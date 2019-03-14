@@ -12,7 +12,11 @@ public class Driver {
 		
 		//SQLConnection se = new SQLConnection();
 		//se.connect();
+<<<<<<< HEAD
 		//se.PrintUser();
+=======
+		//se.PrintUser();		
+>>>>>>> branch 'master' of https://github.com/seniorprojecttopgamer/TopGamer.git
 		
 	}
 
