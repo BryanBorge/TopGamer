@@ -10,7 +10,7 @@ public class Driver {
 		Application.launch(TopGamerGUI.class,args);
 		
 		
-		//SQLConnection se = new SQLConnection();
+		SQLConnection se = new SQLConnection();
 		//se.connect();
 		//se.PrintUser();
 		
