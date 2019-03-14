@@ -21,6 +21,7 @@ public class SQLConnection {
     /**
      * SQLConnection Constructor 
      * 
+     *
      * Calls connect each time an object is created
      */
     public SQLConnection()
