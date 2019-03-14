@@ -9,10 +9,9 @@ import org.sqlite.SQLiteException;
 import java.sql.*;
 
 public class SQLConnection {
-	
-	Connection connection;
-	
-	String fName;
+    //testing branch stuff
+    Connection connection;
+    String fName;
     String lName;
     String email;
     String userName;
