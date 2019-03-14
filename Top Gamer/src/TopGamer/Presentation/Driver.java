@@ -10,14 +10,10 @@ public class Driver {
 		Application.launch(TopGamerGUI.class,args);
 		
 		
-		SQLConnection se = new SQLConnection();
-		se.connect();
-		se.PrintUser();
+		//SQLConnection se = new SQLConnection();
+		//se.connect();
+		//se.PrintUser();		
 		
-	//will this show up 
-		//yes it did show up
-		//pc
-		//laptop
 	}
 
 }
