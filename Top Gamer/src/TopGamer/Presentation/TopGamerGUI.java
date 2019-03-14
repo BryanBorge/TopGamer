@@ -263,19 +263,19 @@ public class TopGamerGUI extends Application
 		Label lblFeaturedGames = new Label("Featured Games");
 		
 		//Load images and set their size
-		ImageView fortniteLogo = new ImageView(new Image("TopGamer/Presentation/Fortnite.jpg"));
+		ImageView fortniteLogo = new ImageView(new Image("TopGamer/Presentation/Images/Fortnite.jpg"));
 		fortniteLogo.setFitWidth(133);
 		fortniteLogo.setFitHeight(202);
-		ImageView apexLogo = new ImageView(new Image("TopGamer/Presentation/Apex.jpg"));
+		ImageView apexLogo = new ImageView(new Image("TopGamer/Presentation/Images/Apex.jpg"));
 		apexLogo.setFitWidth(133);
 		apexLogo.setFitHeight(202);
-		ImageView codLogo = new ImageView(new Image("TopGamer/Presentation/Cod.jpg"));
+		ImageView codLogo = new ImageView(new Image("TopGamer/Presentation/Images/Cod.jpg"));
 		codLogo.setFitWidth(133);
 		codLogo.setFitHeight(202);
-		ImageView fifaLogo = new ImageView(new Image("TopGamer/Presentation/fifa.jpg"));
+		ImageView fifaLogo = new ImageView(new Image("TopGamer/Presentation/Images/fifa.jpg"));
 		fifaLogo.setFitWidth(133);
 		fifaLogo.setFitHeight(202);
-		ImageView haloLogo = new ImageView(new Image("TopGamer/Presentation/Halo.jpg"));
+		ImageView haloLogo = new ImageView(new Image("TopGamer/Presentation/Images/Halo.jpg"));
 		haloLogo.setFitWidth(133);
 		haloLogo.setFitHeight(202);
 		
@@ -341,7 +341,7 @@ public class TopGamerGUI extends Application
 		Button btnReg2 = new Button("Register");
 		Button back = new Button("<-");
 		Label lblLeaderboard = new Label("Leaderboards - Coming Soon");
-		ImageView fortniteHeader = new ImageView(new Image("TopGamer/Presentation/FortniteHeader.png"));
+		ImageView fortniteHeader = new ImageView(new Image("TopGamer/Presentation/Images/FortniteHeader.png"));
 		fortniteHeader.setFitHeight(70);
 		fortniteHeader.setFitWidth(255);
 		
@@ -400,7 +400,7 @@ public class TopGamerGUI extends Application
 		Button btnReg2 = new Button("Register");
 		Button back = new Button("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView apexHeader = new ImageView(new Image("TopGamer/Presentation/ApexHeader.png"));
+		ImageView apexHeader = new ImageView(new Image("TopGamer/Presentation/Images/ApexHeader.png"));
 		apexHeader.setFitHeight(70);
 		apexHeader.setFitWidth(255);
 		
@@ -458,7 +458,7 @@ public class TopGamerGUI extends Application
 		Button btnReg2 = new Button("Register");
 		Button back = new Button("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView codHeader = new ImageView(new Image("TopGamer/Presentation/CodHeader.png"));
+		ImageView codHeader = new ImageView(new Image("TopGamer/Presentation/Images/CodHeader.png"));
 		codHeader.setFitHeight(70);
 		codHeader.setFitWidth(255);
 		
@@ -516,7 +516,7 @@ public class TopGamerGUI extends Application
 		Button btnReg2 = new Button("Register");
 		Button back = new Button("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming Soon");
-		ImageView fifaHeader = new ImageView(new Image("TopGamer/Presentation/FifaHeader.png"));
+		ImageView fifaHeader = new ImageView(new Image("TopGamer/Presentation/Images/FifaHeader.png"));
 		fifaHeader.setFitHeight(70);
 		fifaHeader.setFitWidth(255);
 		
@@ -573,7 +573,7 @@ public class TopGamerGUI extends Application
 		Button btnReg2 = new Button("Register");
 		Button back = new Button("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView haloHeader = new ImageView(new Image("TopGamer/Presentation/HaloHeader.png"));
+		ImageView haloHeader = new ImageView(new Image("TopGamer/Presentation/Images/HaloHeader.png"));
 		haloHeader.setFitHeight(70);
 		haloHeader.setFitWidth(255);
 		
