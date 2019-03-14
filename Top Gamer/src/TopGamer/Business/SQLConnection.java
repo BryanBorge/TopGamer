@@ -36,10 +36,10 @@ public class SQLConnection {
 	{      
         try {
         	//location of the database file
-        	String url = "jdbc:sqlite:TestDataBase.db";
+        	String databaseLocation = "jdbc:sqlite:TestDataBase.db";
             
         	//create a connection to the database
-            connection = DriverManager.getConnection(url);
+            connection = DriverManager.getConnection(databaseLocation);
             
             System.out.println("Connection to SQLite has been established.\n");
             
