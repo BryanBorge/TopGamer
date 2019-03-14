@@ -37,9 +37,9 @@ public class SQLConnection {
 	public void connect() 
 	{      
         try {
-            // db parameters
-            String url = "jdbc:sqlite:C:/Users/Bryan/Desktop/TestDataBase.db";
-            // create a connection to the database
+          String url = "jdbc:sqlite:TestDataBase.db";
+            
+          // create a connection to the database
             c = DriverManager.getConnection(url);
             
             System.out.println("Connection to SQLite has been established.\n");
@@ -48,11 +48,9 @@ public class SQLConnection {
             System.out.println(e.getMessage());
         }
     }
-//
+
 	public void AddUser(String f, String l, String e, String u, String p)
 	{
-	
-		ResultSet r = null;
 		String query = "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
 		              "Values ( \'" + f + "\', \'" + l + "\', \'" + e + "\', \'" + u + "\', \'" + p +"\');";
 		
