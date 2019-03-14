@@ -17,6 +17,7 @@ public class SQLConnection {
     String email;
     String userName;
     String pass;
+    int test;
     
     /**
      * SQLConnection Constructor 
