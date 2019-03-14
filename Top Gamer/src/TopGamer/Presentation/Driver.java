@@ -11,8 +11,8 @@ public class Driver {
 		
 		
 		SQLConnection se = new SQLConnection();
-		//se.connect();
-		//se.PrintUser();
+		se.connect();
+		se.PrintUser();
 		
 	
 	}
