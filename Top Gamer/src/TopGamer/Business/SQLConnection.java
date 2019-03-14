@@ -10,38 +10,36 @@ import java.sql.*;
 
 public class SQLConnection {
 	
-	Connection c = null;
+	Connection connection;
 	
 	String fName;
     String lName;
     String email;
     String userName;
     String pass;
-	
-    public void SetFirstName(String n) { fName = n;}
-    public String GetFirstName() {return fName;}
     
-    public void SetLastName(String n) { lName = n;}
-    public String GetLastName() {return lName;}
+    /**
+     * SQLConnection Constructor 
+     * 
+     * Calls connect each time an object is created
+     */
+    public SQLConnection()
+    {
+    	connection = null;
+    	connect();
+    }
     
-    public void SetEmail(String e) { email = e;}
-    public String GetEmail() {return email;}
-
-    public void SetUserName(String n) { userName = n;}
-    public String GetUserName() {return userName;}
-    
-    public void SetPassword(String p) { pass = p;}
-    public String GetPassword() {return pass;}
-    
-    
+    /**
+     * Establish a connection to the database
+     */
 	public void connect() 
 	{      
         try {
-         
+        	//location of the database file
         	String url = "jdbc:sqlite:TestDataBase.db";
             
-          // create a connection to the database
-            c = DriverManager.getConnection(url);
+        	//create a connection to the database
+            connection = DriverManager.getConnection(url);
             
             System.out.println("Connection to SQLite has been established.\n");
             
@@ -50,25 +48,36 @@ public class SQLConnection {
         }
     }
 
+	/**
+	 * Adds a user info from registration form to the database
+	 * 
+	 * @param f First Name
+	 * @param l Last Name
+	 * @param e Email
+	 * @param u UserName
+	 * @param p Password
+	 */
 	public void AddUser(String f, String l, String e, String u, String p)
 	{
+		//adds user info from the registration form
 		String query = "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
 		              "Values ( \'" + f + "\', \'" + l + "\', \'" + e + "\', \'" + u + "\', \'" + p +"\');";
 		
+		//test query to add any data
 		String q =  "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
 	              "Values ( 'f', 'l', 'email', 'a', 'p');";
 		
 		
 		try {
-			Statement statement = c.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(query);
+			System.out.println("User added successfully");
 			statement.close();
-			c.close();
+			connection.close();
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
 	}
 	
 	public void PrintUser()
@@ -76,7 +85,7 @@ public class SQLConnection {
 		Statement query = null;
 		   try {
 		     connect();
-		      query = c.createStatement();
+		      query = connection.createStatement();
 		      ResultSet result = query.executeQuery( "SELECT * FROM User" );
 		      
 		      while ( result.next() ) {
@@ -86,11 +95,11 @@ public class SQLConnection {
 		         String userName = result.getString("UserName");
 		         String pass = result.getString("Password");
 		         
-		         System.out.printf("%s %s %s %s %s", fName, lName, email,userName,pass);  
+		         System.out.printf("%s %s %s %s %s \n", fName, lName, email,userName,pass);  
 		      }
 		      result.close();
 		      query.close();
-		      c.close();
+		      connection.close();
 		   } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);

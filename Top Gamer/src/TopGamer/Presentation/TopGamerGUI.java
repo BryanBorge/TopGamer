@@ -239,7 +239,6 @@ public class TopGamerGUI extends Application
 	void RegisterUser()
 	{
 		SQLConnection s = new SQLConnection();
-		s.connect();
 		s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
 	}
 	
