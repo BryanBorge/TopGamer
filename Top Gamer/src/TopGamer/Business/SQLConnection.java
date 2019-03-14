@@ -37,7 +37,8 @@ public class SQLConnection {
 	public void connect() 
 	{      
         try {
-          String url = "jdbc:sqlite:TestDataBase.db";
+         
+        	String url = "jdbc:sqlite:TestDataBase.db";
             
           // create a connection to the database
             c = DriverManager.getConnection(url);
