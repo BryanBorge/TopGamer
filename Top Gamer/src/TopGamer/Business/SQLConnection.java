@@ -79,6 +79,49 @@ public class SQLConnection {
 		}
 	}
 	
+	public boolean Login(String userName, String password) throws SQLException
+	{
+		//adds user info from the registration form
+		String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
+		
+		Statement statement = null;
+		ResultSet result;
+		
+		String dbUserName = null,dbPassword= null;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(query);
+			while(result.next())
+			{
+				dbUserName = result.getString("UserName");
+				dbPassword = result.getString("Password");
+			}
+			if(userName.equals(dbUserName) && password.equals(dbPassword))
+			{
+				System.out.println("User login successful");
+				return true;
+			}
+			else
+				return false;
+			
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+			return false;
+		}
+		finally
+		{
+
+			statement.close();
+			connection.close();
+		}
+	
+	}
+	
+	
+	
+	
 	public void PrintUser()
 	{
 		Statement query = null;

@@ -11,6 +11,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
+
 import TopGamer.Business.*;
 
 
@@ -126,7 +129,7 @@ public class TopGamerGUI extends Application
 		btnUserLogin = new Button("Login");
 		btnUserLogin.setPrefWidth(160.0);
 		btnUserLogin.setPrefHeight(25.0);
-		btnUserLogin.setOnAction(e-> LoginSuccessful());
+		btnUserLogin.setOnAction(e-> Login());
 		Button btnReturn = new Button("<-");
 		btnReturn.setOnAction(e -> window.setScene(welcomeScene));
 		btnSignUp = new Button("Dont have an account? Sign up");
@@ -161,19 +164,26 @@ public class TopGamerGUI extends Application
 		loginScene = new Scene(ap,600,400);
 	}
 	
-	void LoginSuccessful()
+	void Login()
 	{
-		/*
-		boolean Valid;
-		if(txtLoginName.getText().equals("") || txtLoginPass.getText().equals(""))
-			Valid = false;
-		else
-			Valid = true;
 		
+		boolean Valid = false;
+	    SQLConnection dbLogin = new SQLConnection();
+				try
+				{
+					Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText());
+					
+				}
+					catch(SQLException e)
+				{
+					
+				}
 		if(Valid)
-		*/
-		OpenMainDashboard();
-			
+			OpenMainDashboard();
+		else
+		{
+			System.out.println("Try again");
+		}
 	}
 
 	void OpenRegisterScene()
