@@ -72,7 +72,6 @@ public class SQLConnection {
 			statement.executeUpdate(query);
 			System.out.println("User added successfully");
 			statement.close();
-			connection.close();
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -112,9 +111,7 @@ public class SQLConnection {
 		}
 		finally
 		{
-
 			statement.close();
-			connection.close();
 		}
 	
 	}
