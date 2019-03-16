@@ -48,7 +48,8 @@ public class TopGamerGUI extends Application
 	TextField txtUserName;
 	TextField txtPass;
 
-	Label lblValidPass;
+	//Labels to display if login info isnt valid
+	Label lblValidUser,lblValidPass;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -76,12 +77,18 @@ public class TopGamerGUI extends Application
 		
 	}
 	
-	//Welcome Screen
-	void BackToWelcomeScreen()
+	/**
+	 * Set main window the the welcomeScene
+	 */
+	public void BackToWelcomeScreen()
 	{
 		window.setScene(welcomeScene);
 	}
-	void CreateWelcomeScene()
+	
+	/**
+	 * Create/Add all controls to the welcomeScene
+	 */
+	public void CreateWelcomeScene()
 	{
 		AnchorPane ap = new AnchorPane();
 		
@@ -114,13 +121,18 @@ public class TopGamerGUI extends Application
 	
 	}
 	
-	
-	//Login
-	void OpenLoginScene()
+	/**
+	 * Set main window to the loginScene
+	 */
+	public void OpenLoginScene()
 	{
 		window.setScene(loginScene);
 	}
-	void CreateLoginScene()
+	
+	/**
+	 * Create/Add controls to the loginScene
+	 */
+	public void CreateLoginScene()
 	{
 		AnchorPane ap = new AnchorPane();
 		
@@ -174,7 +186,13 @@ public class TopGamerGUI extends Application
 
 		loginScene = new Scene(ap,600,400);
 	}
-	void Login()
+	
+	/**
+	 * Creates an instance of SQLConnection and calls Login() 
+	 * 
+	 * If login is valid, open mainDashboard and load user data into object
+	 */
+	public void Login()
 	{
 		if(!LoginValidation())
 			return;
@@ -201,9 +219,15 @@ public class TopGamerGUI extends Application
 		}
 	}
 	
-	//The coloring of the textboxes needs to be moved to a different event
-	boolean LoginValidation()
+	/**
+	 * Login form validation
+	 * Username cannot be blank and must be a string (will allow users to add numbers later on)
+	 * Password cannot be blank and must be a string (will allow users to add numbers later on)
+	 * @return boolean for valid login
+	 */
+	public boolean LoginValidation()
 	{
+		//The coloring of the textboxes needs to be moved to an event
 		lblValidPass.setText(null);
 		
 		if((txtLoginName.getText() == ""))
@@ -253,12 +277,17 @@ public class TopGamerGUI extends Application
 		
 	}
 
-	//Registration
-	void OpenRegisterScene()
+	/**
+	 * Set main window to registerScene
+	 */
+	public void OpenRegisterScene()
 	{
 		window.setScene(registerScene);
 	}
-	void CreateRegisterScene()
+	/**
+	 * Create/Add controls to the registerScene
+	 */
+	public void CreateRegisterScene()
 	{
 		AnchorPane ap = new AnchorPane();
 		Button btnReturn = new Button("<-");
@@ -314,23 +343,33 @@ public class TopGamerGUI extends Application
 		ap.getChildren().addAll(btnReturn,lblFName,txtFName,txtLName,txtEmail,txtUserName,txtPass,lblLName,lblEmail,lblUserName,lblPass,btnSignUp);
 		registerScene = new Scene(ap,600,400);
 	}
-	void RegisterUser()
+	/**
+	 * 	Creates an instance of SQLConnection and calls AddUser()
+	 *  using data from the register form's text fields
+	 */
+	public void RegisterUser()
 	{
 		SQLConnection s = new SQLConnection();
 		s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
 	}
 	
-	//Main Dashboard
-	void OpenMainDashboard()
+	
+	/**
+	 * Sets main winodow to the mainDashboard scene
+	 */
+	public void OpenMainDashboard()
 	{
 		 window.setScene(mainDashboardScene);
 	}	
-	void CreateMainDashboard()
+	
+	/**
+	 * Creates/Adds controls to the mainDashboard scene
+	 */
+	public void CreateMainDashboard()
 	{
 		//use this vbox to only make games scroll
 		VBox test = new VBox();
 		test.setStyle("-fx-focus-color: transparent;");
-	//	test.setStyle("-fx-focus-color: transparent;");
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setPannable(true);
 		mainScroll.setFitToHeight(true);
@@ -379,8 +418,6 @@ public class TopGamerGUI extends Application
 		haloLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
 		//Set image position on anchor pane
-		//AnchorPane.setTopAnchor(lblFeaturedGames, 14.0);
-		//AnchorPane.setLeftAnchor(lblFeaturedGames, 24.0);
 		AnchorPane.setTopAnchor(fortniteLogo, 35.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
 		AnchorPane.setTopAnchor(apexLogo, 35.0);
@@ -388,11 +425,10 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(codLogo, 35.0);
 		AnchorPane.setLeftAnchor(codLogo, 308.0);
 		AnchorPane.setTopAnchor(fifaLogo, 35.0);
-		AnchorPane.setLeftAnchor(fifaLogo, 453.0);
+		AnchorPane.setLeftAnchor(fifaLogo, 453.0); 
 		AnchorPane.setTopAnchor(haloLogo, 35.0);
 		AnchorPane.setLeftAnchor(haloLogo, 601.0);
 		AnchorPane.setTopAnchor(btnReturn, 300.0);
-		//AnchorPane.setLeftAnchor(btnReturn, 35.0);
 		
 		//add images to anchor pane
 		ap.getChildren().addAll(lblFeaturedGames,btnReturn,fortniteLogo,apexLogo,codLogo,fifaLogo,haloLogo);
@@ -405,8 +441,10 @@ public class TopGamerGUI extends Application
 		mainDashboardScene = new Scene(test,600,400);
 	}
 	
-	//Fortnite Scene
-	void CreateFortniteScene()
+	/**
+	 * Create/Add controls to the fortniteScene
+	 */
+	public void CreateFortniteScene()
 	{
 		Label lblDesc = new Label("Fortnite Battle Royale is the FREE 100-player PvP mode in Fortnite. One giant map. A battle bus. Fortnite building skills and destructible environments combined with intense PvP combat. The last one standing wins. Available on PC, PlayStation 4, Xbox One & Mac. ");
 		lblDesc.setPrefHeight(77);
@@ -459,14 +497,19 @@ public class TopGamerGUI extends Application
 		fortniteScene = new Scene(ap,600,400);
 		
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}
-	void OpenFortniteScene()
+	}	
+	/**
+	 * Set main window the the fortniteScene
+	 */
+	public void OpenFortniteScene()
 	{
 		window.setScene(fortniteScene);
 	}
 	
-	//ApexScene
-	void CreateApexScene()
+	/**
+	 * Create/Add controls to the apexScene
+	 */
+	public void CreateApexScene()
 	{
 		Label lblDesc = new Label("Explore a growing roster of powerful Legends, each with their own unique personality, strengths, and abilities. Choose your Legend, team up with two other players, and combine your unique skills to be the last squad standing. Master your Legend’s abilities, make strategic calls on the fly, and use your team’s strengths to your advantage in vicious 60-player matches.  ");
 		lblDesc.setPrefHeight(90);
@@ -519,13 +562,18 @@ public class TopGamerGUI extends Application
 		
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
 	}
-	void OpenApexScene()
+	/**
+	 * Set main window the the apexScene
+	 */
+	public void OpenApexScene()
 	{
 		window.setScene(apexScene);
 	}
 	
-	//Cod Scene
-	void CreateCODScene()
+	/**
+	 * Create/Add controls to the codScene
+	 */
+	public void CreateCODScene()
 	{
 		Label lblDesc = new Label("Apart from the Exo Movement, Advanced Warfare's multiplayer retains certain similarities to previous Call of Duty titles. The Pick 10 system in Black Ops II returns as Pick 13, allowing players to pick weapons, attachments, perks and score-streaks within a total of 13 allocation points.");
 		lblDesc.setPrefHeight(90);
@@ -577,13 +625,18 @@ public class TopGamerGUI extends Application
 		
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
 	}
-	void OpenCodScene()
+	/**
+	 * Set main window to the codScene
+	 */
+	public void OpenCodScene()
 	{
 		window.setScene(codScene);
 	}
 	
-	//Fifa Scene
-	void CreateFifaScene()
+	/**
+	 * Create/Add controls to the fifaScene
+	 */
+	public void CreateFifaScene()
 	{
 		Label lblDesc = new Label("Get ready for the return of the UEFA Champions League with amazing new content in FIFA 19. With special Champions League kits and player items, as well as your choice of a Neymar Jr, Kevin De Bruyne, or Paulo Dybala 10 match loan item for your team, there's no better time to get started in FIFA 19!\r\n"); 
 				
@@ -636,13 +689,18 @@ public class TopGamerGUI extends Application
 		fifaScene = new Scene(ap,600,400);
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
 	}
-	void OpenFifaScene()
+	/**
+	 * Set main window to the fifaScene
+	 */
+	public void OpenFifaScene()
 	{
 		window.setScene(fifaScene);
 	}
 	
-	//Halo Scene
-	void CreateHaloScene()
+	/**
+	 * Create/Add controls to the haloScene
+	 */
+	public void CreateHaloScene()
 	{
 		Label lblDesc = new Label("Four years after the events of Halo 3, the Master Chief returns in this award-winning first-person shooter. Battle through the campaign and explore the Forerunner planet, Requiem, as the Chief faces off with an ancient evil. Test your skills against familiar Covenant foes and new Promethean enemies in solo mode or with up to three friends on split-screen. With Xbox Live Gold Membership, access the online multiplayer and Spartan Ops missions.");
 		lblDesc.setPrefHeight(90);
@@ -694,7 +752,11 @@ public class TopGamerGUI extends Application
 		
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
 	}
-	void OpenHaloScene()
+	
+	/**
+	 * Set main window to the haloScene
+	 */
+	public void OpenHaloScene()
 	{
 		window.setScene(haloScene);
 	}

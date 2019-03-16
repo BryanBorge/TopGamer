@@ -79,6 +79,14 @@ public class SQLConnection {
 		}
 	}
 	
+	/**
+	 * Returns true and loads user data if login exists and false otherwise
+	 * @param userName From registration form
+	 * @param password From registration form
+	 * @param test user instance
+	 * @return true/false
+	 * @throws SQLException
+	 */
 	public boolean Login(String userName, String password,User test) throws SQLException
 	{
 		//adds user info from the registration form
@@ -133,7 +141,9 @@ public class SQLConnection {
 	
 	
 	
-	
+	/**
+	 * Just a test function that prints user from the database
+	 */
 	public void PrintUser()
 	{
 		Statement query = null;
