@@ -355,7 +355,7 @@ public class TopGamerGUI extends Application
 	
 	
 	/**
-	 * Sets main winodow to the mainDashboard scene
+	 * Sets main window to the mainDashboard scene
 	 */
 	public void OpenMainDashboard()
 	{
