@@ -78,7 +78,7 @@ public class User
 	 * Gets email member
 	 * @return email
 	 */
-	public String SetEmail()
+	public String GetEmail()
 	{
 		return m_email;
 	}

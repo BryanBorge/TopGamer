@@ -2,6 +2,8 @@ package TopGamer.Presentation;
 
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Observable;
 
 import TopGamer.Business.*;
 
@@ -157,15 +160,19 @@ public class TopGamerGUI extends Application
 		btnSignUp.setOnAction(e -> OpenRegisterScene());
 		
 		lblValidPass = new Label();
+		lblValidUser = new Label();
 		
 		AnchorPane.setLeftAnchor(txtLoginName, 226.0);
 		AnchorPane.setTopAnchor(txtLoginName, 134.0);
+		
+		AnchorPane.setLeftAnchor(lblValidUser, 226.0);
+		AnchorPane.setTopAnchor(lblValidUser, 160.0);
 		
 		AnchorPane.setLeftAnchor(txtLoginPass, 226.0);
 		AnchorPane.setTopAnchor(txtLoginPass, 188.0);
 		
 		AnchorPane.setLeftAnchor(lblValidPass, 226.0);
-		AnchorPane.setTopAnchor(lblValidPass, 225.0);
+		AnchorPane.setTopAnchor(lblValidPass, 215.0);
 		
 		AnchorPane.setLeftAnchor(btnUserLogin, 226.0);
 		AnchorPane.setTopAnchor(btnUserLogin, 246.0);
@@ -182,7 +189,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidPass,btnSignUp,btnReturn);
+		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidUser,lblValidPass,btnSignUp,btnReturn);
 
 		loginScene = new Scene(ap,600,400);
 	}
@@ -209,15 +216,17 @@ public class TopGamerGUI extends Application
 						e.printStackTrace();
 					}
 			if(Valid)
-			{
 				OpenMainDashboard();
-			}
 			else
 			{
-				System.out.println("Try again");
+				lblValidPass.setText("Username or password invalid");
+				lblValidPass.setTextFill(Color.RED);
 			}
 		}
 	}
+	
+	
+	
 	
 	/**
 	 * Login form validation
@@ -229,47 +238,38 @@ public class TopGamerGUI extends Application
 	{
 		//The coloring of the textboxes needs to be moved to an event
 		lblValidPass.setText(null);
+		lblValidUser.setText(null);
 		
-		if((txtLoginName.getText() == ""))
+		if(txtLoginName.getText().equals("") && txtLoginPass.getText().equals(""))
 		{
-			System.out.println("Username cannot be blank");
+			lblValidUser.setText("Username cannot be blank");
+			lblValidUser.setTextFill(Color.RED);
+			lblValidPass.setText("Password cannot be blank");
+			lblValidPass.setTextFill(Color.RED);
 			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
-			return false;
-		}
-		else
-			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-		
-		if((txtLoginPass.getText() == ""))
-		{
-			System.out.println("Password cannot be blank");
 			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
-			return false;
 		}
-		else
-			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-		
-		if(!txtLoginName.getText().matches("[a-zA-Z]*"))
+		if(txtLoginName.getText().equals(""))
 		{
-			System.out.println("Username must be a string");
+			lblValidUser.setText("Username cannot be blank");
+			lblValidUser.setTextFill(Color.RED);
 			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
 			return false;
 		}
 		else
 			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-		if(!txtLoginPass.getText().matches("[a-zA-Z]*"))
+		
+		if(txtLoginPass.getText().equals(""))
 		{
-			System.out.println("Password must be a string");
-			lblValidPass.setText("Password must be a string");
+			lblValidPass.setText("Password cannot be blank");
 			lblValidPass.setTextFill(Color.RED);
 			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
-			return false;		
+			return false;
 		}
 		else
 			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-	 
 		
-		txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-		txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+	
 		return true;
 		
 	
@@ -359,6 +359,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenMainDashboard()
 	{
+		 System.out.println(testUser.GetFirstName() + " " + testUser.GetLastName() + " " + testUser.GetEmail());
 		 window.setScene(mainDashboardScene);
 	}	
 	
@@ -439,6 +440,7 @@ public class TopGamerGUI extends Application
 		test.getChildren().addAll(lblFeaturedGames,mainScroll, btnReturn);
 
 		mainDashboardScene = new Scene(test,600,400);
+	
 	}
 	
 	/**

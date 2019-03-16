@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import org.sqlite.SQLiteException;
 
+import javafx.scene.control.Alert;
+
 import java.sql.*;
 
 public class SQLConnection {
@@ -121,7 +123,6 @@ public class SQLConnection {
 			}
 			if(!userName.equals(dbUserName) || !password.equals(dbPassword))
 			{
-				System.out.println("Username or password is incorrect.");
 				return false;
 			}
 			else
