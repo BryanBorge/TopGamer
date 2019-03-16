@@ -60,8 +60,8 @@ public class SQLConnection {
 	public void AddUser(String f, String l, String e, String u, String p)
 	{
 		//adds user info from the registration form
-		String query = "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
-		              "Values ( \'" + f + "\', \'" + l + "\', \'" + e + "\', \'" + u + "\', \'" + p +"\');";
+		String query = "INSERT INTO Users (UserName,Password,Email,FirstName,LastName) " +
+		              "Values ( \'" + u + "\', \'" + p + "\', \'" + e + "\', \'" + f + "\', \'" + l +"\');";
 		
 		//test query to add any data
 		String q =  "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
@@ -83,7 +83,7 @@ public class SQLConnection {
 	{
 		//adds user info from the registration form
 		//String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
-		String query = "select * from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
+		String query = "select * from Users where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
 		
 		Statement statement = null;
 		ResultSet result;
