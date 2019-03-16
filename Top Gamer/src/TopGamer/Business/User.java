@@ -69,15 +69,6 @@ public class User
 		return m_username;
 	}
 	
-	public void SetPassword(String pass)
-	{
-		m_password = pass;
-	}
-	
-	public String GetPassword()
-	{
-		return m_password;
-	}
 	
 	
 	
