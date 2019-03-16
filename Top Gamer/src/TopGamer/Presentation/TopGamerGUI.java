@@ -72,11 +72,11 @@ public class TopGamerGUI extends Application
 		
 	}
 	
+	//Welcome Screen
 	void BackToWelcomeScreen()
 	{
 		window.setScene(welcomeScene);
 	}
-	
 	void CreateWelcomeScene()
 	{
 		AnchorPane ap = new AnchorPane();
@@ -110,6 +110,8 @@ public class TopGamerGUI extends Application
 	
 	}
 	
+	
+	//Login
 	void OpenLoginScene()
 	{
 		window.setScene(loginScene);
@@ -163,29 +165,82 @@ public class TopGamerGUI extends Application
 
 		loginScene = new Scene(ap,600,400);
 	}
-	
 	void Login()
 	{
-		
-		boolean Valid = false;
-	    SQLConnection dbLogin = new SQLConnection();
-				try
-				{
-					Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText());
-					
-				}
-					catch(SQLException e)
-				{
-					
-				}
-		if(Valid)
-			OpenMainDashboard();
+		if(!LoginValidation())
+			return;
 		else
 		{
-			System.out.println("Try again");
+			boolean Valid = false;
+		    SQLConnection dbLogin = new SQLConnection();
+					try
+					{
+						
+						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText());
+						
+					}
+						catch(SQLException e)
+					{
+						
+					}
+			if(Valid)
+				OpenMainDashboard();
+			else
+			{
+				System.out.println("Try again");
+			}
 		}
 	}
+	
+	//The coloring of the textboxes needs to be moved to a different event
+	boolean LoginValidation()
+	{
+		if((txtLoginName.getText() == ""))
+		{
+			System.out.println("Username cannot be blank");
+			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			return false;
+		}
+		else
+			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+		
+		if((txtLoginPass.getText() == ""))
+		{
+			System.out.println("Password cannot be blank");
+			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			return false;
+		}
+		else
+			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+		
+		if(!txtLoginName.getText().matches("[a-zA-Z]*"))
+		{
+			System.out.println("Username must be a string");
+			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			return false;
+		}
+		else
+			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+		if(!txtLoginPass.getText().matches("[a-zA-Z]*"))
+		{
+			System.out.println("Password must be a string");
+			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			return false;		
+		}
+		else
+			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+	 
+		
+		txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+		txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
+		return true;
+		
+	
+		
+		
+	}
 
+	//Registration
 	void OpenRegisterScene()
 	{
 		window.setScene(registerScene);
@@ -252,6 +307,7 @@ public class TopGamerGUI extends Application
 		s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
 	}
 	
+	//Main Dashboard
 	void OpenMainDashboard()
 	{
 		 window.setScene(mainDashboardScene);
@@ -336,6 +392,7 @@ public class TopGamerGUI extends Application
 		mainDashboardScene = new Scene(test,600,400);
 	}
 	
+	//Fortnite Scene
 	void CreateFortniteScene()
 	{
 		Label lblDesc = new Label("Fortnite Battle Royale is the FREE 100-player PvP mode in Fortnite. One giant map. A battle bus. Fortnite building skills and destructible environments combined with intense PvP combat. The last one standing wins. Available on PC, PlayStation 4, Xbox One & Mac. ");
@@ -395,6 +452,7 @@ public class TopGamerGUI extends Application
 		window.setScene(fortniteScene);
 	}
 	
+	//ApexScene
 	void CreateApexScene()
 	{
 		Label lblDesc = new Label("Explore a growing roster of powerful Legends, each with their own unique personality, strengths, and abilities. Choose your Legend, team up with two other players, and combine your unique skills to be the last squad standing. Master your Legend’s abilities, make strategic calls on the fly, and use your team’s strengths to your advantage in vicious 60-player matches.  ");
@@ -453,6 +511,7 @@ public class TopGamerGUI extends Application
 		window.setScene(apexScene);
 	}
 	
+	//Cod Scene
 	void CreateCODScene()
 	{
 		Label lblDesc = new Label("Apart from the Exo Movement, Advanced Warfare's multiplayer retains certain similarities to previous Call of Duty titles. The Pick 10 system in Black Ops II returns as Pick 13, allowing players to pick weapons, attachments, perks and score-streaks within a total of 13 allocation points.");
@@ -510,6 +569,7 @@ public class TopGamerGUI extends Application
 		window.setScene(codScene);
 	}
 	
+	//Fifa Scene
 	void CreateFifaScene()
 	{
 		Label lblDesc = new Label("Get ready for the return of the UEFA Champions League with amazing new content in FIFA 19. With special Champions League kits and player items, as well as your choice of a Neymar Jr, Kevin De Bruyne, or Paulo Dybala 10 match loan item for your team, there's no better time to get started in FIFA 19!\r\n"); 
@@ -568,6 +628,7 @@ public class TopGamerGUI extends Application
 		window.setScene(fifaScene);
 	}
 	
+	//Halo Scene
 	void CreateHaloScene()
 	{
 		Label lblDesc = new Label("Four years after the events of Halo 3, the Master Chief returns in this award-winning first-person shooter. Battle through the campaign and explore the Forerunner planet, Requiem, as the Chief faces off with an ancient evil. Test your skills against familiar Covenant foes and new Promethean enemies in solo mode or with up to three friends on split-screen. With Xbox Live Gold Membership, access the online multiplayer and Spartan Ops missions.");
