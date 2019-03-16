@@ -101,9 +101,14 @@ public class SQLConnection {
 				System.out.println("User login successful");
 				return true;
 			}
-			else
+			if(!userName.equals(dbUserName) || !password.equals(dbPassword))
+			{
+				System.out.println("Username or password is incorrect.");
 				return false;
-			
+			}
+			else
+				return true;
+				
 		} catch (SQLException e1) {
 			
 			e1.printStackTrace();

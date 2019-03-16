@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -28,7 +29,8 @@ public class TopGamerGUI extends Application
 	
 	//Used for user login - DESIGNED BUT NOT WORKING
 	Label lblLoginName, lblLoginPass;
-	TextField txtLoginName, txtLoginPass;
+	TextField txtLoginName;
+	PasswordField txtLoginPass;
 	Button btnUserLogin,btnBackToWelcome;
 	Button btnSignUp;
 	
@@ -44,7 +46,7 @@ public class TopGamerGUI extends Application
 	TextField txtUserName;
 	TextField txtPass;
 
-	
+	Label lblValidPass;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -124,7 +126,7 @@ public class TopGamerGUI extends Application
 		txtLoginName.setPrefWidth(160.0);
 		txtLoginName.setPrefHeight(25.0);
 		txtLoginName.setPromptText("Username or email address");
-		txtLoginPass = new TextField();
+		txtLoginPass = new PasswordField();
 		txtLoginPass.setPrefWidth(160.0);
 		txtLoginPass.setPrefHeight(25.0);
 		txtLoginPass.setPromptText("Password");
@@ -140,11 +142,16 @@ public class TopGamerGUI extends Application
 		btnSignUp.setFont(Font.font(10));
 		btnSignUp.setOnAction(e -> OpenRegisterScene());
 		
+		lblValidPass = new Label();
+		
 		AnchorPane.setLeftAnchor(txtLoginName, 226.0);
 		AnchorPane.setTopAnchor(txtLoginName, 134.0);
 		
 		AnchorPane.setLeftAnchor(txtLoginPass, 226.0);
 		AnchorPane.setTopAnchor(txtLoginPass, 188.0);
+		
+		AnchorPane.setLeftAnchor(lblValidPass, 226.0);
+		AnchorPane.setTopAnchor(lblValidPass, 225.0);
 		
 		AnchorPane.setLeftAnchor(btnUserLogin, 226.0);
 		AnchorPane.setTopAnchor(btnUserLogin, 246.0);
@@ -161,7 +168,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,btnSignUp,btnReturn);
+		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidPass,btnSignUp,btnReturn);
 
 		loginScene = new Scene(ap,600,400);
 	}
@@ -175,9 +182,7 @@ public class TopGamerGUI extends Application
 		    SQLConnection dbLogin = new SQLConnection();
 					try
 					{
-						
 						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText());
-						
 					}
 						catch(SQLException e)
 					{
@@ -195,6 +200,8 @@ public class TopGamerGUI extends Application
 	//The coloring of the textboxes needs to be moved to a different event
 	boolean LoginValidation()
 	{
+		lblValidPass.setText(null);
+		
 		if((txtLoginName.getText() == ""))
 		{
 			System.out.println("Username cannot be blank");
@@ -224,6 +231,8 @@ public class TopGamerGUI extends Application
 		if(!txtLoginPass.getText().matches("[a-zA-Z]*"))
 		{
 			System.out.println("Password must be a string");
+			lblValidPass.setText("Password must be a string");
+			lblValidPass.setTextFill(Color.RED);
 			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
 			return false;		
 		}
