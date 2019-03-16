@@ -51,7 +51,7 @@ public class User
 	
 	public void SetEmail(String email)
 	{
-		m_firstName = email;
+		m_email = email;
 	}
 	
 	public String SetEmail()

@@ -9,7 +9,8 @@ import org.sqlite.SQLiteException;
 import java.sql.*;
 
 public class SQLConnection {
-    //testing branch stuff
+   
+	//testing branch stuff
     Connection connection;
     String fName;
     String lName;
@@ -78,27 +79,36 @@ public class SQLConnection {
 		}
 	}
 	
-	public boolean Login(String userName, String password) throws SQLException
+	public boolean Login(String userName, String password,User test) throws SQLException
 	{
 		//adds user info from the registration form
-		String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
+		//String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
+		String query = "select * from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
 		
 		Statement statement = null;
 		ResultSet result;
 		
-		String dbUserName = null,dbPassword= null;
+		String dbUserName = null,dbPassword= null,dbFirstName = null, dbLastName = null,dbEmail = null;
 		
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(query);
 			while(result.next())
 			{
+				dbFirstName = result.getString("FirstName");
+				dbLastName = result.getString("LastName");
+				dbEmail = result.getString("Email");
 				dbUserName = result.getString("UserName");
 				dbPassword = result.getString("Password");
 			}
 			if(userName.equals(dbUserName) && password.equals(dbPassword))
 			{
+				//if successful, load all data to user
 				System.out.println("User login successful");
+				test.SetFirstName(dbFirstName);
+				test.SetLastName(dbLastName);
+				test.SetEmail(dbEmail);
+				test.SetUsername(dbUserName);
 				return true;
 			}
 			if(!userName.equals(dbUserName) || !password.equals(dbPassword))

@@ -20,6 +20,8 @@ import TopGamer.Business.*;
 
 public class TopGamerGUI extends Application
 {
+	
+	User testUser = new User();
 	Stage window,gameStage;
 	Scene welcomeScene,loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, apexScene, fifaScene, codScene, haloScene;
@@ -182,14 +184,16 @@ public class TopGamerGUI extends Application
 		    SQLConnection dbLogin = new SQLConnection();
 					try
 					{
-						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText());
+						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText(),testUser);	
 					}
 						catch(SQLException e)
 					{
-						
+						e.printStackTrace();
 					}
 			if(Valid)
+			{
 				OpenMainDashboard();
+			}
 			else
 			{
 				System.out.println("Try again");
