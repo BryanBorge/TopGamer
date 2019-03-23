@@ -246,18 +246,14 @@ public class TopGamerGUI extends Application
 			lblValidUser.setTextFill(Color.RED);
 			lblValidPass.setText("Password cannot be blank");
 			lblValidPass.setTextFill(Color.RED);
-			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
-			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			return false;
 		}
 		if(txtLoginName.getText().equals(""))
 		{
 			lblValidUser.setText("Username cannot be blank");
 			lblValidUser.setTextFill(Color.RED);
-			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
 			return false;
 		}
-		else
-			txtLoginName.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
 		
 		if(txtLoginPass.getText().equals(""))
 		{
@@ -266,9 +262,6 @@ public class TopGamerGUI extends Application
 			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
 			return false;
 		}
-		else
-			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: green ; -fx-focus-color: green ;}");
-		
 	
 		return true;
 		
@@ -349,8 +342,47 @@ public class TopGamerGUI extends Application
 	 */
 	public void RegisterUser()
 	{
-		SQLConnection s = new SQLConnection();
-		s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+		if(RegisterValidation())
+		{
+			SQLConnection s = new SQLConnection();
+			s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+			window.setScene(mainDashboardScene);
+		}
+	}
+	
+	public boolean RegisterValidation()
+	{
+		if(txtFName.getText().equals("") && txtLName.getText().equals("") && txtEmail.getText().equals("") && txtUserName.getText().equals("") && txtPass.getText().equals(""))
+		{
+			System.out.println("All fields are empty");
+			return false;
+		}
+		if(txtFName.getText().equals(""))
+		{
+			System.out.println("First name is empty");
+			return false;
+		}
+		if(txtLName.getText().equals(""))
+		{
+			System.out.println("Last name is empty");
+			return false;
+		}
+		if(txtEmail.getText().equals(""))
+		{
+			System.out.println("Email is empty");
+			return false;
+		}
+		if(txtUserName.getText().equals(""))
+		{
+			System.out.println("User name is empty");
+			return false;
+		}
+		if(txtPass.getText().equals(""))
+		{
+			System.out.println("Password is empty");
+			return false;
+		}
+		return true;
 	}
 	
 	
@@ -443,6 +475,7 @@ public class TopGamerGUI extends Application
 	
 	}
 	
+	
 	/**
 	 * Create/Add controls to the fortniteScene
 	 */
@@ -508,6 +541,7 @@ public class TopGamerGUI extends Application
 		window.setScene(fortniteScene);
 	}
 	
+	
 	/**
 	 * Create/Add controls to the apexScene
 	 */
@@ -572,6 +606,7 @@ public class TopGamerGUI extends Application
 		window.setScene(apexScene);
 	}
 	
+	
 	/**
 	 * Create/Add controls to the codScene
 	 */
@@ -634,6 +669,7 @@ public class TopGamerGUI extends Application
 	{
 		window.setScene(codScene);
 	}
+	
 	
 	/**
 	 * Create/Add controls to the fifaScene
@@ -699,6 +735,7 @@ public class TopGamerGUI extends Application
 		window.setScene(fifaScene);
 	}
 	
+	
 	/**
 	 * Create/Add controls to the haloScene
 	 */
@@ -753,8 +790,7 @@ public class TopGamerGUI extends Application
 		haloScene = new Scene(ap,600,400);
 		
 		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}
-	
+	}	
 	/**
 	 * Set main window to the haloScene
 	 */
