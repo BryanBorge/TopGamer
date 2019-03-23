@@ -9,13 +9,10 @@ public class Driver {
 		// TODO Auto-generated method stub
 		Application.launch(TopGamerGUI.class,args);
 		
-		
 		//SQLConnection se = new SQLConnection();
 		//se.connect();
 		//se.PrintUser();
 		//se.PrintUser();		
-
-		
 	}
 
 }
