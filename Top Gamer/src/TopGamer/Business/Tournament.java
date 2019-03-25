@@ -1,5 +1,6 @@
 package TopGamer.Business;
 
-public class Tournament {
-
+public class Tournament 
+{
+	
 }

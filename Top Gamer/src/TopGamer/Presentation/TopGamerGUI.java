@@ -16,7 +16,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Observable;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 
 import TopGamer.Business.*;
 
@@ -30,14 +36,14 @@ public class TopGamerGUI extends Application
 	Scene fortniteScene, apexScene, fifaScene, codScene, haloScene;
 	
 	//Used on welcome scene
-	Button btnLogin, btnRegister, btnContinue;
+	JFXButton btnLogin, btnRegister, btnContinue;
 	
 	//Used for user login - DESIGNED BUT NOT WORKING
 	Label lblLoginName, lblLoginPass;
-	TextField txtLoginName;
-	PasswordField txtLoginPass;
-	Button btnUserLogin,btnBackToWelcome;
-	Button btnSignUp;
+	JFXTextField txtLoginName;
+	JFXPasswordField txtLoginPass;
+	JFXButton btnUserLogin, btnBackToWelcome;
+	JFXButton btnSignUp;
 	
 	//Registration
 	Label lblFName;
@@ -45,11 +51,11 @@ public class TopGamerGUI extends Application
 	Label lblEmail;
 	Label lblUserName;
 	Label lblPass;
-	TextField txtFName;
-	TextField txtLName;
-	TextField txtEmail;
-	TextField txtUserName;
-	TextField txtPass;
+	JFXTextField txtFName;
+	JFXTextField txtLName;
+	JFXTextField txtEmail;
+	JFXTextField txtUserName;
+	JFXPasswordField txtPass;
 
 	//Labels to display if login info isnt valid
 	Label lblValidUser,lblValidPass;
@@ -99,15 +105,16 @@ public class TopGamerGUI extends Application
 //		Image img = new Image("TopGamer/Presentation/stadium.jpg");
 //		imageView.setImage(img);
 		
-		btnLogin = new Button("Login");
+		btnLogin = new JFXButton("Login");
 		btnLogin.setPrefWidth(173.0);
 		btnLogin.setPrefHeight(43.0);
-		btnRegister = new Button("Register");
+		btnRegister = new JFXButton("Register");
 		btnRegister.setPrefWidth(173.0);
 		btnRegister.setPrefHeight(43.0);
-		btnContinue = new Button("Continue without registering");
+		btnContinue = new JFXButton("Continue without registering");
 		btnContinue.setPrefWidth(600.0);
 		btnContinue.setPrefHeight(20.0);
+		
 		
 		AnchorPane.setLeftAnchor(btnLogin, 214.0);
 		AnchorPane.setTopAnchor(btnLogin, 110.0);
@@ -139,21 +146,29 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane ap = new AnchorPane();
 		
-		txtLoginName = new TextField();
+		txtLoginName = new JFXTextField();
 		txtLoginName.setPrefWidth(160.0);
 		txtLoginName.setPrefHeight(25.0);
+		txtLoginName.setLabelFloat(true);
 		txtLoginName.setPromptText("Username or email address");
-		txtLoginPass = new PasswordField();
+		txtLoginPass = new JFXPasswordField();
 		txtLoginPass.setPrefWidth(160.0);
+		txtLoginPass.setLabelFloat(true);
 		txtLoginPass.setPrefHeight(25.0);
 		txtLoginPass.setPromptText("Password");
-		btnUserLogin = new Button("Login");
+		
+		btnUserLogin = new JFXButton("Login");
+		
+		
 		btnUserLogin.setPrefWidth(160.0);
 		btnUserLogin.setPrefHeight(25.0);
 		btnUserLogin.setOnAction(e-> Login());
-		Button btnReturn = new Button("<-");
+		//JFXButton btn = new JFXButton();
+	    
+		
+		Button btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e -> window.setScene(welcomeScene));
-		btnSignUp = new Button("Dont have an account? Sign up");
+		btnSignUp = new JFXButton("Dont have an account? Sign up");
 		btnSignUp.setPrefWidth(160.0);
 		btnSignUp.setPrefHeight(25.0);
 		btnSignUp.setFont(Font.font(10));
@@ -263,13 +278,25 @@ public class TopGamerGUI extends Application
 			return false;
 		}
 	
-		return true;
-		
-	
-		
-		
+		return true;		
 	}
 
+	/**
+	 *  Tests if TextField is empty or not
+	 *  
+	 * @param text - JFXTextField Instance
+	 * @return true is text is empty, false otherwise
+	 */
+	public boolean Empty(JFXTextField text)
+	{
+		if(text.getText() == null || text.getText().isEmpty())
+			return true;
+		else 
+			return false;
+	}
+	
+	
+	
 	/**
 	 * Set main window to registerScene
 	 */
@@ -283,7 +310,7 @@ public class TopGamerGUI extends Application
 	public void CreateRegisterScene()
 	{
 		AnchorPane ap = new AnchorPane();
-		Button btnReturn = new Button("<-");
+		Button btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e ->BackToWelcomeScreen());
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
@@ -293,14 +320,33 @@ public class TopGamerGUI extends Application
 		lblEmail = new Label("Email Address");
 		lblUserName = new Label("Username");
 		lblPass = new Label("Password");
-		txtFName = new TextField();
-		txtLName = new TextField();
-		txtEmail = new TextField();
-		txtUserName = new TextField();
-		txtPass = new TextField();
-		btnSignUp = new Button("Sign up");
+		
+		txtFName = new JFXTextField();
+		txtFName.setLabelFloat(true);
+		txtFName.setPromptText("First Name");
+		
+		txtLName = new JFXTextField();
+		txtLName.setLabelFloat(true);
+		txtLName.setPromptText("Last Name");
+		
+		txtEmail = new JFXTextField();
+		txtEmail.setLabelFloat(true);
+		txtEmail.setPromptText("Email Address");
+		
+		
+		txtUserName = new JFXTextField();
+		txtUserName.setLabelFloat(true);
+		txtUserName.setPromptText("Username");
+		
+		
+		txtPass = new JFXPasswordField();
+		txtPass.setLabelFloat(true);
+		txtPass.setPromptText("Password");
+		
+		btnSignUp = new JFXButton("Sign up");
 		btnSignUp.setOnAction(e -> RegisterUser());
 		
+				
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
@@ -333,7 +379,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
 		AnchorPane.setTopAnchor(btnSignUp, 344.0);
 		
-		ap.getChildren().addAll(btnReturn,lblFName,txtFName,txtLName,txtEmail,txtUserName,txtPass,lblLName,lblEmail,lblUserName,lblPass,btnSignUp);
+		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp);
 		registerScene = new Scene(ap,600,400);
 	}
 	/**
@@ -357,9 +403,9 @@ public class TopGamerGUI extends Application
 			System.out.println("All fields are empty");
 			return false;
 		}
-		if(txtFName.getText().equals(""))
+		if(Empty(txtFName))
 		{
-			System.out.println("First name is empty");
+			System.out.println("Firsttt name is empty");
 			return false;
 		}
 		if(txtLName.getText().equals(""))
@@ -408,7 +454,7 @@ public class TopGamerGUI extends Application
 		mainScroll.setFitToHeight(true);
 		mainScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		AnchorPane ap = new AnchorPane();
-		Button btnReturn = new Button("<-");
+		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> window.setScene(welcomeScene));
 		Label lblFeaturedGames = new Label("Featured Games");
 		
@@ -489,9 +535,9 @@ public class TopGamerGUI extends Application
 		lblUpcoming.setUnderline(true);
 		Label lblTourney1 = new Label("March 15th - Fortnite 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Fortnite 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new Button("Register");
-		Button btnReg2 = new Button("Register");
-		Button back = new Button("<-");
+		JFXButton btnReg1 = new JFXButton("Register");
+		JFXButton btnReg2 = new JFXButton("Register");
+		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboards - Coming Soon");
 		ImageView fortniteHeader = new ImageView(new Image("TopGamer/Presentation/Images/FortniteHeader.png"));
 		fortniteHeader.setFitHeight(70);
@@ -555,9 +601,9 @@ public class TopGamerGUI extends Application
 		lblUpcoming.setUnderline(true);
 		Label lblTourney1 = new Label("March 15th - Apex 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Apex 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new Button("Register");
-		Button btnReg2 = new Button("Register");
-		Button back = new Button("<-");
+		Button btnReg1 = new JFXButton("Register");
+		Button btnReg2 = new JFXButton("Register");
+		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
 		ImageView apexHeader = new ImageView(new Image("TopGamer/Presentation/Images/ApexHeader.png"));
 		apexHeader.setFitHeight(70);
@@ -620,9 +666,9 @@ public class TopGamerGUI extends Application
 		lblUpcoming.setUnderline(true);
 		Label lblTourney1 = new Label("March 15th - Call Of Duty 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Call Of Duty 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new Button("Register");
-		Button btnReg2 = new Button("Register");
-		Button back = new Button("<-");
+		Button btnReg1 = new JFXButton("Register");
+		Button btnReg2 = new JFXButton("Register");
+		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
 		ImageView codHeader = new ImageView(new Image("TopGamer/Presentation/Images/CodHeader.png"));
 		codHeader.setFitHeight(70);
@@ -685,9 +731,9 @@ public class TopGamerGUI extends Application
 		lblUpcoming.setUnderline(true);
 		Label lblTourney1 = new Label("March 15th - Fifa - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Fifa - Boston - Sponsored by Razer");
-		Button btnReg1 = new Button("Register");
-		Button btnReg2 = new Button("Register");
-		Button back = new Button("<-");
+		Button btnReg1 = new JFXButton("Register");
+		Button btnReg2 = new JFXButton("Register");
+		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming Soon");
 		ImageView fifaHeader = new ImageView(new Image("TopGamer/Presentation/Images/FifaHeader.png"));
 		fifaHeader.setFitHeight(70);
@@ -749,9 +795,9 @@ public class TopGamerGUI extends Application
 		lblUpcoming.setUnderline(true);
 		Label lblTourney1 = new Label("March 15th - Halo 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Halo 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new Button("Register");
-		Button btnReg2 = new Button("Register");
-		Button back = new Button("<-");
+		Button btnReg1 = new JFXButton("Register");
+		Button btnReg2 = new JFXButton("Register");
+		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
 		ImageView haloHeader = new ImageView(new Image("TopGamer/Presentation/Images/HaloHeader.png"));
 		haloHeader.setFitHeight(70);
