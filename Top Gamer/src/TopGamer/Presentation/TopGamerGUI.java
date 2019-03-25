@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -151,11 +152,21 @@ public class TopGamerGUI extends Application
 		txtLoginName.setPrefHeight(25.0);
 		txtLoginName.setLabelFloat(true);
 		txtLoginName.setPromptText("Username or email address");
+		
+		txtLoginName.setOnKeyReleased(e -> {
+			lblValidPass.setText(null);
+			lblValidUser.setText(null);
+		});
+		
 		txtLoginPass = new JFXPasswordField();
 		txtLoginPass.setPrefWidth(160.0);
 		txtLoginPass.setLabelFloat(true);
 		txtLoginPass.setPrefHeight(25.0);
 		txtLoginPass.setPromptText("Password");
+		
+		txtLoginPass.setOnKeyReleased(e -> {
+			lblValidPass.setText(null);
+		});
 		
 		btnUserLogin = new JFXButton("Login");
 		
@@ -208,6 +219,9 @@ public class TopGamerGUI extends Application
 
 		loginScene = new Scene(ap,600,400);
 	}
+	
+	
+	
 	
 	/**
 	 * Creates an instance of SQLConnection and calls Login() 
@@ -403,22 +417,22 @@ public class TopGamerGUI extends Application
 			System.out.println("All fields are empty");
 			return false;
 		}
-		if(Empty(txtFName))
+		else if(Empty(txtFName))
 		{
 			System.out.println("Firsttt name is empty");
 			return false;
 		}
-		if(txtLName.getText().equals(""))
+		else if(txtLName.getText().equals(""))
 		{
 			System.out.println("Last name is empty");
 			return false;
 		}
-		if(txtEmail.getText().equals(""))
+		else if(txtEmail.getText().equals(""))
 		{
 			System.out.println("Email is empty");
 			return false;
 		}
-		if(txtUserName.getText().equals(""))
+		else if(txtUserName.getText().equals(""))
 		{
 			System.out.println("User name is empty");
 			return false;
@@ -446,17 +460,33 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateMainDashboard()
 	{
+		JFXButton btn = new JFXButton("Profile");
+		JFXButton btn2 = new JFXButton("Settings");
+		JFXButton btn3 = new JFXButton("Edit Profile");
+		JFXNodesList nodeList = new JFXNodesList();
+		nodeList.addAnimatedNode(btn);
+		nodeList.addAnimatedNode(btn2);
+		nodeList.addAnimatedNode(btn3);
+		
+		
 		//use this vbox to only make games scroll
-		VBox test = new VBox();
-		test.setStyle("-fx-focus-color: transparent;");
+		VBox mainDashVbox = new VBox();
+		mainDashVbox.setSpacing(55);
+		HBox mainDashHbox = new HBox();
+		mainDashHbox.setSpacing(500);
+		mainDashVbox.setStyle("-fx-focus-color: transparent;");
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setPannable(true);
 		mainScroll.setFitToHeight(true);
+		mainScroll.setFitToHeight(true);
+		//mainScroll.setPrefHeight(220);
 		mainScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		AnchorPane ap = new AnchorPane();
+		ap.setStyle("-fx-focus-color: transparent;");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> window.setScene(welcomeScene));
 		Label lblFeaturedGames = new Label("Featured Games");
+		mainDashHbox.getChildren().addAll(lblFeaturedGames,nodeList);
 		
 		//Load images and set their size
 		ImageView fortniteLogo = new ImageView(new Image("TopGamer/Presentation/Images/Fortnite.jpg"));
@@ -496,7 +526,7 @@ public class TopGamerGUI extends Application
 		haloLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
 		haloLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
-		//Set image position on anchor pane
+		//Set image position on anchor pane	
 		AnchorPane.setTopAnchor(fortniteLogo, 35.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
 		AnchorPane.setTopAnchor(apexLogo, 35.0);
@@ -509,15 +539,22 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(haloLogo, 601.0);
 		AnchorPane.setTopAnchor(btnReturn, 300.0);
 		
+		
+		
+	
+		
+		
+		
+		
 		//add images to anchor pane
-		ap.getChildren().addAll(lblFeaturedGames,btnReturn,fortniteLogo,apexLogo,codLogo,fifaLogo,haloLogo);
+		ap.getChildren().addAll(btnReturn,fortniteLogo,apexLogo,codLogo,fifaLogo,haloLogo);
 	
 		//add anchor pane to the scroll pane
 		mainScroll.setContent(ap);
 		
-		test.getChildren().addAll(lblFeaturedGames,mainScroll, btnReturn);
+		mainDashVbox.getChildren().addAll(mainDashHbox,mainScroll, btnReturn);
 
-		mainDashboardScene = new Scene(test,600,400);
+		mainDashboardScene = new Scene(mainDashVbox,600,400);
 	
 	}
 	
