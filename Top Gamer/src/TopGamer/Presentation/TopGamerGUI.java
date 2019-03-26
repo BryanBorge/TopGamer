@@ -117,13 +117,15 @@ public class TopGamerGUI extends Application
 		btnLogin = new JFXButton("Login");
 		btnLogin.setPrefWidth(173.0);
 		btnLogin.setPrefHeight(43.0);
+		btnLogin.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		btnRegister = new JFXButton("Register");
 		btnRegister.setPrefWidth(173.0);
 		btnRegister.setPrefHeight(43.0);
+		btnRegister.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		btnContinue = new JFXButton("Continue without registering");
 		btnContinue.setPrefWidth(600.0);
 		btnContinue.setPrefHeight(20.0);
-		
+		btnContinue.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		
 		AnchorPane.setLeftAnchor(btnLogin, 214.0);
 		AnchorPane.setTopAnchor(btnLogin, 110.0);
@@ -182,7 +184,7 @@ public class TopGamerGUI extends Application
 		btnUserLogin.setPrefWidth(160.0);
 		btnUserLogin.setPrefHeight(25.0);
 		btnUserLogin.setOnAction(e-> Login());
-		//JFXButton btn = new JFXButton();
+		btnUserLogin.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 	    
 		
 		Button btnReturn = new JFXButton("<-");
@@ -192,6 +194,7 @@ public class TopGamerGUI extends Application
 		btnSignUp.setPrefHeight(25.0);
 		btnSignUp.setFont(Font.font(10));
 		btnSignUp.setOnAction(e -> OpenRegisterScene());
+		btnSignUp.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		
 		lblValidLoginPass = new Label();
 		lblValidLoginUser = new Label();
@@ -394,6 +397,7 @@ public class TopGamerGUI extends Application
 		});
 		
 		btnSignUp = new JFXButton("Sign up");
+		btnSignUp.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		btnSignUp.setOnAction(e -> RegisterUser());
 		
 				
@@ -535,21 +539,12 @@ public class TopGamerGUI extends Application
 		//use this vbox to only make games scroll
 		VBox mainDashVbox = new VBox();
 		mainDashVbox.setSpacing(55);
-		HBox mainDashHbox = new HBox();
-		mainDashHbox.setSpacing(490);
 		mainDashVbox.setStyle("-fx-focus-color: transparent;");
-		ScrollPane mainScroll = new ScrollPane();
-		mainScroll.setPannable(true);
-		mainScroll.setFitToHeight(true);
-		mainScroll.setFitToHeight(true);
-		//mainScroll.setPrefHeight(220);
-		mainScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		AnchorPane ap = new AnchorPane();
 		ap.setStyle("-fx-focus-color: transparent;");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> window.setScene(welcomeScene));
 		Label lblFeaturedGames = new Label("Featured Games");
-		mainDashHbox.getChildren().addAll(lblFeaturedGames,nodeList);
 		
 		//Load images and set their size
 		ImageView fortniteLogo = new ImageView(new Image("TopGamer/Presentation/Images/Fortnite.jpg"));
@@ -573,17 +568,9 @@ public class TopGamerGUI extends Application
 		fortniteLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
 		fortniteLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
-		apexLogo.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {apexScene.setCursor(Cursor.DEFAULT); OpenApexScene();});
-		apexLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
-		apexLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
-		
 		codLogo.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {codScene.setCursor(Cursor.DEFAULT); OpenCodScene();});
 		codLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
 		codLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
-		
-		fifaLogo.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {fifaScene.setCursor(Cursor.DEFAULT); OpenFifaScene();});
-		fifaLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
-		fifaLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
 		haloLogo.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {haloScene.setCursor(Cursor.DEFAULT); OpenHaloScene();});
 		haloLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
@@ -592,23 +579,19 @@ public class TopGamerGUI extends Application
 		//Set image position on anchor pane	
 		AnchorPane.setTopAnchor(fortniteLogo, 35.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
-		AnchorPane.setTopAnchor(apexLogo, 35.0);
-		AnchorPane.setLeftAnchor(apexLogo, 167.0);
 		AnchorPane.setTopAnchor(codLogo, 35.0);
-		AnchorPane.setLeftAnchor(codLogo, 308.0);
-		AnchorPane.setTopAnchor(fifaLogo, 35.0);
-		AnchorPane.setLeftAnchor(fifaLogo, 453.0); 
+		AnchorPane.setLeftAnchor(codLogo, 167.0);
 		AnchorPane.setTopAnchor(haloLogo, 35.0);
-		AnchorPane.setLeftAnchor(haloLogo, 601.0);
+		AnchorPane.setLeftAnchor(haloLogo, 308.0);
 		AnchorPane.setTopAnchor(btnReturn, 300.0);
-		
+		AnchorPane.setTopAnchor(nodeList, 14.0);
+		AnchorPane.setRightAnchor(nodeList, 14.0);
 		//add images to anchor pane
-		ap.getChildren().addAll(btnReturn,fortniteLogo,apexLogo,codLogo,fifaLogo,haloLogo);
+		ap.getChildren().addAll(btnReturn,fortniteLogo,codLogo,haloLogo,nodeList);
 	
 		//add anchor pane to the scroll pane
-		mainScroll.setContent(ap);
 		
-		mainDashVbox.getChildren().addAll(mainDashHbox,mainScroll, btnReturn);
+		mainDashVbox.getChildren().addAll(ap, btnReturn);
 
 		mainDashboardScene = new Scene(mainDashVbox,600,400);
 	
