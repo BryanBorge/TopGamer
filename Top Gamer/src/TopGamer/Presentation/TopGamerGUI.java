@@ -34,19 +34,18 @@ public class TopGamerGUI extends Application
 	
 	User testUser = new User();
 	boolean loggedIn = false;
+	
 	Stage window,gameStage;
-	Scene welcomeScene,loginScene, registerScene, mainDashboardScene;
-	Scene fortniteScene, apexScene, fifaScene, codScene, haloScene;
+	Scene loginScene, registerScene, mainDashboardScene;
+	Scene fortniteScene, codScene, haloScene;
 	
-	//Used on welcome scene
-	JFXButton btnLogin, btnRegister, btnContinue;
-	
-	//Used for user login - DESIGNED BUT NOT WORKING
+	//Used for user login 
 	Label lblLoginName, lblLoginPass;
 	JFXTextField txtLoginName;
 	JFXPasswordField txtLoginPass;
-	JFXButton btnUserLogin, btnBackToWelcome;
+	JFXButton btnUserLogin;
 	JFXButton btnSignUp;
+	JFXButton btnContinue;
 	
 	//Registration
 	Label lblValidFirstName;
@@ -75,72 +74,17 @@ public class TopGamerGUI extends Application
 		window = primaryStage;
 		window.setResizable(false);
 		
-		CreateWelcomeScene();
 		CreateLoginScene();
 		CreateRegisterScene();
 		CreateMainDashboard();
-		CreateFortniteScene();
-		CreateApexScene();
-		CreateCODScene();
-		CreateFifaScene();
+		CreateFortniteScene();		
+		CreateCODScene();	
 		CreateHaloScene();
-		
-		btnRegister.setOnAction(e -> OpenRegisterScene());
-		btnLogin.setOnAction( e -> OpenLoginScene());
-		//btnBackToWelcome.setOnAction(e -> BackToWelcomeScreen());
-		btnContinue.setOnAction(e -> OpenMainDashboard());
-		
-		window.setScene(welcomeScene);
-		window.show();
-		
-	}
 	
-	/**
-	 * Set main window the the welcomeScene
-	 */
-	public void BackToWelcomeScreen()
-	{
-		window.setScene(welcomeScene);
+		window.setScene(loginScene);
+		window.show();	
 	}
-	
-	/**
-	 * Create/Add all controls to the welcomeScene
-	 */
-	public void CreateWelcomeScene()
-	{
-		AnchorPane ap = new AnchorPane();
-		
-//		ImageView imageView = new ImageView();
-//		Image img = new Image("TopGamer/Presentation/stadium.jpg");
-//		imageView.setImage(img);
-		
-		btnLogin = new JFXButton("Login");
-		btnLogin.setPrefWidth(173.0);
-		btnLogin.setPrefHeight(43.0);
-		btnLogin.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		btnRegister = new JFXButton("Register");
-		btnRegister.setPrefWidth(173.0);
-		btnRegister.setPrefHeight(43.0);
-		btnRegister.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		btnContinue = new JFXButton("Continue without registering");
-		btnContinue.setPrefWidth(600.0);
-		btnContinue.setPrefHeight(20.0);
-		btnContinue.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		
-		AnchorPane.setLeftAnchor(btnLogin, 214.0);
-		AnchorPane.setTopAnchor(btnLogin, 110.0);
-		
-		AnchorPane.setLeftAnchor(btnRegister,214.0);
-		AnchorPane.setTopAnchor(btnRegister, 188.0);
-		
-		AnchorPane.setLeftAnchor(btnContinue,0.0);
-		AnchorPane.setTopAnchor(btnContinue, 374.0);
-		
-		ap.getChildren().addAll(btnLogin,btnRegister,btnContinue);
 
-		welcomeScene = new Scene(ap,600,400);
-	
-	}
 	
 	/**
 	 * Set main window to the loginScene
@@ -185,16 +129,26 @@ public class TopGamerGUI extends Application
 		btnUserLogin.setPrefHeight(25.0);
 		btnUserLogin.setOnAction(e-> Login());
 		btnUserLogin.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-	    
 		
-		Button btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e -> window.setScene(welcomeScene));
+		
 		btnSignUp = new JFXButton("Dont have an account? Sign up");
 		btnSignUp.setPrefWidth(160.0);
 		btnSignUp.setPrefHeight(25.0);
 		btnSignUp.setFont(Font.font(10));
-		btnSignUp.setOnAction(e -> OpenRegisterScene());
+		btnSignUp.setOnAction(e ->{
+			txtLoginName.setText("");
+	    	txtLoginPass.setText("");
+	    	lblValidLoginUser.setText(null);
+	    	lblValidLoginPass.setText(null);
+			OpenRegisterScene();
+		});
 		btnSignUp.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
+		
+		btnContinue = new JFXButton("Continue without registering");
+		btnContinue.setPrefWidth(600.0);
+		btnContinue.setPrefHeight(20.0);
+		btnContinue.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
+		btnContinue.setOnAction(e -> OpenMainDashboard());
 		
 		lblValidLoginPass = new Label();
 		lblValidLoginUser = new Label();
@@ -223,10 +177,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
 		AnchorPane.setTopAnchor(btnSignUp, 278.0);
 		
-		AnchorPane.setLeftAnchor(btnReturn, 14.0);
-		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidLoginUser,lblValidLoginPass,btnSignUp,btnReturn);
+		AnchorPane.setLeftAnchor(btnContinue,0.0);
+		AnchorPane.setTopAnchor(btnContinue, 374.0);
+		
+		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidLoginUser,lblValidLoginPass,btnSignUp,btnContinue);
 
 		loginScene = new Scene(ap,600,400);
 	}
@@ -351,10 +306,20 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane ap = new AnchorPane();
 		Button btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e ->BackToWelcomeScreen());
-		AnchorPane.setLeftAnchor(btnReturn, 14.0);
-		AnchorPane.setTopAnchor(btnReturn, 14.0);
-		
+		btnReturn.setOnAction(e ->{
+			txtFName.setText("");
+			txtLName.setText("");
+			txtEmail.setText("");
+			txtUserName.setText("");
+			txtPass.setText("");
+			lblValidFirstName.setText(null);
+			lblValidLastName.setText(null);
+			lblValidEmail.setText(null);
+			lblValidUserName.setText(null);
+			lblValidPass.setText(null);
+			OpenLoginScene();
+		});
+			
 		lblValidFirstName = new Label("");
 		lblValidLastName = new Label("");
 		lblValidEmail = new Label("");
@@ -529,7 +494,7 @@ public class TopGamerGUI extends Application
 		btnProfile = new JFXButton("Profile");
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
-		btnLogOut.setOnAction(e -> BackToWelcomeScreen());
+		btnLogOut.setOnAction(e -> OpenLoginScene());
 		nodeList = new JFXNodesList();
 		nodeList.addAnimatedNode(btnProfile);
 		nodeList.addAnimatedNode(btnEditProfile);
@@ -543,7 +508,7 @@ public class TopGamerGUI extends Application
 		AnchorPane ap = new AnchorPane();
 		ap.setStyle("-fx-focus-color: transparent;");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e-> window.setScene(welcomeScene));
+		btnReturn.setOnAction(e-> OpenLoginScene());
 		Label lblFeaturedGames = new Label("Featured Games");
 		
 		//Load images and set their size
@@ -664,70 +629,6 @@ public class TopGamerGUI extends Application
 	}
 	
 	
-	/**
-	 * Create/Add controls to the apexScene
-	 */
-	public void CreateApexScene()
-	{
-		Label lblDesc = new Label("Explore a growing roster of powerful Legends, each with their own unique personality, strengths, and abilities. Choose your Legend, team up with two other players, and combine your unique skills to be the last squad standing. Master your Legend’s abilities, make strategic calls on the fly, and use your team’s strengths to your advantage in vicious 60-player matches.  ");
-		lblDesc.setPrefHeight(90);
-		lblDesc.setPrefWidth(397);
-		lblDesc.setWrapText(true);
-		Label lblUpcoming= new Label("Upcoming Tournaments");
-		lblUpcoming.setUnderline(true);
-		Label lblTourney1 = new Label("March 15th - Apex 4v4 - NYC - Sponsored by Best-Buy");
-		Label lblTourney2 = new Label("March 20th - Apex 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new JFXButton("Register");
-		Button btnReg2 = new JFXButton("Register");
-		Button back = new JFXButton("<-");
-		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView apexHeader = new ImageView(new Image("TopGamer/Presentation/Images/ApexHeader.png"));
-		apexHeader.setFitHeight(70);
-		apexHeader.setFitWidth(255);
-		
-		AnchorPane ap = new AnchorPane();
-		
-		AnchorPane.setTopAnchor(back, 14.0);
-		AnchorPane.setLeftAnchor(back, 14.0);
-		
-		AnchorPane.setTopAnchor(apexHeader, 69.0);
-		AnchorPane.setLeftAnchor(apexHeader, 14.0);
-		
-		AnchorPane.setTopAnchor(lblDesc, 150.0);
-		AnchorPane.setLeftAnchor(lblDesc, 14.0);
-		
-		AnchorPane.setTopAnchor(lblUpcoming, 247.0);
-		AnchorPane.setLeftAnchor(lblUpcoming, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney1, 273.0);
-		AnchorPane.setLeftAnchor(lblTourney1, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney2, 310.0);
-		AnchorPane.setLeftAnchor(lblTourney2, 14.0);
-		
-		AnchorPane.setTopAnchor(btnReg1, 269.0);
-		AnchorPane.setLeftAnchor(btnReg1, 336.0);
-		
-		AnchorPane.setTopAnchor(btnReg2, 306.0);
-		AnchorPane.setLeftAnchor(btnReg2, 336.0);
-		
-		AnchorPane.setTopAnchor(lblLeaderboard,350.0);
-		AnchorPane.setLeftAnchor(lblLeaderboard, 14.0);
-		
-		ap.getChildren().addAll(back,apexHeader,lblDesc, lblUpcoming, lblTourney1, lblTourney2,lblLeaderboard, btnReg1, btnReg2);
-		
-		apexScene = new Scene(ap, 600,400);
-		
-		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}
-	/**
-	 * Set main window the the apexScene
-	 */
-	public void OpenApexScene()
-	{
-		window.setScene(apexScene);
-	}
-	
 	
 	/**
 	 * Create/Add controls to the codScene
@@ -790,71 +691,6 @@ public class TopGamerGUI extends Application
 	public void OpenCodScene()
 	{
 		window.setScene(codScene);
-	}
-	
-	
-	/**
-	 * Create/Add controls to the fifaScene
-	 */
-	public void CreateFifaScene()
-	{
-		Label lblDesc = new Label("Get ready for the return of the UEFA Champions League with amazing new content in FIFA 19. With special Champions League kits and player items, as well as your choice of a Neymar Jr, Kevin De Bruyne, or Paulo Dybala 10 match loan item for your team, there's no better time to get started in FIFA 19!\r\n"); 
-				
-		lblDesc.setPrefHeight(90);
-		lblDesc.setPrefWidth(397);
-		lblDesc.setWrapText(true);
-		Label lblUpcoming= new Label("Upcoming Tournaments");
-		lblUpcoming.setUnderline(true);
-		Label lblTourney1 = new Label("March 15th - Fifa - NYC - Sponsored by Best-Buy");
-		Label lblTourney2 = new Label("March 20th - Fifa - Boston - Sponsored by Razer");
-		Button btnReg1 = new JFXButton("Register");
-		Button btnReg2 = new JFXButton("Register");
-		Button back = new JFXButton("<-");
-		Label lblLeaderboard = new Label("Leaderboard - Coming Soon");
-		ImageView fifaHeader = new ImageView(new Image("TopGamer/Presentation/Images/FifaHeader.png"));
-		fifaHeader.setFitHeight(70);
-		fifaHeader.setFitWidth(255);
-		
-		AnchorPane ap = new AnchorPane();
-		
-		AnchorPane.setTopAnchor(back, 14.0);
-		AnchorPane.setLeftAnchor(back, 14.0);
-		
-		AnchorPane.setTopAnchor(fifaHeader, 69.0);
-		AnchorPane.setLeftAnchor(fifaHeader, 14.0);
-		
-		AnchorPane.setTopAnchor(lblDesc, 150.0);
-		AnchorPane.setLeftAnchor(lblDesc, 14.0);
-		
-		AnchorPane.setTopAnchor(lblUpcoming, 247.0);
-		AnchorPane.setLeftAnchor(lblUpcoming, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney1, 273.0);
-		AnchorPane.setLeftAnchor(lblTourney1, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney2, 310.0);
-		AnchorPane.setLeftAnchor(lblTourney2, 14.0);
-		
-		AnchorPane.setTopAnchor(btnReg1, 269.0);
-		AnchorPane.setLeftAnchor(btnReg1, 336.0);
-		
-		AnchorPane.setTopAnchor(btnReg2, 306.0);
-		AnchorPane.setLeftAnchor(btnReg2, 336.0);
-		
-		AnchorPane.setTopAnchor(lblLeaderboard,350.0);
-		AnchorPane.setLeftAnchor(lblLeaderboard, 14.0);
-
-		ap.getChildren().addAll(back,fifaHeader,lblDesc, lblUpcoming, lblTourney1, lblTourney2,lblLeaderboard, btnReg1, btnReg2);
-		
-		fifaScene = new Scene(ap,600,400);
-		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}
-	/**
-	 * Set main window to the fifaScene
-	 */
-	public void OpenFifaScene()
-	{
-		window.setScene(fifaScene);
 	}
 	
 	
