@@ -12,8 +12,6 @@ public class Team {
 	private String m_TeamName;
 	private int m_Wins;
 	private int m_Losses;
-	private int m_TournamentID;
-	private int m_TeamID;
 	
 		
 	/*
@@ -27,8 +25,7 @@ public class Team {
 		m_TeamName = "N/A";
 		m_Wins = 0;
 		m_Losses = 0;
-		m_TournamentID = 1;
-		m_TeamID = 1;
+		
 		}
 	
 	/*
@@ -95,50 +92,7 @@ public class Team {
 	   return m_Losses;
 	}
 
-	/*
-	 * sets TournamentID Member Variable
-	 * 
-	 * @param TournamentID
-	 */
 	
-	public void setTournamentID(int TournamentID) 
-	{
-		m_TournamentID = TournamentID;
-	}
-
-	/*
-	 * gets TournamentID Member Variable
-	 * 
-	 * @returns TournamentID
-	 */
-	
-	public int getTournamentID() 
-	{
-		return m_TournamentID;
-	}
-
-	/*
-	 * sets TeamID Member Variable
-	 * 
-	 * @param TeamID
-	 */
-	
-	public void setTeamID(int TeamID) 
-	{
-		m_TeamID = TeamID;
-	}
-
-	/*
-	 * gets TeamID Member Variable
-	 * 
-	 * @returns TeamID
-	 */
-	
-	public int getTeamID() 
-	{
-		return m_TeamID;
-	}
-
 }
 
 
