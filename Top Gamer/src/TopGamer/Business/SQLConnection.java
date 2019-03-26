@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
 import javafx.scene.control.Alert;
@@ -60,7 +61,7 @@ public class SQLConnection {
 	 * @param userName UserName
 	 * @param password Password
 	 */
-	public void AddUser(String firstName, String lastName, String email, String userName, String password)
+	public void AddUser(String firstName, String lastName, String email, String userName, String password) throws SQLiteException
 	{
 		//adds user info from the registration form
 		String query = "INSERT INTO Users (FirstName,LastName,Email,UserName,Password) " +
@@ -76,9 +77,9 @@ public class SQLConnection {
 			statement.executeUpdate(query);
 			System.out.println("User added successfully");
 			statement.close();
-			
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		}
+		catch (SQLException e1) {
+			throw new SQLiteException("cannot save user to database", SQLiteErrorCode.SQLITE_BUSY);
 		}
 	}
 	

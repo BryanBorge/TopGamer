@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,6 +20,10 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
+
+import javax.lang.model.AnnotatedConstruct;
+
+import org.sqlite.SQLiteException;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
@@ -121,12 +126,16 @@ public class TopGamerGUI extends Application
 		txtLoginPass.setPromptText("Password");
 		
 		txtLoginPass.setOnKeyReleased(e -> {
-			lblValidLoginPass.setText(null);
+			if(e.getCode() != KeyCode.ENTER)
+				lblValidLoginPass.setText(null);
+		});
+		
+		txtLoginPass.setOnKeyPressed(e -> {
+			if(e.getCode() == KeyCode.ENTER) 
+				Login();
 		});
 		
 		btnUserLogin = new JFXButton("Login");
-		
-		
 		btnUserLogin.setPrefWidth(160.0);
 		btnUserLogin.setPrefHeight(25.0);
 		btnUserLogin.setOnAction(e-> Login());
@@ -359,8 +368,15 @@ public class TopGamerGUI extends Application
 		txtPass = new JFXPasswordField();
 		txtPass.setLabelFloat(true);
 		txtPass.setPromptText("Password");
-		txtPass.setOnKeyPressed(e -> {
-			lblValidPass.setText(null);
+		
+		txtPass.setOnKeyReleased(e -> {
+			if(e.getCode() != KeyCode.ENTER)
+				lblValidPass.setText(null);
+		});
+		
+		txtPass.setOnKeyPressed(e->{
+			if(e.getCode() == KeyCode.ENTER)
+				RegisterUser();
 		});
 		
 		btnSignUp = new JFXButton("Sign up");
@@ -411,15 +427,22 @@ public class TopGamerGUI extends Application
 	{
 		if(RegisterValidation())
 		{
-			SQLConnection s = new SQLConnection();
-			s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
-			btnProfile.setText(txtUserName.getText());
-			window.setScene(mainDashboardScene);
-			txtFName.setText("");
-			txtLName.setText("");
-			txtEmail.setText("");
-			txtUserName.setText("");
-			txtPass.setText("");
+		
+			try {
+				SQLConnection s = new SQLConnection();
+				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+				btnProfile.setText(txtUserName.getText());
+				txtFName.setText("");
+				txtLName.setText("");
+				txtEmail.setText("");
+				txtUserName.setText("");
+				txtPass.setText("");
+				window.setScene(mainDashboardScene);
+			} catch (SQLiteException e) {
+				System.out.println("Error saving user to database. Make sure it is closed");
+			}
+			
+			
 		}
 	}
 	
@@ -521,19 +544,23 @@ public class TopGamerGUI extends Application
 		profileIcon.setFitHeight(20);
 		profileIcon.setFitWidth(20);
 		btnProfile.setGraphic(profileIcon);
-		
+	
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
 		fortniteLogo.setFitWidth(133);
 		fortniteLogo.setFitHeight(202);
+		
 		ImageView apexLogo = new ImageView(new Image("Apex.jpg"));
 		apexLogo.setFitWidth(133);
 		apexLogo.setFitHeight(202);
+		
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(133);
 		codLogo.setFitHeight(202);
+		
 		ImageView fifaLogo = new ImageView(new Image("fifa.jpg"));
 		fifaLogo.setFitWidth(133);
 		fifaLogo.setFitHeight(202);
+		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(133);
 		haloLogo.setFitHeight(202);
@@ -562,8 +589,6 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(lblFeaturedGames, 14.0);
 		AnchorPane.setTopAnchor(nodeList, 14.0);
 		AnchorPane.setRightAnchor(nodeList, 14.0);
-	//	AnchorPane.setTopAnchor(profileIcon, 14.0);
-	//	AnchorPane.setRightAnchor(profileIcon, 14.0);
 	
 		//add images to anchor pane
 		ap.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,nodeList);
@@ -578,60 +603,63 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateFortniteScene()
 	{
-		Label lblDesc = new Label("Fortnite Battle Royale is the FREE 100-player PvP mode in Fortnite. One giant map. A battle bus. Fortnite building skills and destructible environments combined with intense PvP combat. The last one standing wins. Available on PC, PlayStation 4, Xbox One & Mac. ");
-		lblDesc.setPrefHeight(77);
-		lblDesc.setPrefWidth(397);
-		lblDesc.setWrapText(true);
-		Label lblUpcoming= new Label("Upcoming Tournaments");
-		lblUpcoming.setUnderline(true);
-		Label lblTourney1 = new Label("March 15th - Fortnite 4v4 - NYC - Sponsored by Best-Buy");
-		Label lblTourney2 = new Label("March 20th - Fortnite 4v4 - Boston - Sponsored by Razer");
-		JFXButton btnReg1 = new JFXButton("Register");
-		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		JFXButton btnReg2 = new JFXButton("Register");
-		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		Button back = new JFXButton("<-");
-		Label lblLeaderboard = new Label("Leaderboards - Coming Soon");
-		ImageView fortniteHeader = new ImageView(new Image("FortniteHeader.png"));
-		fortniteHeader.setFitHeight(70);
-		fortniteHeader.setFitWidth(255);
-		
 		AnchorPane ap = new AnchorPane();
 		
-		AnchorPane.setTopAnchor(back, 14.0);
-		AnchorPane.setLeftAnchor(back, 14.0);
+		Label lblTitle = new Label("Fortnite"); 
+		lblTitle.setFont(new Font(24));
+		Label lblDesc = new Label("Epic Games");
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e-> OpenMainDashboard());
+		JFXButton btnPS4 = new JFXButton("PS4");
+		JFXButton btnXbox = new JFXButton("Xbox One");
+		JFXButton btnPC = new JFXButton("PC");
 		
-		AnchorPane.setTopAnchor(fortniteHeader, 69.0);
-		AnchorPane.setLeftAnchor(fortniteHeader, 14.0);
-		
-		AnchorPane.setTopAnchor(lblDesc, 150.0);
-		AnchorPane.setLeftAnchor(lblDesc, 14.0);
-		
-		AnchorPane.setTopAnchor(lblUpcoming, 247.0);
-		AnchorPane.setLeftAnchor(lblUpcoming, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney1, 273.0);
-		AnchorPane.setLeftAnchor(lblTourney1, 14.0);
-		
-		AnchorPane.setTopAnchor(lblTourney2, 310.0);
-		AnchorPane.setLeftAnchor(lblTourney2, 14.0);
-		
-		AnchorPane.setTopAnchor(lblLeaderboard,350.0);
-		AnchorPane.setLeftAnchor(lblLeaderboard, 14.0);
-		
-		AnchorPane.setTopAnchor(btnReg1, 269.0);
-		AnchorPane.setLeftAnchor(btnReg1, 336.0);
-		
-		AnchorPane.setTopAnchor(btnReg2, 306.0);
-		AnchorPane.setLeftAnchor(btnReg2, 336.0);
-		
-		ap.getChildren().addAll(back,fortniteHeader,lblDesc, lblUpcoming, lblTourney1, lblTourney2, lblLeaderboard, btnReg1, btnReg2);
+		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
+		fortniteLogo.setFitWidth(104);
+		fortniteLogo.setFitHeight(148);
 		
 		
+		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
+		psLogo.setFitHeight(30);
+		psLogo.setFitWidth(30);
+		btnPS4.setGraphic(psLogo);
+		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		xboxLogo.setFitHeight(30);
+		xboxLogo.setFitWidth(30);
+		btnXbox.setGraphic(xboxLogo);
+		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
+		pcLogo.setFitHeight(30);
+		pcLogo.setFitWidth(30);
+		btnPC.setGraphic(pcLogo);
+		
+		AnchorPane.setTopAnchor(fortniteLogo, 64.0);
+		AnchorPane.setLeftAnchor(fortniteLogo, 196.0);
+
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
+		
+		AnchorPane.setTopAnchor(lblTitle, 87.0);
+		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		
+		AnchorPane.setTopAnchor(lblDesc, 118.0);
+		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		
+		AnchorPane.setTopAnchor(btnPS4, 228.0);
+		AnchorPane.setLeftAnchor(btnPS4, 230.0);
+		
+		AnchorPane.setTopAnchor(btnXbox, 264.0);
+		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		
+		AnchorPane.setTopAnchor(btnPC, 300.0);
+		AnchorPane.setLeftAnchor(btnPC, 230.0);
+	
+		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+	
 		fortniteScene = new Scene(ap,600,400);
-		
-		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}	
+	
+	}
+	
+	
 	/**
 	 * Set main window the the fortniteScene
 	 */
@@ -647,58 +675,61 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateCODScene()
 	{
-		Label lblDesc = new Label("Apart from the Exo Movement, Advanced Warfare's multiplayer retains certain similarities to previous Call of Duty titles. The Pick 10 system in Black Ops II returns as Pick 13, allowing players to pick weapons, attachments, perks and score-streaks within a total of 13 allocation points.");
-		lblDesc.setPrefHeight(90);
-		lblDesc.setPrefWidth(397);
-		lblDesc.setWrapText(true);
-		Label lblUpcoming= new Label("Upcoming Tournaments");
-		lblUpcoming.setUnderline(true);
-		Label lblTourney1 = new Label("March 15th - Call Of Duty 4v4 - NYC - Sponsored by Best-Buy");
-		Label lblTourney2 = new Label("March 20th - Call Of Duty 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new JFXButton("Register");
-		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		Button btnReg2 = new JFXButton("Register");
-		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		Button back = new JFXButton("<-");
-		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView codHeader = new ImageView(new Image("CodHeader.png"));
-		codHeader.setFitHeight(70);
-		codHeader.setFitWidth(255);
-		
 		AnchorPane ap = new AnchorPane();
 		
-		AnchorPane.setTopAnchor(back, 14.0);
-		AnchorPane.setLeftAnchor(back, 14.0);
+		Label lblTitle = new Label("Call Of Duty: \nAdvanced Warefare"); 
+		lblTitle.setFont(new Font(24));
+		Label lblDesc = new Label("Activision");
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e-> OpenMainDashboard());
+		JFXButton btnPS4 = new JFXButton("PS4");
+		JFXButton btnXbox = new JFXButton("Xbox One");
+		JFXButton btnPC = new JFXButton("PC");
 		
-		AnchorPane.setTopAnchor(codHeader, 69.0);
-		AnchorPane.setLeftAnchor(codHeader, 14.0);
+		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
+		codLogo.setFitWidth(104);
+		codLogo.setFitHeight(148);
 		
-		AnchorPane.setTopAnchor(lblDesc, 150.0);
-		AnchorPane.setLeftAnchor(lblDesc, 14.0);
+		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
+		psLogo.setFitHeight(30);
+		psLogo.setFitWidth(30);
+		btnPS4.setGraphic(psLogo);
+		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		xboxLogo.setFitHeight(30);
+		xboxLogo.setFitWidth(30);
+		btnXbox.setGraphic(xboxLogo);
+		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
+		pcLogo.setFitHeight(30);
+		pcLogo.setFitWidth(30);
+		btnPC.setGraphic(pcLogo);
 		
-		AnchorPane.setTopAnchor(lblUpcoming, 247.0);
-		AnchorPane.setLeftAnchor(lblUpcoming, 14.0);
+		AnchorPane.setTopAnchor(codLogo, 64.0);
+		AnchorPane.setLeftAnchor(codLogo, 196.0);
+
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTourney1, 273.0);
-		AnchorPane.setLeftAnchor(lblTourney1, 14.0);
+		AnchorPane.setTopAnchor(lblTitle, 87.0);
+		AnchorPane.setLeftAnchor(lblTitle, 320.0);
 		
-		AnchorPane.setTopAnchor(lblTourney2, 310.0);
-		AnchorPane.setLeftAnchor(lblTourney2, 14.0);
+		AnchorPane.setTopAnchor(lblDesc, 155.0);
+		AnchorPane.setLeftAnchor(lblDesc, 320.0);
 		
-		AnchorPane.setTopAnchor(btnReg1, 269.0);
-		AnchorPane.setLeftAnchor(btnReg1, 345.0);
+		AnchorPane.setTopAnchor(btnPS4, 228.0);
+		AnchorPane.setLeftAnchor(btnPS4, 230.0);
 		
-		AnchorPane.setTopAnchor(btnReg2, 306.0);
-		AnchorPane.setLeftAnchor(btnReg2, 345.0);
+		AnchorPane.setTopAnchor(btnXbox, 264.0);
+		AnchorPane.setLeftAnchor(btnXbox, 230.0);
 		
-		AnchorPane.setTopAnchor(lblLeaderboard,350.0);
-		AnchorPane.setLeftAnchor(lblLeaderboard, 14.0);
-		
-		ap.getChildren().addAll(back,codHeader,lblDesc, lblUpcoming, lblTourney1, lblTourney2, lblLeaderboard, btnReg1, btnReg2);
+		AnchorPane.setTopAnchor(btnPC, 300.0);
+		AnchorPane.setLeftAnchor(btnPC, 230.0);
+	
+		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+	
 		codScene = new Scene(ap,600,400);
-		
-		back.setOnAction(e -> window.setScene(mainDashboardScene));
 	}
+	
+	
 	/**
 	 * Set main window to the codScene
 	 */
@@ -713,58 +744,48 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateHaloScene()
 	{
-		Label lblDesc = new Label("Four years after the events of Halo 3, the Master Chief returns in this award-winning first-person shooter. Battle through the campaign and explore the Forerunner planet, Requiem, as the Chief faces off with an ancient evil. Test your skills against familiar Covenant foes and new Promethean enemies in solo mode or with up to three friends on split-screen. With Xbox Live Gold Membership, access the online multiplayer and Spartan Ops missions.");
-		lblDesc.setPrefHeight(90);
-		lblDesc.setPrefWidth(397);
-		lblDesc.setWrapText(true);
-		Label lblUpcoming= new Label("Upcoming Tournaments");
-		lblUpcoming.setUnderline(true);
-		Label lblTourney1 = new Label("March 15th - Halo 4v4 - NYC - Sponsored by Best-Buy");
-		Label lblTourney2 = new Label("March 20th - Halo 4v4 - Boston - Sponsored by Razer");
-		Button btnReg1 = new JFXButton("Register");
-		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		Button btnReg2 = new JFXButton("Register");
-		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
-		Button back = new JFXButton("<-");
-		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView haloHeader = new ImageView(new Image("HaloHeader.png"));
-		haloHeader.setFitHeight(70);
-		haloHeader.setFitWidth(255);
-		
 		AnchorPane ap = new AnchorPane();
 		
-		AnchorPane.setTopAnchor(back, 14.0);
-		AnchorPane.setLeftAnchor(back, 14.0);
+		Label lblTitle = new Label("Halo 5"); 
+		lblTitle.setFont(new Font(24));
+		Label lblDesc = new Label("Bungee");
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		AnchorPane.setTopAnchor(haloHeader, 69.0);
-		AnchorPane.setLeftAnchor(haloHeader, 14.0);
+		JFXButton btnXbox = new JFXButton("Xbox One");
 		
-		AnchorPane.setTopAnchor(lblDesc, 150.0);
-		AnchorPane.setLeftAnchor(lblDesc, 14.0);
+		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
+		haloLogo.setFitWidth(104);
+		haloLogo.setFitHeight(148);
+	
+		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		xboxLogo.setFitHeight(30);
+		xboxLogo.setFitWidth(30);
+		btnXbox.setGraphic(xboxLogo);
 		
-		AnchorPane.setTopAnchor(lblUpcoming, 247.0);
-		AnchorPane.setLeftAnchor(lblUpcoming, 14.0);
+		AnchorPane.setTopAnchor(haloLogo, 64.0);
+		AnchorPane.setLeftAnchor(haloLogo, 196.0);
+
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTourney1, 273.0);
-		AnchorPane.setLeftAnchor(lblTourney1, 14.0);
+		AnchorPane.setTopAnchor(lblTitle, 87.0);
+		AnchorPane.setLeftAnchor(lblTitle, 320.0);
 		
-		AnchorPane.setTopAnchor(lblTourney2, 310.0);
-		AnchorPane.setLeftAnchor(lblTourney2, 14.0);
+		AnchorPane.setTopAnchor(lblDesc, 118.0);
+		AnchorPane.setLeftAnchor(lblDesc, 320.0);
 		
-		AnchorPane.setTopAnchor(btnReg1, 269.0);
-		AnchorPane.setLeftAnchor(btnReg1, 345.0);
+		AnchorPane.setTopAnchor(btnXbox, 228.0);
+		AnchorPane.setLeftAnchor(btnXbox, 230.0);
 		
-		AnchorPane.setTopAnchor(btnReg2, 306.0);
-		AnchorPane.setLeftAnchor(btnReg2, 345.0);
-		
-		AnchorPane.setTopAnchor(lblLeaderboard,350.0);
-		AnchorPane.setLeftAnchor(lblLeaderboard, 14.0);
-		
-		ap.getChildren().addAll(back,haloHeader,lblDesc, lblUpcoming, lblTourney1, lblTourney2,lblLeaderboard, btnReg1, btnReg2);
+	
+		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnXbox,btnReturn);
+	
 		haloScene = new Scene(ap,600,400);
-		
-		back.setOnAction(e -> window.setScene(mainDashboardScene));
-	}	
+	}
+	
+	
+	
 	/**
 	 * Set main window to the haloScene
 	 */
