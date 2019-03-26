@@ -30,8 +30,9 @@ import TopGamer.Business.*;
 
 public class TopGamerGUI extends Application
 {
-	// dfsdsdsdsds
+	
 	User testUser = new User();
+	boolean loggedIn = false;
 	Stage window,gameStage;
 	Scene welcomeScene,loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, apexScene, fifaScene, codScene, haloScene;
@@ -57,6 +58,13 @@ public class TopGamerGUI extends Application
 	JFXTextField txtEmail;
 	JFXTextField txtUserName;
 	JFXPasswordField txtPass;
+	
+	//Profile drop down
+	JFXButton btnProfile = new JFXButton("Profile");
+	JFXButton btnEditProfile = new JFXButton("Settings");
+	JFXButton btnLogOut = new JFXButton("Edit Profile");
+	JFXNodesList nodeList = new JFXNodesList();
+	
 
 	//Labels to display if login info isnt valid
 	Label lblValidUser,lblValidPass;
@@ -245,8 +253,11 @@ public class TopGamerGUI extends Application
 						e.printStackTrace();
 					}
 			if(Valid)
+			{
+				loggedIn = true;
 				OpenMainDashboard();
-			else
+			}
+				else
 			{
 				lblValidPass.setText("Username or password invalid");
 				lblValidPass.setTextFill(Color.RED);
@@ -309,7 +320,19 @@ public class TopGamerGUI extends Application
 			return false;
 	}
 	
-	
+	/**
+	 *  Tests if Password field is empty or not
+	 *  
+	 * @param text - JFXTextField Instance
+	 * @return true is text is empty, false otherwise
+	 */
+	public boolean Empty(JFXPasswordField pass)
+	{
+		if(pass.getText() == null || pass.getText().isEmpty())
+			return true;
+		else 
+			return false;
+	}
 	
 	/**
 	 * Set main window to registerScene
@@ -412,7 +435,7 @@ public class TopGamerGUI extends Application
 	
 	public boolean RegisterValidation()
 	{
-		if(txtFName.getText().equals("") && txtLName.getText().equals("") && txtEmail.getText().equals("") && txtUserName.getText().equals("") && txtPass.getText().equals(""))
+		if(Empty(txtFName) && Empty(txtLName) && Empty(txtEmail) && Empty(txtUserName) && Empty(txtPass))
 		{
 			System.out.println("All fields are empty");
 			return false;
@@ -422,22 +445,22 @@ public class TopGamerGUI extends Application
 			System.out.println("Firsttt name is empty");
 			return false;
 		}
-		else if(txtLName.getText().equals(""))
+		else if(Empty(txtLName))
 		{
 			System.out.println("Last name is empty");
 			return false;
 		}
-		else if(txtEmail.getText().equals(""))
+		else if(Empty(txtEmail))
 		{
 			System.out.println("Email is empty");
 			return false;
 		}
-		else if(txtUserName.getText().equals(""))
+		else if(Empty(txtUserName))
 		{
 			System.out.println("User name is empty");
 			return false;
 		}
-		if(txtPass.getText().equals(""))
+		if(Empty(txtPass))
 		{
 			System.out.println("Password is empty");
 			return false;
@@ -451,6 +474,8 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenMainDashboard()
 	{
+		if(loggedIn)
+			btnProfile.setText(testUser.GetUsername());
 		 System.out.println(testUser.GetFirstName() + " " + testUser.GetLastName() + " " + testUser.GetEmail());
 		 window.setScene(mainDashboardScene);
 	}	
@@ -460,13 +485,13 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateMainDashboard()
 	{
-		JFXButton btn = new JFXButton("Profile");
-		JFXButton btn2 = new JFXButton("Settings");
-		JFXButton btn3 = new JFXButton("Edit Profile");
-		JFXNodesList nodeList = new JFXNodesList();
-		nodeList.addAnimatedNode(btn);
-		nodeList.addAnimatedNode(btn2);
-		nodeList.addAnimatedNode(btn3);
+		btnProfile = new JFXButton("Profile");
+		btnEditProfile = new JFXButton("Settings");
+		btnLogOut= new JFXButton("Edit Profile");
+		nodeList = new JFXNodesList();
+		nodeList.addAnimatedNode(btnProfile);
+		nodeList.addAnimatedNode(btnEditProfile);
+		nodeList.addAnimatedNode(btnLogOut);
 		
 		
 		//use this vbox to only make games scroll

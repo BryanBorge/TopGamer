@@ -38,7 +38,8 @@ public class SQLConnection {
 	{      
         try {
         	//location of the database file
-        	String databaseLocation = "jdbc:sqlite:TestDataBase.db";
+          //String databaseLocation = "jdbc:sqlite:TestDataBase.db";
+        	String databaseLocation = "jdbc:sqlite:TopGamerDB1.1.db";
             
         	//create a connection to the database
             connection = DriverManager.getConnection(databaseLocation);
@@ -53,17 +54,17 @@ public class SQLConnection {
 	/**
 	 * Adds a user info from registration form to the database
 	 * 
-	 * @param f First Name
-	 * @param l Last Name
-	 * @param e Email
-	 * @param u UserName
-	 * @param p Password
+	 * @param firstName First Name
+	 * @param lastName Last Name
+	 * @param email Email
+	 * @param userName UserName
+	 * @param password Password
 	 */
-	public void AddUser(String f, String l, String e, String u, String p)
+	public void AddUser(String firstName, String lastName, String email, String userName, String password)
 	{
 		//adds user info from the registration form
-		String query = "INSERT INTO Users (UserName,Password,Email,FirstName,LastName) " +
-		              "Values ( \'" + u + "\', \'" + p + "\', \'" + e + "\', \'" + f + "\', \'" + l +"\');";
+		String query = "INSERT INTO Users (FirstName,LastName,Email,UserName,Password) " +
+		              "Values ( \'" + firstName + "\', \'" + lastName + "\', \'" + email + "\', \'" + userName + "\', \'" + password +"\');";
 		
 		//test query to add any data
 		String q =  "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +

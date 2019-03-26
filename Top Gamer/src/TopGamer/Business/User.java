@@ -9,11 +9,11 @@ package TopGamer.Business;
 
 public class User 
 {
-	public String m_firstName;
-	public String m_lastName;
-	public String m_email;
-	public String m_username;
-	public String m_password;
+	private String m_firstName;
+	private String m_lastName;
+	private String m_email;
+	private String m_username;
+	private String m_password;
 	
 	/**
 	 * User constructor
