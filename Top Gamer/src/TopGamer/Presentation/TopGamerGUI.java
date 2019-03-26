@@ -44,6 +44,9 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 	
+	ImageView backArrow = new ImageView(new Image("back arrow.png"));
+	
+	
 	//Used for user login 
 	Label lblLoginName, lblLoginPass;
 	JFXTextField txtLoginName;
@@ -78,6 +81,9 @@ public class TopGamerGUI extends Application
 	{		
 		window = primaryStage;
 		window.setResizable(false);
+		
+		backArrow.setFitHeight(20);
+		backArrow.setFitWidth(20);
 		
 		CreateLoginScene();
 		CreateRegisterScene();
@@ -196,10 +202,7 @@ public class TopGamerGUI extends Application
 
 		loginScene = new Scene(ap,600,400);
 	}
-	
-	
-	
-	
+
 	/**
 	 * Creates an instance of SQLConnection and calls Login() 
 	 * 
@@ -236,9 +239,7 @@ public class TopGamerGUI extends Application
 		}
 	}
 	
-	
-	
-	
+
 	/**
 	 * Login form validation
 	 * Username cannot be blank and must be a string (will allow users to add numbers later on)
@@ -316,7 +317,10 @@ public class TopGamerGUI extends Application
 	public void CreateRegisterScene()
 	{
 		AnchorPane ap = new AnchorPane();
-		Button btnReturn = new JFXButton("<-");
+		Button btnReturn = new JFXButton();
+		
+		btnReturn.setGraphic(backArrow);
+		
 		btnReturn.setOnAction(e ->{
 			txtFName.setText("");
 			txtLName.setText("");
@@ -609,6 +613,7 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Epic Games");
 		JFXButton btnReturn = new JFXButton("<-");
+		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		JFXButton btnPS4 = new JFXButton("PS4");
 		JFXButton btnXbox = new JFXButton("Xbox One");
@@ -681,6 +686,7 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
+		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		JFXButton btnPS4 = new JFXButton("PS4");
 		JFXButton btnXbox = new JFXButton("Xbox One");
@@ -750,6 +756,7 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Bungee");
 		JFXButton btnReturn = new JFXButton("<-");
+		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 		JFXButton btnXbox = new JFXButton("Xbox One");
@@ -783,8 +790,6 @@ public class TopGamerGUI extends Application
 	
 		haloScene = new Scene(ap,600,400);
 	}
-	
-	
 	
 	/**
 	 * Set main window to the haloScene
