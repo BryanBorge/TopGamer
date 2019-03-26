@@ -4,6 +4,7 @@ package TopGamer.Presentation;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -48,11 +49,11 @@ public class TopGamerGUI extends Application
 	JFXButton btnSignUp;
 	
 	//Registration
-	Label lblFName;
-	Label lblLName;
-	Label lblEmail;
-	Label lblUserName;
-	Label lblPass;
+	Label lblValidFirstName;
+	Label lblValidLastName;
+	Label lblValidEmail;
+	Label lblValidUserName;
+	Label lblValidPass;
 	JFXTextField txtFName;
 	JFXTextField txtLName;
 	JFXTextField txtEmail;
@@ -65,9 +66,8 @@ public class TopGamerGUI extends Application
 	JFXButton btnLogOut = new JFXButton("Edit Profile");
 	JFXNodesList nodeList = new JFXNodesList();
 	
-
 	//Labels to display if login info isnt valid
-	Label lblValidUser,lblValidPass;
+	Label lblValidLoginUser,lblValidLoginPass;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -162,8 +162,8 @@ public class TopGamerGUI extends Application
 		txtLoginName.setPromptText("Username or email address");
 		
 		txtLoginName.setOnKeyReleased(e -> {
-			lblValidPass.setText(null);
-			lblValidUser.setText(null);
+			lblValidLoginPass.setText(null);
+			lblValidLoginUser.setText(null);
 		});
 		
 		txtLoginPass = new JFXPasswordField();
@@ -173,7 +173,7 @@ public class TopGamerGUI extends Application
 		txtLoginPass.setPromptText("Password");
 		
 		txtLoginPass.setOnKeyReleased(e -> {
-			lblValidPass.setText(null);
+			lblValidLoginPass.setText(null);
 		});
 		
 		btnUserLogin = new JFXButton("Login");
@@ -193,20 +193,20 @@ public class TopGamerGUI extends Application
 		btnSignUp.setFont(Font.font(10));
 		btnSignUp.setOnAction(e -> OpenRegisterScene());
 		
-		lblValidPass = new Label();
-		lblValidUser = new Label();
+		lblValidLoginPass = new Label();
+		lblValidLoginUser = new Label();
 		
 		AnchorPane.setLeftAnchor(txtLoginName, 226.0);
 		AnchorPane.setTopAnchor(txtLoginName, 134.0);
 		
-		AnchorPane.setLeftAnchor(lblValidUser, 226.0);
-		AnchorPane.setTopAnchor(lblValidUser, 160.0);
+		AnchorPane.setLeftAnchor(lblValidLoginUser, 226.0);
+		AnchorPane.setTopAnchor(lblValidLoginUser, 160.0);
 		
 		AnchorPane.setLeftAnchor(txtLoginPass, 226.0);
 		AnchorPane.setTopAnchor(txtLoginPass, 188.0);
 		
-		AnchorPane.setLeftAnchor(lblValidPass, 226.0);
-		AnchorPane.setTopAnchor(lblValidPass, 215.0);
+		AnchorPane.setLeftAnchor(lblValidLoginPass, 226.0);
+		AnchorPane.setTopAnchor(lblValidLoginPass, 215.0);
 		
 		AnchorPane.setLeftAnchor(btnUserLogin, 226.0);
 		AnchorPane.setTopAnchor(btnUserLogin, 246.0);
@@ -223,7 +223,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidUser,lblValidPass,btnSignUp,btnReturn);
+		ap.getChildren().addAll(txtLoginName,txtLoginPass,btnUserLogin,lblValidLoginUser,lblValidLoginPass,btnSignUp,btnReturn);
 
 		loginScene = new Scene(ap,600,400);
 	}
@@ -255,12 +255,14 @@ public class TopGamerGUI extends Application
 			if(Valid)
 			{
 				loggedIn = true;
+				txtLoginName.setText("");
+				txtLoginPass.setText("");
 				OpenMainDashboard();
 			}
 				else
 			{
-				lblValidPass.setText("Username or password invalid");
-				lblValidPass.setTextFill(Color.RED);
+				lblValidLoginPass.setText("Username or password invalid");
+				lblValidLoginPass.setTextFill(Color.RED);
 			}
 		}
 	}
@@ -276,30 +278,28 @@ public class TopGamerGUI extends Application
 	 */
 	public boolean LoginValidation()
 	{
-		//The coloring of the textboxes needs to be moved to an event
-		lblValidPass.setText(null);
-		lblValidUser.setText(null);
+		lblValidLoginPass.setText(null);
+		lblValidLoginUser.setText(null);
 		
-		if(txtLoginName.getText().equals("") && txtLoginPass.getText().equals(""))
+		if(Empty(txtLoginName) && Empty(txtLoginPass))
 		{
-			lblValidUser.setText("Username cannot be blank");
-			lblValidUser.setTextFill(Color.RED);
-			lblValidPass.setText("Password cannot be blank");
-			lblValidPass.setTextFill(Color.RED);
+			lblValidLoginUser.setText("Username cannot be blank");
+			lblValidLoginUser.setTextFill(Color.RED);
+			lblValidLoginPass.setText("Password cannot be blank");
+			lblValidLoginPass.setTextFill(Color.RED);
 			return false;
 		}
-		if(txtLoginName.getText().equals(""))
+		if(Empty(txtLoginName))
 		{
-			lblValidUser.setText("Username cannot be blank");
-			lblValidUser.setTextFill(Color.RED);
+			lblValidLoginUser.setText("Username cannot be blank");
+			lblValidLoginUser.setTextFill(Color.RED);
 			return false;
 		}
 		
-		if(txtLoginPass.getText().equals(""))
+		if(Empty(txtLoginPass))
 		{
-			lblValidPass.setText("Password cannot be blank");
-			lblValidPass.setTextFill(Color.RED);
-			txtLoginPass.setStyle(".text-field.error  -fx-text-box-border: red ; -fx-focus-color: red ;}");
+			lblValidLoginPass.setText("Password cannot be blank");
+			lblValidLoginPass.setTextFill(Color.RED);
 			return false;
 		}
 	
@@ -352,33 +352,46 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		lblFName = new Label("First Name");
-		lblLName = new Label("Last Name");
-		lblEmail = new Label("Email Address");
-		lblUserName = new Label("Username");
-		lblPass = new Label("Password");
+		lblValidFirstName = new Label("");
+		lblValidLastName = new Label("");
+		lblValidEmail = new Label("");
+		lblValidUserName = new Label("");
+		lblValidPass = new Label("");
 		
 		txtFName = new JFXTextField();
 		txtFName.setLabelFloat(true);
 		txtFName.setPromptText("First Name");
+		txtFName.setOnKeyPressed(e -> {
+			lblValidFirstName.setText(null);
+		});
 		
 		txtLName = new JFXTextField();
 		txtLName.setLabelFloat(true);
 		txtLName.setPromptText("Last Name");
+		txtLName.setOnKeyPressed(e -> {
+			lblValidLastName.setText(null);
+		});
 		
 		txtEmail = new JFXTextField();
 		txtEmail.setLabelFloat(true);
 		txtEmail.setPromptText("Email Address");
-		
+		txtEmail.setOnKeyPressed(e -> {
+			lblValidEmail.setText(null);
+		});
 		
 		txtUserName = new JFXTextField();
 		txtUserName.setLabelFloat(true);
 		txtUserName.setPromptText("Username");
-		
+		txtUserName.setOnKeyPressed(e -> {
+			lblValidUserName.setText(null);
+		});
 		
 		txtPass = new JFXPasswordField();
 		txtPass.setLabelFloat(true);
 		txtPass.setPromptText("Password");
+		txtPass.setOnKeyPressed(e -> {
+			lblValidPass.setText(null);
+		});
 		
 		btnSignUp = new JFXButton("Sign up");
 		btnSignUp.setOnAction(e -> RegisterUser());
@@ -387,36 +400,36 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setLeftAnchor(lblFName, 226.0);
-		AnchorPane.setTopAnchor(lblFName, 47.0);
+		AnchorPane.setLeftAnchor(lblValidFirstName, 226.0);
+		AnchorPane.setTopAnchor(lblValidFirstName, 47.0);
 		AnchorPane.setLeftAnchor(txtFName, 226.0);
 		AnchorPane.setTopAnchor(txtFName, 70.0);
 		
-		AnchorPane.setLeftAnchor(lblLName, 226.0);
-		AnchorPane.setTopAnchor(lblLName, 108.0);
+		AnchorPane.setLeftAnchor(lblValidLastName, 226.0);
+		AnchorPane.setTopAnchor(lblValidLastName, 108.0);
 		AnchorPane.setLeftAnchor(txtLName, 226.0);
 		AnchorPane.setTopAnchor(txtLName, 125.0);
 		
 
-		AnchorPane.setLeftAnchor(lblEmail, 226.0);
-		AnchorPane.setTopAnchor(lblEmail, 164.0);
+		AnchorPane.setLeftAnchor(lblValidEmail, 226.0);
+		AnchorPane.setTopAnchor(lblValidEmail, 164.0);
 		AnchorPane.setLeftAnchor(txtEmail, 226.0);
 		AnchorPane.setTopAnchor(txtEmail, 181.0);
 		
-		AnchorPane.setLeftAnchor(lblUserName, 226.0);
-		AnchorPane.setTopAnchor(lblUserName, 221.0);
+		AnchorPane.setLeftAnchor(lblValidUserName, 226.0);
+		AnchorPane.setTopAnchor(lblValidUserName, 221.0);
 		AnchorPane.setLeftAnchor(txtUserName, 226.0);
 		AnchorPane.setTopAnchor(txtUserName, 238.0);
 		
-		AnchorPane.setLeftAnchor(lblPass, 226.0);
-		AnchorPane.setTopAnchor(lblPass, 279.0);
+		AnchorPane.setLeftAnchor(lblValidPass, 226.0);
+		AnchorPane.setTopAnchor(lblValidPass, 279.0);
 		AnchorPane.setLeftAnchor(txtPass, 226.0);
 		AnchorPane.setTopAnchor(txtPass, 296.0);
 		
 		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
 		AnchorPane.setTopAnchor(btnSignUp, 344.0);
 		
-		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp);
+		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass);
 		registerScene = new Scene(ap,600,400);
 	}
 	/**
@@ -429,40 +442,64 @@ public class TopGamerGUI extends Application
 		{
 			SQLConnection s = new SQLConnection();
 			s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+			btnProfile.setText(txtUserName.getText());
 			window.setScene(mainDashboardScene);
+			txtFName.setText("");
+			txtLName.setText("");
+			txtEmail.setText("");
+			txtUserName.setText("");
+			txtPass.setText("");
 		}
 	}
 	
+	/**
+	 * Input validation for registration form 
+	 * @return returns false if any text boxes are empty 
+	 */
 	public boolean RegisterValidation()
 	{
 		if(Empty(txtFName) && Empty(txtLName) && Empty(txtEmail) && Empty(txtUserName) && Empty(txtPass))
 		{
-			System.out.println("All fields are empty");
+			lblValidFirstName.setText("First cannot be empty");
+			lblValidFirstName.setTextFill(Color.RED);
+			lblValidLastName.setText("Last name cannot be empty");
+			lblValidLastName.setTextFill(Color.RED);
+			lblValidEmail.setText("Email cannot be empty");
+			lblValidEmail.setTextFill(Color.RED);
+			lblValidUserName.setText("Username cannot be empty");
+			lblValidUserName.setTextFill(Color.RED);
+			lblValidPass.setText("Password cannot be empty");
+			lblValidPass.setTextFill(Color.RED);
 			return false;
 		}
 		else if(Empty(txtFName))
 		{
-			System.out.println("Firsttt name is empty");
+			lblValidFirstName.setText("First cannot be empty");
+			lblValidFirstName.setTextFill(Color.RED);
 			return false;
 		}
 		else if(Empty(txtLName))
 		{
-			System.out.println("Last name is empty");
+			lblValidLastName.setText("Last name cannot be empty");
+			lblValidLastName.setTextFill(Color.RED);
 			return false;
 		}
 		else if(Empty(txtEmail))
 		{
-			System.out.println("Email is empty");
+			lblValidEmail.setText("Email cannot be empty");
+			lblValidEmail.setTextFill(Color.RED);
 			return false;
 		}
 		else if(Empty(txtUserName))
 		{
-			System.out.println("User name is empty");
+			lblValidUserName.setText("Username cannot be empty");
+			lblValidUserName.setTextFill(Color.RED);
 			return false;
 		}
 		if(Empty(txtPass))
 		{
-			System.out.println("Password is empty");
+			lblValidPass.setText("Password cannot be empty");
+			lblValidPass.setTextFill(Color.RED);
 			return false;
 		}
 		return true;
@@ -486,8 +523,9 @@ public class TopGamerGUI extends Application
 	public void CreateMainDashboard()
 	{
 		btnProfile = new JFXButton("Profile");
-		btnEditProfile = new JFXButton("Settings");
-		btnLogOut= new JFXButton("Edit Profile");
+		btnEditProfile = new JFXButton("Edit profile");
+		btnLogOut= new JFXButton("Log out");
+		btnLogOut.setOnAction(e -> BackToWelcomeScreen());
 		nodeList = new JFXNodesList();
 		nodeList.addAnimatedNode(btnProfile);
 		nodeList.addAnimatedNode(btnEditProfile);
@@ -498,7 +536,7 @@ public class TopGamerGUI extends Application
 		VBox mainDashVbox = new VBox();
 		mainDashVbox.setSpacing(55);
 		HBox mainDashHbox = new HBox();
-		mainDashHbox.setSpacing(500);
+		mainDashHbox.setSpacing(490);
 		mainDashVbox.setStyle("-fx-focus-color: transparent;");
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setPannable(true);
@@ -563,13 +601,6 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(haloLogo, 35.0);
 		AnchorPane.setLeftAnchor(haloLogo, 601.0);
 		AnchorPane.setTopAnchor(btnReturn, 300.0);
-		
-		
-		
-	
-		
-		
-		
 		
 		//add images to anchor pane
 		ap.getChildren().addAll(btnReturn,fortniteLogo,apexLogo,codLogo,fifaLogo,haloLogo);
