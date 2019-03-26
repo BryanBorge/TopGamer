@@ -81,6 +81,8 @@ public class TopGamerGUI extends Application
 		CreateCODScene();	
 		CreateHaloScene();
 	
+		window.getIcons().add(new Image("icon.png"));
+		window.setTitle("Top Gamer");
 		window.setScene(loginScene);
 		window.show();	
 	}
@@ -494,37 +496,45 @@ public class TopGamerGUI extends Application
 		btnProfile = new JFXButton("Profile");
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
-		btnLogOut.setOnAction(e -> OpenLoginScene());
+	
+		//this event should be changed in the future using the loggedIn bool to change the profile option text
+		btnLogOut.setOnAction(e -> {
+			loggedIn = false;
+			btnProfile.setText("Profile");
+			testUser.SetFirstName("");
+			testUser.SetLastName("");
+			testUser.SetEmail("");
+			OpenLoginScene();}
+		);
 		nodeList = new JFXNodesList();
 		nodeList.addAnimatedNode(btnProfile);
 		nodeList.addAnimatedNode(btnEditProfile);
 		nodeList.addAnimatedNode(btnLogOut);
 		
 		
-		//use this vbox to only make games scroll
-		VBox mainDashVbox = new VBox();
-		mainDashVbox.setSpacing(55);
-		mainDashVbox.setStyle("-fx-focus-color: transparent;");
 		AnchorPane ap = new AnchorPane();
-		ap.setStyle("-fx-focus-color: transparent;");
-		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e-> OpenLoginScene());
+	
 		Label lblFeaturedGames = new Label("Featured Games");
 		
 		//Load images and set their size
-		ImageView fortniteLogo = new ImageView(new Image("TopGamer/Presentation/Images/Fortnite.jpg"));
+		ImageView profileIcon = new ImageView(new Image("profileIcon.png"));
+		profileIcon.setFitHeight(20);
+		profileIcon.setFitWidth(20);
+		btnProfile.setGraphic(profileIcon);
+		
+		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
 		fortniteLogo.setFitWidth(133);
 		fortniteLogo.setFitHeight(202);
-		ImageView apexLogo = new ImageView(new Image("TopGamer/Presentation/Images/Apex.jpg"));
+		ImageView apexLogo = new ImageView(new Image("Apex.jpg"));
 		apexLogo.setFitWidth(133);
 		apexLogo.setFitHeight(202);
-		ImageView codLogo = new ImageView(new Image("TopGamer/Presentation/Images/Cod.jpg"));
+		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(133);
 		codLogo.setFitHeight(202);
-		ImageView fifaLogo = new ImageView(new Image("TopGamer/Presentation/Images/fifa.jpg"));
+		ImageView fifaLogo = new ImageView(new Image("fifa.jpg"));
 		fifaLogo.setFitWidth(133);
 		fifaLogo.setFitHeight(202);
-		ImageView haloLogo = new ImageView(new Image("TopGamer/Presentation/Images/Halo.jpg"));
+		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(133);
 		haloLogo.setFitHeight(202);
 		
@@ -542,23 +552,23 @@ public class TopGamerGUI extends Application
 		haloLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
 		//Set image position on anchor pane	
-		AnchorPane.setTopAnchor(fortniteLogo, 35.0);
+		AnchorPane.setTopAnchor(fortniteLogo, 50.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
-		AnchorPane.setTopAnchor(codLogo, 35.0);
+		AnchorPane.setTopAnchor(codLogo, 50.0);
 		AnchorPane.setLeftAnchor(codLogo, 167.0);
-		AnchorPane.setTopAnchor(haloLogo, 35.0);
+		AnchorPane.setTopAnchor(haloLogo, 50.0);
 		AnchorPane.setLeftAnchor(haloLogo, 308.0);
-		AnchorPane.setTopAnchor(btnReturn, 300.0);
+		AnchorPane.setTopAnchor(lblFeaturedGames, 14.0);
+		AnchorPane.setLeftAnchor(lblFeaturedGames, 14.0);
 		AnchorPane.setTopAnchor(nodeList, 14.0);
 		AnchorPane.setRightAnchor(nodeList, 14.0);
-		//add images to anchor pane
-		ap.getChildren().addAll(btnReturn,fortniteLogo,codLogo,haloLogo,nodeList);
+	//	AnchorPane.setTopAnchor(profileIcon, 14.0);
+	//	AnchorPane.setRightAnchor(profileIcon, 14.0);
 	
-		//add anchor pane to the scroll pane
-		
-		mainDashVbox.getChildren().addAll(ap, btnReturn);
-
-		mainDashboardScene = new Scene(mainDashVbox,600,400);
+		//add images to anchor pane
+		ap.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,nodeList);
+	
+		mainDashboardScene = new Scene(ap,600,400);
 	
 	}
 	
@@ -577,10 +587,12 @@ public class TopGamerGUI extends Application
 		Label lblTourney1 = new Label("March 15th - Fortnite 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Fortnite 4v4 - Boston - Sponsored by Razer");
 		JFXButton btnReg1 = new JFXButton("Register");
+		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		JFXButton btnReg2 = new JFXButton("Register");
+		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboards - Coming Soon");
-		ImageView fortniteHeader = new ImageView(new Image("TopGamer/Presentation/Images/FortniteHeader.png"));
+		ImageView fortniteHeader = new ImageView(new Image("FortniteHeader.png"));
 		fortniteHeader.setFitHeight(70);
 		fortniteHeader.setFitWidth(255);
 		
@@ -644,10 +656,12 @@ public class TopGamerGUI extends Application
 		Label lblTourney1 = new Label("March 15th - Call Of Duty 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Call Of Duty 4v4 - Boston - Sponsored by Razer");
 		Button btnReg1 = new JFXButton("Register");
+		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		Button btnReg2 = new JFXButton("Register");
+		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView codHeader = new ImageView(new Image("TopGamer/Presentation/Images/CodHeader.png"));
+		ImageView codHeader = new ImageView(new Image("CodHeader.png"));
 		codHeader.setFitHeight(70);
 		codHeader.setFitWidth(255);
 		
@@ -708,10 +722,12 @@ public class TopGamerGUI extends Application
 		Label lblTourney1 = new Label("March 15th - Halo 4v4 - NYC - Sponsored by Best-Buy");
 		Label lblTourney2 = new Label("March 20th - Halo 4v4 - Boston - Sponsored by Razer");
 		Button btnReg1 = new JFXButton("Register");
+		btnReg1.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		Button btnReg2 = new JFXButton("Register");
+		btnReg2.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		Button back = new JFXButton("<-");
 		Label lblLeaderboard = new Label("Leaderboard - Coming soon");
-		ImageView haloHeader = new ImageView(new Image("TopGamer/Presentation/Images/HaloHeader.png"));
+		ImageView haloHeader = new ImageView(new Image("HaloHeader.png"));
 		haloHeader.setFitHeight(70);
 		haloHeader.setFitWidth(255);
 		
