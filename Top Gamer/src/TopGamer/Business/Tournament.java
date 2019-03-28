@@ -11,9 +11,12 @@ package TopGamer.Business;
 public class Tournament 
 {
 	private String m_tournamentName;
+	/*
+	 * Does this need teams and games as members? Or will we create another class/table for the game INSIDE of the tournament?
+	 */
 
 	/**
-	 *constructor for Team class 
+	 *Tournament default constructor
 	 * 
 	 * sets member variables to default value
 	 */

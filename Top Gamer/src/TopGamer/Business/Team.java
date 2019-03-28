@@ -18,7 +18,7 @@ public class Team {
 	
 		
 	/**
-	 * constructor for class team
+	 * Team default constructor
 	 * 
 	 * sets member variables to default values
 	 */
