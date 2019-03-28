@@ -10,9 +10,9 @@ package TopGamer.Business;
 
 public class Tournament 
 {
-	private String m_TournamentName;
+	private String m_tournamentName;
 
-	/*
+	/**
 	 *constructor for Team class 
 	 * 
 	 * sets member variables to default value
@@ -20,11 +20,11 @@ public class Tournament
 	
 	public Tournament() 
 	{
-		m_TournamentName = "N/A";
+		m_tournamentName = "N/A";
 	}
 
 	
-	/*
+	/**
 	 * sets TournamentName Member Variable
 	 * 
 	 * @param TournamentName
@@ -32,10 +32,10 @@ public class Tournament
 
 	public void setTournamentName(String TournamentName) 
 	{
-		m_TournamentName = TournamentName;
+		m_tournamentName = TournamentName;
 	}
 
-	/*
+	/**
 	 * gets TournamentName Member Variable
 	 * 
 	 * @returns TournamentName
@@ -43,7 +43,7 @@ public class Tournament
 
 	public String getTournamentName() 
 	{
-		return m_TournamentName;
+		return m_tournamentName;
 	}
 
 

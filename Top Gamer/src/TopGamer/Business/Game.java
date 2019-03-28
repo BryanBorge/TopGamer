@@ -1,7 +1,5 @@
 package TopGamer.Business;
 
-import java.util.ArrayList;
-
 public class Game 
 {
 	private String m_gameName;
