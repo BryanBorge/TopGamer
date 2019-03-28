@@ -54,16 +54,40 @@ public class Team {
 	   return m_teamName;
 	}
 	
-	
+	/**
+	 * Adds a team member to the teamMembers array
+	 * @param teamMember
+	 */
 	public void AddTeamMember(User teamMember)
 	{
 		//not sure what else to do with this just yet. Need to create user instances from the db to add to the list based on who the user chooses.
 		m_teamMembers.add(teamMember);
 	}
 	
+	/**
+	 * Returns entire teamMembers ArrayList
+	 * @return teamMember ArrayList
+	 */
+	public ArrayList<User> GetAllTeamMembers()
+	{
+		return m_teamMembers;
+	}
+		
+	/**
+	 * Returns a specific team member that matches the parameter value
+	 * @param teamMember - Team member being searched for
+	 * @return teamMember if it exists, null otherwise
+	 */
+	public User GetSpecificTeamMember(User teamMember)
+	{
+		for(User u : m_teamMembers)
+		{
+			if(u.GetUsername().equals(teamMember.GetUsername()))
+				return u;
+		}
+		return null;
+	}
 	
-	
-
 	/**
 	 * sets Wins member variable
 	 * @param Wins 
