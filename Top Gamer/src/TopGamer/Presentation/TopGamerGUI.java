@@ -23,6 +23,7 @@ import java.util.Observable;
 
 import javax.lang.model.AnnotatedConstruct;
 
+import org.controlsfx.control.textfield.TextFields;
 import org.sqlite.SQLiteException;
 
 import com.jfoenix.controls.JFXButton;
@@ -113,12 +114,12 @@ public class TopGamerGUI extends Application
 	public void CreateLoginScene()
 	{
 		AnchorPane ap = new AnchorPane();
-		
 		txtLoginName = new JFXTextField();
 		txtLoginName.setPrefWidth(160.0);
 		txtLoginName.setPrefHeight(25.0);
 		txtLoginName.setLabelFloat(true);
 		txtLoginName.setPromptText("Username or email address");
+		
 		
 		txtLoginName.setOnKeyReleased(e -> {
 			lblValidLoginPass.setText(null);

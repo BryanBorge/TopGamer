@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="C:/JAR/controlsfx-8.40.14.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/JAR/jfoenix-8.0.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/JAR/jfxrt.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/JAR/sqlite-jdbc-3.27.2.1.jar"/>

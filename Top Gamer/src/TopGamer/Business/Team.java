@@ -38,7 +38,7 @@ public class Team {
 	 * @param TeamName
 	 */
 	
-	public void setTeamName(String TeamName)
+	public void SetTeamName(String TeamName)
 	{
 		m_teamName = TeamName;
 	}
@@ -49,7 +49,7 @@ public class Team {
 	 * @returns TeamName 
 	 */
 	
-	public String getTeamName() 
+	public String GetTeamName() 
 	{
 	   return m_teamName;
 	}

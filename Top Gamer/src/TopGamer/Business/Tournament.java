@@ -40,7 +40,7 @@ public class Tournament
 	 * @param TournamentName
 	 */
 
-	public void setTournamentName(String TournamentName) 
+	public void SetTournamentName(String TournamentName) 
 	{
 		m_tournamentName = TournamentName;
 	}
@@ -51,21 +51,44 @@ public class Tournament
 	 * @returns TournamentName
 	 */
 
-	public String getTournamentName() 
+	public String GetTournamentName() 
 	{
 		return m_tournamentName;
 	}
 
 	
-	/*
+	/**
 	 * returns entire teamName arraylist
 	 * 
 	 * @return teamName arrayList
 	 */
 	
-	public ArrayList<Team> getTeamName()
+	public ArrayList<Team> GetTeamName()
 	{
 		return m_teamName;
+	}
+	
+	
+	/**
+	 * Returns single team if it exists in the tournament
+	 * @param targetTeam = team being searched for
+	 * @return team name if found, null otherwise
+	 */
+	public Team GetTeamName(Team targetTeam)
+	{
+		boolean found = false;
+		Team foundTeam = new Team();
+		for(Team t : m_teamName)
+		{
+			if(t.GetTeamName().equals(targetTeam.GetTeamName())) {
+				found = true;
+				foundTeam = targetTeam;
+			}
+		}
+		if(found)
+			return foundTeam;
+		else
+			return null;
 	}
 	
 	
