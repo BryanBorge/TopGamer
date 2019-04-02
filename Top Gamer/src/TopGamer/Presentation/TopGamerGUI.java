@@ -44,6 +44,7 @@ public class TopGamerGUI extends Application
 	Stage window,gameStage;
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
+	Scene codTourney;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
@@ -92,7 +93,8 @@ public class TopGamerGUI extends Application
 		CreateFortniteScene();		
 		CreateCODScene();	
 		CreateHaloScene();
-	
+		CreateCodTourneyScene();
+		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
 		window.setScene(loginScene);
@@ -277,6 +279,9 @@ public class TopGamerGUI extends Application
 		return true;		
 	}
 
+	
+	
+	
 	/**
 	 *  Tests if TextField is empty or not
 	 *  
@@ -304,6 +309,9 @@ public class TopGamerGUI extends Application
 		else 
 			return false;
 	}
+	
+	
+	
 	
 	/**
 	 * Set main window to registerScene
@@ -505,6 +513,8 @@ public class TopGamerGUI extends Application
 	}
 	
 	
+	
+	
 	/**
 	 * Sets main window to the mainDashboard scene
 	 */
@@ -521,6 +531,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateMainDashboard()
 	{
+		
 		btnProfile = new JFXButton("Profile");
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
@@ -539,8 +550,16 @@ public class TopGamerGUI extends Application
 		nodeList.addAnimatedNode(btnEditProfile);
 		nodeList.addAnimatedNode(btnLogOut);
 		
-		
-		AnchorPane ap = new AnchorPane();
+		VBox mainVbox = new VBox();
+		ScrollPane mainScroll = new ScrollPane();
+		mainScroll.setLayoutX(0.0);
+		mainScroll.setLayoutY(32.0);
+		AnchorPane anchorScroll = new AnchorPane();
+		AnchorPane anchorHeader = new AnchorPane();
+		anchorHeader.setPrefHeight(47);
+		anchorHeader.setPrefWidth(600);
+		anchorHeader.setLayoutX(522.0);
+		anchorHeader.setLayoutY(0.0);
 	
 		Label lblFeaturedGames = new Label("Featured Games");
 		
@@ -583,7 +602,12 @@ public class TopGamerGUI extends Application
 		haloLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
 		haloLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
-		//Set image position on anchor pane	
+		JFXButton testTourney = new JFXButton("4v4 CoD Tournament");
+		testTourney.setOnAction(e -> OpenCodTourney());
+		JFXButton testTourney1 = new JFXButton("4v4 Fortnite Tournament");
+		JFXButton testTourney2 = new JFXButton("4v4 Halo Tournament");
+		
+		//Set image position on anchorScroll
 		AnchorPane.setTopAnchor(fortniteLogo, 50.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
 		AnchorPane.setTopAnchor(codLogo, 50.0);
@@ -592,16 +616,29 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(haloLogo, 308.0);
 		AnchorPane.setTopAnchor(lblFeaturedGames, 14.0);
 		AnchorPane.setLeftAnchor(lblFeaturedGames, 14.0);
-		AnchorPane.setTopAnchor(nodeList, 14.0);
+		
+		//set button position on the anchorScroll
+		AnchorPane.setTopAnchor(testTourney, 300.0);
+		AnchorPane.setLeftAnchor(testTourney, 14.0);
+		AnchorPane.setTopAnchor(testTourney1, 400.0);
+		AnchorPane.setLeftAnchor(testTourney1, 14.0);
+		AnchorPane.setTopAnchor(testTourney2, 500.0);
+		AnchorPane.setLeftAnchor(testTourney2, 14.0);
+		
+		//this goes in the anchorHeader
+		AnchorPane.setTopAnchor(nodeList, 6.0);
 		AnchorPane.setRightAnchor(nodeList, 14.0);
+		
 	
 		//add images to anchor pane
-		ap.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,nodeList);
-	
-		mainDashboardScene = new Scene(ap,600,400);
+		anchorHeader.getChildren().addAll(nodeList);
+		anchorScroll.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,testTourney,testTourney1,testTourney2);
+		mainScroll.setContent(anchorScroll);
+		mainVbox.getChildren().addAll(anchorHeader,mainScroll);
+		
+		mainDashboardScene = new Scene(mainVbox,600,400);
 	
 	}
-	
 	
 	/**
 	 * Create/Add controls to the fortniteScene
@@ -664,8 +701,7 @@ public class TopGamerGUI extends Application
 		fortniteScene = new Scene(ap,600,400);
 	
 	}
-	
-	
+
 	/**
 	 * Set main window the the fortniteScene
 	 */
@@ -673,7 +709,6 @@ public class TopGamerGUI extends Application
 	{
 		window.setScene(fortniteScene);
 	}
-	
 	
 	
 	/**
@@ -687,7 +722,6 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
-		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		JFXButton btnPS4 = new JFXButton("PS4");
 		JFXButton btnXbox = new JFXButton("Xbox One");
@@ -735,7 +769,6 @@ public class TopGamerGUI extends Application
 	
 		codScene = new Scene(ap,600,400);
 	}
-	
 	
 	/**
 	 * Set main window to the codScene
@@ -799,4 +832,91 @@ public class TopGamerGUI extends Application
 	{
 		window.setScene(haloScene);
 	}
+
+
+	/**
+	 * Creates scene to join Call Of Duty tournament
+	 */
+	public void CreateCodTourneyScene()
+	{
+		AnchorPane ap = new AnchorPane();
+		JFXButton btnCreateTeam = new JFXButton("Create team");
+		JFXButton btnJoinTeam = new JFXButton("Join team");
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e-> OpenMainDashboard());
+		
+		Label lblTitle = new Label("4v4 Search and Destroy 4/18");
+		lblTitle.setFont(new Font(24));
+		Label lblLocation = new Label("NY - 5 Teams");
+		Label lblPrize = new Label("Prize");
+		Label lblBracketSize = new Label("Bracket Size");
+		Label lblTeamsJoined = new Label("Teams Joined");
+		
+		Label lblPrizeAmt = new Label("$1000");
+		Label lblBracketAmt = new Label("5");
+		Label lblTeamsJoinedVal = new Label("0");
+		
+
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
+		
+		AnchorPane.setTopAnchor(lblTitle, 42.0);
+		AnchorPane.setLeftAnchor(lblTitle, 137.0);
+		
+		AnchorPane.setTopAnchor(lblLocation, 79.0);
+		AnchorPane.setLeftAnchor(lblLocation, 258.0);
+		
+		AnchorPane.setTopAnchor(lblPrize, 149.0);
+		AnchorPane.setLeftAnchor(lblPrize, 137.0);
+		
+		AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+		AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
+		
+		AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+		AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
+		
+		AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+		AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
+		
+		AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
+		AnchorPane.setLeftAnchor(lblBracketAmt, 342.0);
+		
+		AnchorPane.setTopAnchor(lblTeamsJoinedVal, 223.0);
+		AnchorPane.setLeftAnchor(lblTeamsJoinedVal, 342.0);
+
+		AnchorPane.setTopAnchor(btnJoinTeam, 267.0);
+		AnchorPane.setLeftAnchor(btnJoinTeam, 120.0);
+		
+		AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
+		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam);
+		
+		codTourney = new Scene(ap, 600,400);
+	}
+
+	/**
+	 * Set main window to the codTourney scene
+	 */
+	public void OpenCodTourney()
+	{
+		window.setScene(codTourney);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
