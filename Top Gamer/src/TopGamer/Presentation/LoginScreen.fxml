@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TopGamer.Presentation.TopGamerGUI">
+   <children>
+      <JFXTextField fx:id="txtUserName" labelFloat="true" layoutX="233.0" layoutY="125.0" promptText="Username" />
+      <JFXTextField fx:id="txtPassword" labelFloat="true" layoutX="233.0" layoutY="175.0" promptText="Password" />
+      <JFXButton fx:id="btnLogin" layoutX="232.0" layoutY="225.0" prefHeight="25.0" prefWidth="135.0" text="Login" />
+      <JFXButton fx:id="btnSignUp" layoutX="233.0" layoutY="257.0" prefHeight="25.0" prefWidth="135.0" text="Sign up" />
+      <JFXButton fx:id="btnContinue1" layoutX="-8.0" layoutY="361.0" onAction="#Continue" prefHeight="25.0" prefWidth="615.0" text="Continue without registering" />
+   </children>
+</AnchorPane>

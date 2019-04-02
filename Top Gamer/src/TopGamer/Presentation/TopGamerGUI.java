@@ -4,8 +4,12 @@ package TopGamer.Presentation;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,6 +21,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.awt.Event;
+import java.awt.Desktop.Action;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -97,10 +103,20 @@ public class TopGamerGUI extends Application
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
+		Parent root = FXMLLoader.load(getClass().getResource(("LoginScreen.fxml")));
+		Scene scene = new Scene(root);
+		//window.setScene(scene);
 		window.setScene(loginScene);
 		window.show();	
 	}
 
+	@FXML
+	private JFXButton btnContinue1;
+	
+public void Continue(ActionEvent e) {
+		window.setScene(mainDashboardScene);
+	}
+	
 	
 	/**
 	 * Set main window to the loginScene
