@@ -60,6 +60,7 @@ public class Team {
 	 */
 	public void AddTeamMember(User teamMember)
 	{
+		//
 		//not sure what else to do with this just yet. Need to create user instances from the db to add to the list based on who the user chooses.
 		m_teamMembers.add(teamMember);
 	}
