@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.awt.Event;
+import java.io.IOException;
 import java.awt.Desktop.Action;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 	Scene codTourney;
+	Scene createTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
@@ -101,6 +104,7 @@ public class TopGamerGUI extends Application
 		CreateCODScene();	
 		CreateHaloScene();
 		CreateCodTourneyScene();
+		CreateTeamScene();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -849,6 +853,7 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
+		btnCreateTeam.setOnAction(e->OpenCreateTeam());
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
@@ -917,11 +922,56 @@ public class TopGamerGUI extends Application
 	}
 
 	
-
-	public void CreateTeamScene()
+	
+	public void CreateTeamScene() 
 	{
-		AnchorPane aPane = new AnchorPane();
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
 		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(78.0);
+		
+		JFXTextField txtMember1 = new JFXTextField();
+		txtMember1.setLabelFloat(true);
+		txtMember1.setPromptText("Team member 1");
+		txtMember1.setLayoutX(211.0);
+		txtMember1.setLayoutY(125.0);
+		
+		JFXTextField txtMember2 = new JFXTextField();
+		txtMember2.setLabelFloat(true);
+		txtMember2.setPromptText("Team member 2");
+		txtMember2.setLayoutX(211.0);
+		txtMember2.setLayoutY(166.0);
+		
+		JFXTextField txtMember3 = new JFXTextField();
+		txtMember3.setLabelFloat(true);
+		txtMember3.setLabelFloat(true);
+		txtMember3.setPromptText("Team member 3");
+		txtMember3.setLayoutX(211.0);
+		txtMember3.setLayoutY(212.0);
+		
+		JFXButton btnCreateTeam = new JFXButton("Create team");
+		btnCreateTeam.setLayoutX(220.0);
+		btnCreateTeam.setLayoutY(279.0);
+		btnCreateTeam.prefWidth(135.0);
+		
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e->OpenCodTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
+		
+		createTeam = new Scene(aPane);
+	}
+	
+	public void OpenCreateTeam()
+	{
+		window.setScene(createTeam);
 	}
 
 
