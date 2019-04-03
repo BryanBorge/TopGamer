@@ -17,12 +17,10 @@ public class Tournament
 	private String m_prize;
 	private int m_bracketSize;
 	private int m_teamJoined;
+	private Game m_game;
 	private ArrayList<Team> m_teamName;
 	
 	
-	/*
-	 * Does this need teams and games as members? Or will we create another class/table for the game INSIDE of the tournament?
-	 */
 
 	/**
 	 *Tournament default constructor
