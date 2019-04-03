@@ -33,7 +33,7 @@ public class Tournament
 		m_tournamentName = "N/A";
 		m_teamName = new ArrayList<Team>();
 	}
-
+	
 	public void SetPrize(String p) {
 		m_prize = p;
 	}

@@ -28,9 +28,8 @@ public class Team {
 		m_teamName = "N/A";
 		m_teamMembers = new ArrayList<User>();
 		m_wins = 0;
-		m_losses = 0;
-		
-		}
+		m_losses = 0;	
+	}
 	
 	/**
 	 * sets TeamName member variable
