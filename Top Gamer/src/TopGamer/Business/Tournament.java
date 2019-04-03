@@ -14,6 +14,9 @@ import java.util.ArrayList;
 public class Tournament 
 {
 	private String m_tournamentName;
+	private String m_prize;
+	private int m_bracketSize;
+	private int m_teamJoined;
 	private ArrayList<Team> m_teamName;
 	
 	
@@ -33,6 +36,15 @@ public class Tournament
 		m_teamName = new ArrayList<Team>();
 	}
 
+	public void SetPrize(String p) {
+		m_prize = p;
+	}
+	
+	public String GetPrize() {
+		return m_prize;
+	}
+	
+	
 	
 	/**
 	 * sets TournamentName Member Variable

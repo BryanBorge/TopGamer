@@ -142,7 +142,33 @@ public class SQLConnection {
 	
 	}
 	
+	public Tournament LoadTournamentData() { 
 	
+		Tournament tempTourney = new Tournament();
+		String query = "select TournamentName, Prize from Tournament";
+		
+		Statement statement = null;
+		ResultSet result;
+		
+		
+		String dbTourneyName = null, dbPrize = null;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(query);
+			while(result.next())
+			{
+				dbTourneyName = result.getString("TournamentName");
+				dbPrize = result.getString("Prize");
+			}
+			tempTourney.SetTournamentName(dbTourneyName);
+			tempTourney.SetPrize(dbPrize);
+			return tempTourney;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	/**
 	 * Just a test function that prints user from the database

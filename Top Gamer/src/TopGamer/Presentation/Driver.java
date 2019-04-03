@@ -1,5 +1,7 @@
 package TopGamer.Presentation;
 
+import javax.xml.transform.Templates;
+
 import TopGamer.Business.*;
 import javafx.application.Application;
 
@@ -10,9 +12,12 @@ public class Driver {
 	
 		Application.launch(TopGamerGUI.class,args);
 		
-		//SQLConnection se = new SQLConnection();
-		//se.connect();
-		//se.PrintUser();
-		//se.PrintUser();			
+		/*
+		Tournament testT = new Tournament();
+		SQLConnection se = new SQLConnection();
+		se.connect();
+		testT = se.LoadTournamentData();	
+		System.out.println(testT.GetTournamentName());
+	*/
 	}
 }

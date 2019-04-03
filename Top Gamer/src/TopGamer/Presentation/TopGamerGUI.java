@@ -45,6 +45,7 @@ public class TopGamerGUI extends Application
 {
 	
 	User testUser = new User();
+	Tournament testTourney = new Tournament();
 	boolean loggedIn = false;
 	
 	Stage window,gameStage;
@@ -55,7 +56,7 @@ public class TopGamerGUI extends Application
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
 	
-	//Used for user login 
+	//Used for user login y
 	Label lblLoginName, lblLoginPass;
 	JFXTextField txtLoginName;
 	JFXPasswordField txtLoginPass;
@@ -103,20 +104,13 @@ public class TopGamerGUI extends Application
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
-		Parent root = FXMLLoader.load(getClass().getResource(("LoginScreen.fxml")));
-		Scene scene = new Scene(root);
+		//Parent root = FXMLLoader.load(getClass().getResource(("LoginScreen.fxml")));
+		//Scene scene = new Scene(root);
 		//window.setScene(scene);
 		window.setScene(loginScene);
 		window.show();	
 	}
 
-	@FXML
-	private JFXButton btnContinue1;
-	
-public void Continue(ActionEvent e) {
-		window.setScene(mainDashboardScene);
-	}
-	
 	
 	/**
 	 * Set main window to the loginScene
@@ -295,8 +289,6 @@ public void Continue(ActionEvent e) {
 		return true;		
 	}
 
-	
-	
 	
 	/**
 	 *  Tests if TextField is empty or not
@@ -861,14 +853,19 @@ public void Continue(ActionEvent e) {
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		Label lblTitle = new Label("4v4 Search and Destroy 4/18");
+		Tournament testT = new Tournament();
+		SQLConnection se = new SQLConnection();
+		se.connect();
+		testT = se.LoadTournamentData();
+		
+		Label lblTitle = new Label(testT.GetTournamentName());
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label("NY - 5 Teams");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
 		
-		Label lblPrizeAmt = new Label("$1000");
+		Label lblPrizeAmt = new Label("$" + testT.GetPrize());
 		Label lblBracketAmt = new Label("5");
 		Label lblTeamsJoinedVal = new Label("0");
 		
@@ -919,7 +916,13 @@ public void Continue(ActionEvent e) {
 		window.setScene(codTourney);
 	}
 
+	
 
+	public void CreateTeamScene()
+	{
+		AnchorPane aPane = new AnchorPane();
+		
+	}
 
 
 
