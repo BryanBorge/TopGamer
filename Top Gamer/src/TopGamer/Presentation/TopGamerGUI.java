@@ -547,6 +547,8 @@ public class TopGamerGUI extends Application
 		btnProfile = new JFXButton("Profile");
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e -> OpenLoginScene());
 	
 		//this event should be changed in the future using the loggedIn bool to change the profile option text
 		btnLogOut.setOnAction(e -> {
@@ -641,9 +643,12 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(nodeList, 6.0);
 		AnchorPane.setRightAnchor(nodeList, 14.0);
 		
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
+		
 	
 		//add images to anchor pane
-		anchorHeader.getChildren().addAll(nodeList);
+		anchorHeader.getChildren().addAll(nodeList,btnReturn);
 		anchorScroll.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,testTourney,testTourney1,testTourney2);
 		mainScroll.setContent(anchorScroll);
 		mainVbox.getChildren().addAll(anchorHeader,mainScroll);
