@@ -200,10 +200,25 @@ public class SQLConnection {
 	}
 	
 	
-	public void CreateTeam(String TeamName, String user1, String user2, String user3)
+	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
+		String createTeamQuery = "INSERT into Team (TeamName) VALUES(\"" + TeamName + "\")";
+		String addUser1 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user1 + "\"";
+		String addUser2 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user2 + "\"";
+		String addUser3 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user3 + "\"";
+		String addUser4 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user4 + "\"";
 		
-		
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(createTeamQuery);
+			statement.executeUpdate(addUser1);
+			statement.executeUpdate(addUser2);
+			statement.executeUpdate(addUser3);
+			statement.executeUpdate(addUser4);
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

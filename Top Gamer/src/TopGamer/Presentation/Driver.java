@@ -14,14 +14,10 @@ public class Driver {
 	
 		Application.launch(TopGamerGUI.class,args);
 		
-		/*
-		ArrayList<String> users = new ArrayList<String>();
-		SQLConnection se = new SQLConnection();
-		users = se.LoadAllUsernames();
-		for(String s : users)
-		{
-			System.out.println(s);
-		}
-		*/
+		
+		
+		//SQLConnection se = new SQLConnection();
+	//	se.CreateTeam("TestTeam", "BryanB");
+		
 	}
 }

@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -460,6 +461,11 @@ public class TopGamerGUI extends Application
 				txtEmail.setText("");
 				txtUserName.setText("");
 				txtPass.setText("");
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("User Registration");
+				alert.setHeaderText("Registration successful");
+				alert.setContentText("Welcome!");
+				alert.showAndWait();
 				window.setScene(mainDashboardScene);
 			} catch (SQLiteException e) {
 				System.out.println("Error saving user to database. Make sure it is closed");
@@ -489,25 +495,25 @@ public class TopGamerGUI extends Application
 			lblValidPass.setTextFill(Color.RED);
 			return false;
 		}
-		else if(Empty(txtFName))
+		if(Empty(txtFName))
 		{
 			lblValidFirstName.setText("First cannot be empty");
 			lblValidFirstName.setTextFill(Color.RED);
 			return false;
 		}
-		else if(Empty(txtLName))
+		if(Empty(txtLName))
 		{
 			lblValidLastName.setText("Last name cannot be empty");
 			lblValidLastName.setTextFill(Color.RED);
 			return false;
 		}
-		else if(Empty(txtEmail))
+		if(Empty(txtEmail))
 		{
 			lblValidEmail.setText("Email cannot be empty");
 			lblValidEmail.setTextFill(Color.RED);
 			return false;
 		}
-		else if(Empty(txtUserName))
+		if(Empty(txtUserName))
 		{
 			lblValidUserName.setText("Username cannot be empty");
 			lblValidUserName.setTextFill(Color.RED);
@@ -519,6 +525,7 @@ public class TopGamerGUI extends Application
 			lblValidPass.setTextFill(Color.RED);
 			return false;
 		}
+		loggedIn = true;
 		return true;
 	}
 	
@@ -963,21 +970,62 @@ public class TopGamerGUI extends Application
 		btnCreateTeam.setLayoutY(279.0);
 		btnCreateTeam.prefWidth(135.0);
 		
+		
+		//if user is not logged in/not registered they cannot create a team
+		btnCreateTeam.setOnAction(e->{
+			if(!loggedIn)
+				System.out.println("log in to create a team");
+			else {
+				//Could probably move these checks to another function
+				//but will leave this for now since the text fields are local
+				if(Empty(txtTeamName) && Empty(txtMember1) && Empty(txtMember2) && Empty(txtMember3)) {
+					System.out.println("All empty");
+					e.consume();
+				}
+				else if(Empty(txtTeamName)) {
+					System.out.println("Team name empty");
+					e.consume();
+				}
+				else if(Empty(txtMember1)) {
+					System.out.println("user1 name empty");
+					e.consume();
+				}
+				else if(Empty(txtMember2)) {
+					System.out.println("user2 name empty");
+					e.consume();
+				}
+				else if(Empty(txtMember3)) {
+					System.out.println("user3 name empty");
+					e.consume();
+				}
+				else {
+					SQLConnection sqlConnection = new SQLConnection();
+					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+				}
+			}			
+		});
+		
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e->OpenCodTourney());
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
+		//load all users not currently on a team
+		//to be used for text field auto completion
 		ArrayList<String> users = new ArrayList<String>();
 		SQLConnection sqlConnection = new SQLConnection();
 		users = sqlConnection.LoadAllUsernames();
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
+		
 		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
 		
 		createTeam = new Scene(aPane);
 	}
+	
+	
+	
 	
 	public void OpenCreateTeam()
 	{
