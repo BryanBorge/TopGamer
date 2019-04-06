@@ -7,7 +7,12 @@
  */
 
 package TopGamer.Business;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Connection;
 
 
 
@@ -27,17 +32,24 @@ public class Tournament
 	 * 
 	 * sets member variables to default value
 	 */
-	
 	public Tournament() 
 	{
 		m_tournamentName = "N/A";
 		m_teamName = new ArrayList<Team>();
 	}
 	
+	/**
+	 * Sets prize member variable
+	 * @param p
+	 */
 	public void SetPrize(String p) {
 		m_prize = p;
 	}
 	
+	/**
+	 * Returns prize member variable
+	 * @return
+	 */
 	public String GetPrize() {
 		return m_prize;
 	}
@@ -45,7 +57,7 @@ public class Tournament
 	
 	
 	/**
-	 * sets TournamentName Member Variable
+	 * Sets TournamentName Member Variable
 	 * 
 	 * @param TournamentName
 	 */
@@ -56,7 +68,7 @@ public class Tournament
 	}
 
 	/**
-	 * gets TournamentName Member Variable
+	 * Gets TournamentName Member Variable
 	 * 
 	 * @returns TournamentName
 	 */
@@ -68,11 +80,10 @@ public class Tournament
 
 	
 	/**
-	 * returns entire teamName arraylist
+	 * Returns entire teamName arraylist
 	 * 
 	 * @return teamName arrayList
 	 */
-	
 	public ArrayList<Team> GetTeamName()
 	{
 		return m_teamName;
@@ -100,8 +111,7 @@ public class Tournament
 		else
 			return null;
 	}
-	
-	
+		
 }
 
 	

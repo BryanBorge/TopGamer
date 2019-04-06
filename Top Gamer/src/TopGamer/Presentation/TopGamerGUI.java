@@ -134,9 +134,7 @@ public class TopGamerGUI extends Application
 		txtLoginName.setPrefWidth(160.0);
 		txtLoginName.setPrefHeight(25.0);
 		txtLoginName.setLabelFloat(true);
-		txtLoginName.setPromptText("Username or email address");
-		
-		
+		txtLoginName.setPromptText("Username");
 		txtLoginName.setOnKeyReleased(e -> {
 			lblValidLoginPass.setText(null);
 			lblValidLoginUser.setText(null);
@@ -259,7 +257,7 @@ public class TopGamerGUI extends Application
 
 	/**
 	 * Login form validation
-	 * Username cannot be blank and must be a string (will allow users to add numbers later on)
+	 * Userna)me cannot be blank and must be a string (will allow users to add numbers later on)
 	 * Password cannot be blank and must be a string (will allow users to add numbers later on)
 	 * @return boolean for valid login
 	 */
@@ -934,6 +932,7 @@ public class TopGamerGUI extends Application
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
 		
+		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
 		txtTeamName.setPromptText("Team name");
@@ -969,6 +968,12 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
+		ArrayList<String> users = new ArrayList<String>();
+		SQLConnection sqlConnection = new SQLConnection();
+		users = sqlConnection.LoadAllUsernames();
+		TextFields.bindAutoCompletion(txtMember1, users);
+		TextFields.bindAutoCompletion(txtMember2, users);
+		TextFields.bindAutoCompletion(txtMember3, users);
 		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
 		
 		createTeam = new Scene(aPane);

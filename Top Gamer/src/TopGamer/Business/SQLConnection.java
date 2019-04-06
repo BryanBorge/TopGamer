@@ -3,6 +3,7 @@ package TopGamer.Business;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
@@ -33,13 +34,12 @@ public class SQLConnection {
     }
     
     /**
-     * Establish a connection to the database
+     * Establishes a connection to the database
      */
 	public void connect() 
 	{      
         try {
         	//location of the database file
-          //String databaseLocation = "jdbc:sqlite:TestDataBase.db";
         	String databaseLocation = "jdbc:sqlite:TopGamerDB1.1.db";
             
         	//create a connection to the database
@@ -142,8 +142,10 @@ public class SQLConnection {
 	
 	}
 	
-	
-	
+	/**
+	 * Returns a tournament instance containing values from the database
+	 * @return Tournament instance
+	 */
 	public Tournament LoadTournamentData() { 
 	
 		Tournament tempTourney = new Tournament();
@@ -171,34 +173,38 @@ public class SQLConnection {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Just a test function that prints user from the database
+	 * Loads all usernames into an array for use with autocompletion
+	 * @return
 	 */
-	public void PrintUser()
+	public ArrayList<String> LoadAllUsernames()
 	{
-		Statement query = null;
-		   try {
-		     connect();
-		      query = connection.createStatement();
-		      ResultSet result = query.executeQuery( "SELECT * FROM User" );
-		      
-		      while ( result.next() ) {
-		         String fName = result.getString("FirstName");
-		         String lName = result.getString("LastName");
-		         String email  = result.getString("Email");
-		         String userName = result.getString("UserName");
-		         String pass = result.getString("Password");
-		         
-		         System.out.printf("%s %s %s %s %s \n", fName, lName, email,userName,pass);  
-		      }
-		      result.close();
-		      query.close();
-		      connection.close();
-		   } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-		   }
+		String query = "select UserName from Users where TeamID is NULL";
+		ArrayList<String> users = new ArrayList<String>();
+		Statement statement = null;
+		ResultSet result;
+	
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(query);
+			while(result.next())
+			{
+				users.add(result.getString("UserName"));
+			}
+			return users;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+	
+	
+	public void CreateTeam(String TeamName, String user1, String user2, String user3)
+	{
+		
+		
+	}
+	
 	
 }

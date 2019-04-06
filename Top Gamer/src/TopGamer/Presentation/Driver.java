@@ -1,5 +1,7 @@
 package TopGamer.Presentation;
 
+import java.util.ArrayList;
+
 import javax.xml.transform.Templates;
 
 import TopGamer.Business.*;
@@ -13,11 +15,13 @@ public class Driver {
 		Application.launch(TopGamerGUI.class,args);
 		
 		/*
-		Tournament testT = new Tournament();
+		ArrayList<String> users = new ArrayList<String>();
 		SQLConnection se = new SQLConnection();
-		se.connect();
-		testT = se.LoadTournamentData();	
-		System.out.println(testT.GetTournamentName());
-	*/
+		users = se.LoadAllUsernames();
+		for(String s : users)
+		{
+			System.out.println(s);
+		}
+		*/
 	}
 }
