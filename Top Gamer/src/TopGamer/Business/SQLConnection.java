@@ -221,5 +221,60 @@ public class SQLConnection {
 		}
 	}
 	
+	/**
+	 * loads team data such as teamname and users into team object
+	 * returns team instance using data from database
+	 * @return Team
+	 */
+	public Team loadTeamData(String OpTic) 
+	{
+		Team teamObj = new Team();
+		String teamData = "select * from Team";
+		String userData = "select UserID, FirstName, LastName, Email, UserName from Users" + "WHERE teamID = 1"; 
+		
+		Statement statement = null;
+		ResultSet result;
+		
+		String dbFirstName = "NULL";
+		String dbLastName = " NULL";
+		String dbEmail = "NULL";
+		String dbUserName = "NULL";
+		String dbTeamID = "0";
+		String dbUserID = "0";
+		
+		
+		try 
+		{
+			statement = connection.createStatement();
+			result = statement.executeQuery(teamData);
+			while(result.next()) 
+			{
+				dbFirstName = result.getString("FirstName");
+				dbLastName = result.getString("LastName");
+				dbEmail = result.getString("Email");
+				dbUserName = result.getString("UserName");
+				dbTeamID = result.getString("TeamID");
+				
+				
+			}
+				teamObj.SetTeamName(dbTeamID);
+				teamObj.GetSpecificTeamMember();
+				return teamObj;
+		
+		} catch (SQLException e ) {
+			e.printStackTrace();
+			
+		}
+		
+		return teamObj;
+		
+		
+		
+	
+	
+	
+	}
+	
+	
 	
 }
