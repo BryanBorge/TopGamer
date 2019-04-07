@@ -105,7 +105,7 @@ public class TopGamerGUI extends Application
 		CreateCODScene();	
 		CreateHaloScene();
 		CreateCodTourneyScene();
-		CreateTeamScene();
+		CreateTeamTournament1();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -863,24 +863,24 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
-		btnCreateTeam.setOnAction(e->OpenCreateTeam());
+		btnCreateTeam.setOnAction(e->OpenCreateTeamTournament1());
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		Tournament testT = new Tournament();
+		Tournament codSNDTourney = new Tournament();
 		SQLConnection se = new SQLConnection();
 		se.connect();
-		testT = se.LoadTournamentData();
+		codSNDTourney = se.LoadTournamentData();
 		
-		Label lblTitle = new Label(testT.GetTournamentName());
+		Label lblTitle = new Label(codSNDTourney.GetTournamentName());
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label("NY - 5 Teams");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
 		
-		Label lblPrizeAmt = new Label("$" + testT.GetPrize());
+		Label lblPrizeAmt = new Label("$" + codSNDTourney.GetPrize());
 		Label lblBracketAmt = new Label("5");
 		Label lblTeamsJoinedVal = new Label("0");
 		
@@ -933,7 +933,7 @@ public class TopGamerGUI extends Application
 
 	
 	
-	public void CreateTeamScene() 
+	public void CreateTeamTournament1() 
 	{
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
@@ -988,6 +988,12 @@ public class TopGamerGUI extends Application
 				else {
 					SQLConnection sqlConnection = new SQLConnection();
 					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 1);
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Team Created");
+					alert.setHeaderText("Team created");
+					alert.setContentText("Team has been successfully created");
+					alert.showAndWait();
 				}
 			}			
 		});
@@ -1011,7 +1017,7 @@ public class TopGamerGUI extends Application
 		createTeam = new Scene(aPane);
 	}
 	
-	public void OpenCreateTeam()
+	public void OpenCreateTeamTournament1()
 	{
 		window.setScene(createTeam);
 	}

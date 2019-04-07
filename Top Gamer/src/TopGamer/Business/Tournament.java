@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+
 import java.sql.Connection;
 
 
@@ -20,6 +23,7 @@ public class Tournament
 {
 	private String m_tournamentName;
 	private String m_prize;
+	private int m_tournamentID;
 	private int m_bracketSize;
 	private int m_teamJoined;
 	private Game m_game;
@@ -37,6 +41,17 @@ public class Tournament
 		m_tournamentName = "N/A";
 		m_teamName = new ArrayList<Team>();
 	}
+	
+	public void SetID(int id) {
+		m_tournamentID = id;
+	}
+	
+	public int GetID() {
+		return m_tournamentID;
+	}
+	
+	
+	
 	
 	/**
 	 * Sets prize member variable

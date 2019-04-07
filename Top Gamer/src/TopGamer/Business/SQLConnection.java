@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
+
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
@@ -149,22 +151,25 @@ public class SQLConnection {
 	public Tournament LoadTournamentData() { 
 	
 		Tournament tempTourney = new Tournament();
-		String query = "select TournamentName, Prize from Tournament";
+		String query = "select TournamentID,TournamentName, Prize from tblTournament";
 		
 		Statement statement = null;
 		ResultSet result;
 		
 		
 		String dbTourneyName = null, dbPrize = null;
+		int dbTourneyID = 0;
 		
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(query);
 			while(result.next())
 			{
+				dbTourneyID = result.getInt("TournamentID");
 				dbTourneyName = result.getString("TournamentName");
 				dbPrize = result.getString("Prize");
 			}
+			tempTourney.SetID(dbTourneyID);
 			tempTourney.SetTournamentName(dbTourneyName);
 			tempTourney.SetPrize(dbPrize);
 			return tempTourney;
@@ -215,6 +220,20 @@ public class SQLConnection {
 			statement.executeUpdate(addUser2);
 			statement.executeUpdate(addUser3);
 			statement.executeUpdate(addUser4);
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void AddTeamToTournament(String teamName, int tournamentID)
+	{
+		String addTeamQuery = "Update Team set TournamentID = " + tournamentID + " where TeamName = \"" + teamName + "\"";
+		
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(addTeamQuery);
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

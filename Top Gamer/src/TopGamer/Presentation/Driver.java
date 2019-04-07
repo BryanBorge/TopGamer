@@ -12,16 +12,15 @@ public class Driver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	
-	//	Application.launch(TopGamerGUI.class,args);
+		Application.launch(TopGamerGUI.class,args);
 		
-		
-		Team test = new Team();
-		SQLConnection se = new SQLConnection();
-		test = se.LoadTeamData("the Team");
-		for(User user : test.GetAllTeamMembers())
-		{
-			System.out.println(user.GetUsername());
-		}
-		
+		/*
+		Tournament test = new Tournament();
+		SQLConnection sqlConnection = new SQLConnection();
+		test = sqlConnection.LoadTournamentData();
+		System.out.println(test.GetID());
+		System.out.println(test.GetTournamentName());
+		System.out.println(test.GetPrize());
+		*/
 	}
 }
