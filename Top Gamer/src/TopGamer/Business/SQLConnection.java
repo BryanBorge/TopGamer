@@ -223,37 +223,32 @@ public class SQLConnection {
 	
 	
 	/**
-	 * loads team data such as teamname and users into team object
+	 * Loads team members into teamMemebers array
 	 * returns team instance using data from database
 	 * @return Team
 	 */
-	public Team loadTeamData(String teamName) 
+	public Team LoadTeamData(String teamName) 
 	{
 		Team teamObj = new Team();
-		String teamQuery = "select * from Team";
-		String getUsersQuery = "select UserName from Users" + "WHERE TeamID = 1"; 
-		
+		String teamQuery = "select FirstName, LastName, UserName from Users u JOIN Team t on u.TeamID = t.TeamID where u.TeamID = (select TeamID from Team where TeamName = \"" + teamName + "\")";
+
 		Statement statement = null;
 		ResultSet result;
-		
-		String dbUserName = null;
-		String dbTeamID = "0";
-		
+		String dbFirstName = null;
+		String dbLastName = null;
+		String dbUsername = null;
 		
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(teamQuery);
 			while(result.next()) 
 			{
-				dbUserName = result.getString("UserName");
-				dbTeamID = result.getString("TeamID");		
+					dbFirstName = result.getString("FirstName");
+					dbLastName = result.getString("LastName");
+					dbUsername = result.getString("UserName");
+					teamObj.AddTeamMember(new User(dbFirstName,dbLastName,dbUsername));
 			}
-				teamObj.SetTeamName(dbTeamID);
-				// i am not sure what to do about the user data. There's no function in the team class that seems to work.
-				// When i try to pass a parameter into it it doesn't take them and gives me an error
-				teamObj.setteamMember(teamMember);
-				return teamObj;
-			
+			return teamObj;
 		} catch (SQLException e ) {
 			e.printStackTrace();
 			

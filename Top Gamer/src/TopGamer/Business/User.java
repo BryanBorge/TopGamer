@@ -29,6 +29,13 @@ public class User
 		m_password = "N/A";
 	}
 	
+	public User(String fName, String lName, String uName) {
+		m_firstName = fName;
+		m_lastName = lName;
+		m_username = uName;
+	}
+	
+	
 	/**
 	 * Sets first name member
 	 * @param firstName - value from gui

@@ -59,8 +59,6 @@ public class Team {
 	 */
 	public void AddTeamMember(User teamMember)
 	{
-		//
-		//not sure what else to do with this just yet. Need to create user instances from the db to add to the list based on who the user chooses.
 		m_teamMembers.add(teamMember);
 	}
 	
@@ -92,7 +90,7 @@ public class Team {
 	 * sets Wins member variable
 	 * @param Wins 
 	 */
-	public void setWins(int Wins) 
+	public void SetWins(int Wins) 
 	{
 		m_wins = Wins;
 	}
@@ -102,7 +100,7 @@ public class Team {
 	 * @returns wins 
 	 */
 	
-	public int getWins() 
+	public int GetWins() 
 	{
 	   return m_wins;  	
 	}
@@ -113,31 +111,20 @@ public class Team {
 	 * @param Losses
 	 */
 	
-	public void setLosses(int Losses)
+	public void SetLosses(int Losses)
 	{
 	   m_losses = Losses;
 	}
 
-	
 	/**
 	 *
 	 * gets Losses Member Variable
 	 * 
 	 * @returns Losses
 	 */
-	public int getLosses() 
+	public int GetLosses() 
 	{
 	   return m_losses;
-	}
-
-	
-	/**
-	 * sets teamMember variable
-	 */
-
-	public void setteamMember(User teamMember) 
-	{
-	   m_teamMembers.add(teamMember);
 	}
 
 
