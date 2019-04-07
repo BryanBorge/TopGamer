@@ -973,29 +973,16 @@ public class TopGamerGUI extends Application
 		
 		//if user is not logged in/not registered they cannot create a team
 		btnCreateTeam.setOnAction(e->{
-			if(!loggedIn)
-				System.out.println("log in to create a team");
-			else {
-				//Could probably move these checks to another function
-				//but will leave this for now since the text fields are local
-				if(Empty(txtTeamName) && Empty(txtMember1) && Empty(txtMember2) && Empty(txtMember3)) {
-					System.out.println("All empty");
-					e.consume();
-				}
-				else if(Empty(txtTeamName)) {
+			if(!loggedIn) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Not logged in");
+				alert.setContentText("Please log in to create a team");
+				alert.showAndWait();
+			}else {
+				
+				if(Empty(txtTeamName)) {
 					System.out.println("Team name empty");
-					e.consume();
-				}
-				else if(Empty(txtMember1)) {
-					System.out.println("user1 name empty");
-					e.consume();
-				}
-				else if(Empty(txtMember2)) {
-					System.out.println("user2 name empty");
-					e.consume();
-				}
-				else if(Empty(txtMember3)) {
-					System.out.println("user3 name empty");
 					e.consume();
 				}
 				else {
@@ -1005,7 +992,7 @@ public class TopGamerGUI extends Application
 			}			
 		});
 		
-		JFXButton btnReturn = new JFXButton("<-");
+		JFXButton btnReturn = new JFXButton("<");
 		btnReturn.setOnAction(e->OpenCodTourney());
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
@@ -1023,9 +1010,6 @@ public class TopGamerGUI extends Application
 		
 		createTeam = new Scene(aPane);
 	}
-	
-	
-	
 	
 	public void OpenCreateTeam()
 	{

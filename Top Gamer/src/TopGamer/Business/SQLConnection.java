@@ -221,6 +221,7 @@ public class SQLConnection {
 		}
 	}
 	
+	
 	/**
 	 * loads team data such as teamname and users into team object
 	 * returns team instance using data from database
@@ -243,8 +244,7 @@ public class SQLConnection {
 		String dbUserID = "0";
 		
 		
-		try 
-		{
+		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(teamData);
 			while(result.next()) 
@@ -253,26 +253,17 @@ public class SQLConnection {
 				dbLastName = result.getString("LastName");
 				dbEmail = result.getString("Email");
 				dbUserName = result.getString("UserName");
-				dbTeamID = result.getString("TeamID");
-				
-				
+				dbTeamID = result.getString("TeamID");		
 			}
 				teamObj.SetTeamName(dbTeamID);
-				teamObj.GetSpecificTeamMember();
+				//teamObj.GetSpecificTeamMember();
 				return teamObj;
 		
 		} catch (SQLException e ) {
 			e.printStackTrace();
 			
 		}
-		
 		return teamObj;
-		
-		
-		
-	
-	
-	
 	}
 	
 	
