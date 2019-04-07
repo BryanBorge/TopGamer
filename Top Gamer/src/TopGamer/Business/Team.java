@@ -131,6 +131,14 @@ public class Team {
 	}
 
 	
+	/**
+	 * sets teamMember variable
+	 */
+
+	public void setteamMember(User teamMember) 
+	{
+	   m_teamMembers.add(teamMember);
+	}
+
+
 }
-
-

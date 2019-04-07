@@ -231,7 +231,7 @@ public class SQLConnection {
 	{
 		Team teamObj = new Team();
 		String teamQuery = "select * from Team";
-		String getUsersQuery = "select TeamID, COUNT(*) as count from Users group by TeamID"; 
+		String getUsersQuery = "select UserName from Users" + "WHERE TeamID = 1"; 
 		
 		Statement statement = null;
 		ResultSet result;
@@ -251,7 +251,7 @@ public class SQLConnection {
 				teamObj.SetTeamName(dbTeamID);
 				// i am not sure what to do about the user data. There's no function in the team class that seems to work.
 				// When i try to pass a parameter into it it doesn't take them and gives me an error
-				teamObj.AddTeamMember(teamMember);
+				teamObj.setteamMember(teamMember);
 				return teamObj;
 			
 		} catch (SQLException e ) {
