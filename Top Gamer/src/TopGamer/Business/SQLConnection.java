@@ -151,7 +151,7 @@ public class SQLConnection {
 	public Tournament LoadTournamentData() { 
 	
 		Tournament tempTourney = new Tournament();
-		String query = "select TournamentID,TournamentName, Prize from tblTournament";
+		String query = "select TournamentID,TournamentName, Prize from tblTournaments";
 		
 		Statement statement = null;
 		ResultSet result;
@@ -185,7 +185,7 @@ public class SQLConnection {
 	 */
 	public ArrayList<String> LoadAllUsernames()
 	{
-		String query = "select UserName from Users where TeamID is NULL";
+		String query = "select UserName from tblUsers where TeamID is NULL";
 		ArrayList<String> users = new ArrayList<String>();
 		Statement statement = null;
 		ResultSet result;
