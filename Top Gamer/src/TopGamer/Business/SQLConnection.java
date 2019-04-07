@@ -97,7 +97,7 @@ public class SQLConnection {
 	{
 		//adds user info from the registration form
 		//String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
-		String query = "select * from Users where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
+		String query = "select * from tblUsers where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
 		
 		Statement statement = null;
 		ResultSet result;
