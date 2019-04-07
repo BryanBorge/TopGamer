@@ -227,38 +227,33 @@ public class SQLConnection {
 	 * returns team instance using data from database
 	 * @return Team
 	 */
-	public Team loadTeamData(String OpTic) 
+	public Team loadTeamData(String teamName) 
 	{
 		Team teamObj = new Team();
-		String teamData = "select * from Team";
-		String userData = "select UserID, FirstName, LastName, Email, UserName from Users" + "WHERE teamID = 1"; 
+		String teamQuery = "select * from Team";
+		String getUsersQuery = "select TeamID, COUNT(*) as count from Users group by TeamID"; 
 		
 		Statement statement = null;
 		ResultSet result;
 		
-		String dbFirstName = "NULL";
-		String dbLastName = " NULL";
-		String dbEmail = "NULL";
-		String dbUserName = "NULL";
+		String dbUserName = null;
 		String dbTeamID = "0";
-		String dbUserID = "0";
 		
 		
 		try {
 			statement = connection.createStatement();
-			result = statement.executeQuery(teamData);
+			result = statement.executeQuery(teamQuery);
 			while(result.next()) 
 			{
-				dbFirstName = result.getString("FirstName");
-				dbLastName = result.getString("LastName");
-				dbEmail = result.getString("Email");
 				dbUserName = result.getString("UserName");
 				dbTeamID = result.getString("TeamID");		
 			}
 				teamObj.SetTeamName(dbTeamID);
-				//teamObj.GetSpecificTeamMember();
+				// i am not sure what to do about the user data. There's no function in the team class that seems to work.
+				// When i try to pass a parameter into it it doesn't take them and gives me an error
+				teamObj.AddTeamMember(teamMember);
 				return teamObj;
-		
+			
 		} catch (SQLException e ) {
 			e.printStackTrace();
 			
