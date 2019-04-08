@@ -204,7 +204,6 @@ public class SQLConnection {
 		return null;
 	}
 	
-	
 	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
 		String createTeamQuery = "INSERT into Team (TeamName) VALUES(\"" + TeamName + "\")";
@@ -226,7 +225,6 @@ public class SQLConnection {
 		}
 	}
 	
-	
 	public void AddTeamToTournament(String teamName, int tournamentID)
 	{
 		String addTeamQuery = "Update Team set TournamentID = " + tournamentID + " where TeamName = \"" + teamName + "\"";
@@ -239,7 +237,6 @@ public class SQLConnection {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	/**
 	 * Loads team members into teamMemebers array

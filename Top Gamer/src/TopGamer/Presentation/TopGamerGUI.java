@@ -884,7 +884,6 @@ public class TopGamerGUI extends Application
 		Label lblBracketAmt = new Label("5");
 		Label lblTeamsJoinedVal = new Label("0");
 		
-
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
