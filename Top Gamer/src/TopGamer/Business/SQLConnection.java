@@ -206,11 +206,11 @@ public class SQLConnection {
 	
 	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
-		String createTeamQuery = "INSERT into Team (TeamName) VALUES(\"" + TeamName + "\")";
-		String addUser1 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user1 + "\"";
-		String addUser2 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user2 + "\"";
-		String addUser3 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user3 + "\"";
-		String addUser4 = "Update Users set TeamID = (select TeamID from Team where TeamName = \"" + TeamName + "\") where UserName = \"" + user4 + "\"";
+		String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\"" + TeamName + "\")";
+		String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user1 + "\"";
+		String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user2 + "\"";
+		String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user3 + "\"";
+		String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user4 + "\"";
 		
 		try {
 			Statement statement = connection.createStatement();
@@ -227,7 +227,7 @@ public class SQLConnection {
 	
 	public void AddTeamToTournament(String teamName, int tournamentID)
 	{
-		String addTeamQuery = "Update Team set TournamentID = " + tournamentID + " where TeamName = \"" + teamName + "\"";
+		String addTeamQuery = "Update tblTeams set TournamentID = " + tournamentID + " where TeamName = \"" + teamName + "\"";
 		
 		try {
 			Statement statement = connection.createStatement();
