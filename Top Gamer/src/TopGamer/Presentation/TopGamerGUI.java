@@ -1006,7 +1006,7 @@ public class TopGamerGUI extends Application
 		//to be used for text field auto completion
 		ArrayList<String> users = new ArrayList<String>();
 		SQLConnection sqlConnection = new SQLConnection();
-		users = sqlConnection.LoadAllUsernames();
+		users = sqlConnection.LoadAllAvailUsernames();
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);

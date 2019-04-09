@@ -16,14 +16,12 @@ import java.sql.*;
 
 public class SQLConnection {
    
-	//testing branch stuff
+	//used for joining an open team
+	//select TeamName, count() as NUMOFPLAyERS from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by t.TeamID HAVING count() < 4
+
     Connection connection;
-    String fName;
-    String lName;
-    String email;
-    String userName;
-    String pass;
     
+  
     /**
      * SQLConnection Constructor 
      * 
@@ -180,10 +178,10 @@ public class SQLConnection {
 	}
 
 	/**
-	 * Loads all usernames into an array for use with autocompletion
+	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
 	 * @return
 	 */
-	public ArrayList<String> LoadAllUsernames()
+	public ArrayList<String> LoadAllAvailavleUsernames()
 	{
 		String query = "select UserName from tblUsers where TeamID is NULL";
 		ArrayList<String> users = new ArrayList<String>();
@@ -203,6 +201,12 @@ public class SQLConnection {
 		}
 		return null;
 	}
+	
+	public ArrayList<String>LoadAllOpenTeams()
+	{
+		
+	}
+	
 	
 	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
