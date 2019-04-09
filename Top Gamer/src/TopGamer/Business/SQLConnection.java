@@ -204,7 +204,23 @@ public class SQLConnection {
 	
 	public ArrayList<String>LoadAllOpenTeams()
 	{
-		
+		String query = "select TeamName, count() as NUMOFPLAyERS from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by t.TeamID HAVING count() < 4";
+		ArrayList<String> openTeams = new ArrayList<String>();
+		Statement statement = null;
+		ResultSet result;
+	
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(query);
+			while(result.next())
+			{
+				openTeams.add(result.getString("TeamName"));
+			}
+			return openTeams;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

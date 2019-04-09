@@ -14,13 +14,14 @@ public class Driver {
 	
 		Application.launch(TopGamerGUI.class,args);
 		
-		/*
-		Tournament test = new Tournament();
-		SQLConnection sqlConnection = new SQLConnection();
-		test = sqlConnection.LoadTournamentData();
-		System.out.println(test.GetID());
-		System.out.println(test.GetTournamentName());
-		System.out.println(test.GetPrize());
-		*/
+		
+		SQLConnection sql = new SQLConnection();
+		ArrayList<String> test = new ArrayList<String>();
+		test = sql.LoadAllOpenTeams();
+		for(String t : test)
+		{
+			System.out.println(t);
+		}
+		
 	}
 }

@@ -55,7 +55,7 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 	Scene codTourney;
-	Scene createTeam;
+	Scene createTeam, joinTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
@@ -106,6 +106,7 @@ public class TopGamerGUI extends Application
 		CreateHaloScene();
 		CreateCodTourneyScene();
 		CreateTeamTournament1();
+		CreateJoinTeam();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -865,6 +866,7 @@ public class TopGamerGUI extends Application
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		btnCreateTeam.setOnAction(e->OpenCreateTeamTournament1());
 		JFXButton btnJoinTeam = new JFXButton("Join team");
+		btnJoinTeam.setOnAction(e-> OpenJoinTeam());
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
@@ -1006,7 +1008,7 @@ public class TopGamerGUI extends Application
 		//to be used for text field auto completion
 		ArrayList<String> users = new ArrayList<String>();
 		SQLConnection sqlConnection = new SQLConnection();
-		users = sqlConnection.LoadAllAvailUsernames();
+		users = sqlConnection.LoadAllAvailavleUsernames();
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1022,8 +1024,44 @@ public class TopGamerGUI extends Application
 	}
 
 
+	public void CreateJoinTeam()
+	{
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team Name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(166.0);
+		
+		JFXButton btnJoinTeam = new JFXButton("Join Team");
+		btnJoinTeam.setLayoutX(220.0);
+		btnJoinTeam.setLayoutY(279.0);
+		btnJoinTeam.prefWidth(135.0);
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenCodTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		ArrayList<String> openTeams = new ArrayList<String>();
+		SQLConnection sqlConnection = new SQLConnection();
+		openTeams = sqlConnection.LoadAllOpenTeams();
+		TextFields.bindAutoCompletion(txtTeamName, openTeams);
+		
+		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
+		
+		joinTeam = new Scene(aPane);
+		
+	}
 
-
+	
+	public void OpenJoinTeam()
+	{
+		window.setScene(joinTeam);
+	}
 
 
 
