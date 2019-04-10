@@ -29,7 +29,6 @@ public class SQLConnection {
      */
     public SQLConnection()
     {
-    	connection = null;
     	connect();
     }
     
@@ -59,12 +58,14 @@ public class SQLConnection {
         String password = "Password0505";
         String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;"
             + "hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
-        Connection connection = null;
+        connection = null;
 		
 		
 		try {
 			// get connection
-			connection = DriverManager.getConnection(url);
+			connection = DriverManager.getConnection(url); 
+			String schema = connection.getSchema();
+			System.out.println(schema);
 		}
 		catch (SQLException e)
 		{
@@ -89,11 +90,11 @@ public class SQLConnection {
 	public void AddUser(String firstName, String lastName, String email, String userName, String password) throws SQLiteException
 	{
 		//adds user info from the registration form
-		String query = "INSERT INTO Users (FirstName,LastName,Email,UserName,Password) " +
+		String query = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password) " +
 		              "Values ( \'" + firstName + "\', \'" + lastName + "\', \'" + email + "\', \'" + userName + "\', \'" + password +"\');";
 		
 		//test query to add any data
-		String q =  "INSERT INTO User (FirstName, LastName, Email, UserName,Password) " +
+		String q =  "INSERT INTO tblUsers (FirstName, LastName, Email, UserName,Password) " +
 	              "Values ( 'f', 'l', 'email', 'a', 'p');";
 		
 		
@@ -104,7 +105,7 @@ public class SQLConnection {
 			statement.close();
 		}
 		catch (SQLException e1) {
-			throw new SQLiteException("cannot save user to database", SQLiteErrorCode.SQLITE_BUSY);
+			e1.printStackTrace();
 		}
 	}
 	
@@ -120,7 +121,7 @@ public class SQLConnection {
 	{
 		//adds user info from the registration form
 		//String query = "select UserName, Password from User where UserName= \"" + userName + "\" and Password= \"" + password + "\"  "; 
-		String query = "select * from tblUsers where UserName= \"" + userName + "\" and Password= \"" + password + "\"  ";
+		String query = "select * from tblUsers where UserName= \'" + userName + "\' and Password= \'" + password + "\'  ";
 		
 		Statement statement = null;
 		ResultSet result;
@@ -210,12 +211,10 @@ public class SQLConnection {
 	{
 		String query = "select UserName from tblUsers where TeamID is NULL";
 		ArrayList<String> users = new ArrayList<String>();
-		Statement statement = null;
-		ResultSet result;
 	
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(query);
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(query);
 			while(result.next())
 			{
 				users.add(result.getString("UserName"));
@@ -229,7 +228,7 @@ public class SQLConnection {
 	
 	public ArrayList<String>LoadAllOpenTeams()
 	{
-		String query = "select TeamName, count() as NUMOFPLAyERS from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by t.TeamID HAVING count() < 4";
+		String query = "select TeamName, count(t.TeamID) as num from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by TeamName HAVING count(t.TeamID) < 4";
 		ArrayList<String> openTeams = new ArrayList<String>();
 		Statement statement = null;
 		ResultSet result;
@@ -251,11 +250,11 @@ public class SQLConnection {
 	
 	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
-		String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\"" + TeamName + "\")";
-		String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user1 + "\"";
-		String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user2 + "\"";
-		String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user3 + "\"";
-		String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \"" + TeamName + "\") where UserName = \"" + user4 + "\"";
+		String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\'" + TeamName + "\')";
+		String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user1 + "\'";
+		String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user2 + "\'";
+		String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user3 + "\'";
+		String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user4 + "\'";
 		
 		try {
 			Statement statement = connection.createStatement();
@@ -272,7 +271,7 @@ public class SQLConnection {
 	
 	public void AddTeamToTournament(String teamName, int tournamentID)
 	{
-		String addTeamQuery = "Update tblTeams set TournamentID = " + tournamentID + " where TeamName = \"" + teamName + "\"";
+		String addTeamQuery = "Update tblTeams set TournamentID = " + tournamentID + " where TeamName = \'" + teamName + "\'";
 		
 		try {
 			Statement statement = connection.createStatement();
