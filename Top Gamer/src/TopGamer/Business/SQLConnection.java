@@ -37,7 +37,8 @@ public class SQLConnection {
      * Establishes a connection to the database
      */
 	public void connect() 
-	{      
+	{     
+		/* This is the old database connection. Leaving it here just in case
         try {
         	//location of the database file
         	String databaseLocation = "jdbc:sqlite:TopGamerDB1.1.db";
@@ -49,7 +50,31 @@ public class SQLConnection {
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
+		
+		// Connect to database
+        String hostName = "topgamer1.database.windows.net";
+        String dbName = "topgamer1";
+        String user = "topgamer0505@topgamer1";
+        String password = "Password0505";
+        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;"
+            + "hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
+        Connection connection = null;
+		
+		
+		try {
+			// get connection
+			connection = DriverManager.getConnection(url);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println("Failed to create connection to database.");
+		}
+		if (connection != null) 
+			System.out.println("Successfully created connection to database.");
+		
+		
     }
 
 	/**
