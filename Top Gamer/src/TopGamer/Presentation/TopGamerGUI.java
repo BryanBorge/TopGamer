@@ -107,7 +107,7 @@ public class TopGamerGUI extends Application
 		CreateHaloScene();
 		//CreateCodTourneyScene();
 		CreateTeamTournament1();
-		CreateJoinTeam();
+		//CreateJoinTeam();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -866,7 +866,7 @@ public class TopGamerGUI extends Application
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
-		btnJoinTeam.setOnAction(e-> OpenJoinTeam());
+		btnJoinTeam.setOnAction(e->OpenJoinTeam());
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
@@ -874,10 +874,10 @@ public class TopGamerGUI extends Application
 		SQLConnection se = new SQLConnection();
 		se.connect();
 		codSNDTourney = se.LoadTournamentData();
-		final int count = codSNDTourney.GetTeamsJoined();
+		final int teamCount = codSNDTourney.GetTeamsJoined();
+		final int bracketSize = codSNDTourney.GetBrackSize();
 		btnCreateTeam.setOnAction(e->{
-			
-			if(count < 3)
+			if(teamCount < bracketSize)
 				OpenCreateTeamTournament1();			
 			else {		
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -897,8 +897,8 @@ public class TopGamerGUI extends Application
 		Label lblTeamsJoined = new Label("Teams Joined");
 		
 		Label lblPrizeAmt = new Label("$" + codSNDTourney.GetPrize());
-		Label lblBracketAmt = new Label("5");
-		Label lblTeamsJoinedVal = new Label(String.valueOf(codSNDTourney.GetTeamsJoined()));
+		Label lblBracketAmt = new Label(String.valueOf(bracketSize));
+		Label lblTeamsJoinedVal = new Label(String.valueOf(teamCount));
 		
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
@@ -1050,6 +1050,12 @@ public class TopGamerGUI extends Application
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
 		
+		Tournament codSNDTourney = new Tournament();
+		SQLConnection se = new SQLConnection();
+		se.connect();
+		codSNDTourney = se.LoadTournamentData();
+		se.JoinTeam(testUser.GetUsername(),"Test");
+		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
 		txtTeamName.setPromptText("Team Name");
@@ -1080,6 +1086,7 @@ public class TopGamerGUI extends Application
 	
 	public void OpenJoinTeam()
 	{
+		CreateJoinTeam();
 		window.setScene(joinTeam);
 	}
 

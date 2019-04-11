@@ -35,6 +35,13 @@ public class Tournament
 	public void SetTeamsJoined(int n) {
 		m_teamsJoined = n;
 	}
+	
+	public int GetBrackSize() {
+		return m_bracketSize;
+	}
+	public void SetBrackSize(int b) {
+		m_bracketSize = b;
+	}
 
 	/**
 	 *Tournament default constructor

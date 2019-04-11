@@ -175,14 +175,14 @@ public class SQLConnection {
 	public Tournament LoadTournamentData() { 
 	
 		Tournament tempTourney = new Tournament();
-		String tournamentQry = "select TournamentID,TournamentName, Prize from tblTournaments";
+		String tournamentQry = "select TournamentID,TournamentName, Prize, BracketSize from tblTournaments";
 		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = 1";
 		Statement statement = null;
 		ResultSet result;
 		
 		
 		String dbTourneyName = null, dbPrize = null;
-		int dbTourneyID = 0, dbCount = 0;
+		int dbTourneyID = 0, dbCount = 0, dbBracketSize = 0;
 		
 		try {
 			statement = connection.createStatement();
@@ -192,11 +192,14 @@ public class SQLConnection {
 				dbTourneyID = result.getInt("TournamentID");
 				dbTourneyName = result.getString("TournamentName");
 				dbPrize = result.getString("Prize");
+				dbBracketSize = result.getInt("BracketSize");
 			}
 			tempTourney.SetTeamsJoined(dbCount);
 			tempTourney.SetID(dbTourneyID);
 			tempTourney.SetTournamentName(dbTourneyName);
 			tempTourney.SetPrize(dbPrize);
+			tempTourney.SetBrackSize(dbBracketSize);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -263,6 +266,19 @@ public class SQLConnection {
 		return null;
 	}
 	
+	public void JoinTeam(String user, String teamName)
+	{
+		String joinTeamQry = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + teamName + "\') where UserName = \'" + user + "\'";
+		
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(joinTeamQry);
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+	}
 	
 	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
 	{
