@@ -46,7 +46,6 @@ public class SQLConnection {
             + "hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
         connection = null;
 		
-		
 		try {
 			// get connection
 			connection = DriverManager.getConnection(url); 
@@ -153,7 +152,6 @@ public class SQLConnection {
 		}
 	
 	}
-	
 	
 	/**
 	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
