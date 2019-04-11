@@ -27,7 +27,7 @@ public class Tournament
 	private int m_bracketSize;
 	private int m_teamsJoined;
 	private Game m_game;
-	private ArrayList<Team> m_teamName;
+	private ArrayList<Team> m_teams;
 	
 	
 	public void LoadTournamentData(int id)
@@ -86,7 +86,7 @@ public class Tournament
 	public Tournament() 
 	{
 		m_tournamentName = "N/A";
-		m_teamName = new ArrayList<Team>();
+		m_teams = new ArrayList<Team>();
 	}
 	
 	public void SetID(int id) {
@@ -158,7 +158,7 @@ public class Tournament
 	 */
 	public ArrayList<Team> GetTeamName()
 	{
-		return m_teamName;
+		return m_teams;
 	}
 	
 	
@@ -171,7 +171,7 @@ public class Tournament
 	{
 		boolean found = false;
 		Team foundTeam = new Team();
-		for(Team t : m_teamName)
+		for(Team t : m_teams)
 		{
 			if(t.GetTeamName().equals(targetTeam.GetTeamName())) {
 				found = true;

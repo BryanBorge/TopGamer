@@ -409,6 +409,18 @@ public class TopGamerGUI extends Application
 		btnSignUp.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		btnSignUp.setOnAction(e -> RegisterUser());
 		
+		HBox platformHbox = new HBox();
+		platformHbox.setSpacing(5);
+		ToggleGroup platformGroup = new ToggleGroup();
+		RadioButton rbXbox = new RadioButton("Xbox One");
+		rbXbox.setToggleGroup(platformGroup);
+		RadioButton rbPS4 = new RadioButton("PS3");
+		rbPS4.setToggleGroup(platformGroup);
+		RadioButton rbPC = new RadioButton("PC");
+		rbPC.setToggleGroup(platformGroup);
+		platformHbox.getChildren().addAll(rbXbox, rbPS4, rbPC);
+		
+		
 				
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
@@ -439,10 +451,13 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(txtPass, 226.0);
 		AnchorPane.setTopAnchor(txtPass, 296.0);
 		
-		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
-		AnchorPane.setTopAnchor(btnSignUp, 344.0);
+		AnchorPane.setLeftAnchor(platformHbox, 226.0);
+		AnchorPane.setTopAnchor(platformHbox, 335.0);
 		
-		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass);
+		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
+		AnchorPane.setTopAnchor(btnSignUp, 365.0);
+		
+		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass,platformHbox);
 		registerScene = new Scene(ap,600,400);
 	}
 	/**
