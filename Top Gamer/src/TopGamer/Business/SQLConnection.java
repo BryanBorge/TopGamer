@@ -32,6 +32,8 @@ public class SQLConnection {
     	connect();
     }
     
+    //adding a test for the branch
+    
     /**
      * Establishes a connection to the database
      */
@@ -58,8 +60,6 @@ public class SQLConnection {
 		}
 		if (connection != null) 
 			System.out.println("Successfully created connection to database.");
-		
-		
     }
 
 	/**
