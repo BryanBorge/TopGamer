@@ -19,7 +19,7 @@ public class SQLConnection {
 	//used for joining an open team
 	//select TeamName, count() as NUMOFPLAyERS from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by t.TeamID HAVING count() < 4
 
-    Connection connection;
+    private Connection connection;
     
   
     /**
@@ -35,7 +35,7 @@ public class SQLConnection {
     /**
      * Establishes a connection to the database
      */
-	public void connect() 
+	public Connection connect() 
 	{     
 		// Connect to database
         String hostName = "topgamer1.database.windows.net";
@@ -55,11 +55,13 @@ public class SQLConnection {
 		{
 			e.printStackTrace();
 			System.out.println("Failed to create connection to database.");
+			return null;
 		}
-		if (connection != null) 
+		if (connection != null) {
 			System.out.println("Successfully created connection to database.");
-		
-		
+		}
+		return connection;
+			
     }
 
 	/**
@@ -152,60 +154,7 @@ public class SQLConnection {
 	
 	}
 	
-	/**
-	 * Returns a tournament instance containing values from the database
-	 * @return Tournament instance
-	 */
-	public Tournament LoadTournamentData() { 
 	
-		Tournament tempTourney = new Tournament();
-		String tournamentQry = "select TournamentID,TournamentName, Prize, BracketSize from tblTournaments";
-		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = 1";
-		Statement statement = null;
-		ResultSet result;
-		
-		
-		String dbTourneyName = null, dbPrize = null;
-		int dbTourneyID = 0, dbCount = 0, dbBracketSize = 0;
-		
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(tournamentQry);
-			while(result.next())
-			{
-				dbTourneyID = result.getInt("TournamentID");
-				dbTourneyName = result.getString("TournamentName");
-				dbPrize = result.getString("Prize");
-				dbBracketSize = result.getInt("BracketSize");
-			}
-			tempTourney.SetTeamsJoined(dbCount);
-			tempTourney.SetID(dbTourneyID);
-			tempTourney.SetTournamentName(dbTourneyName);
-			tempTourney.SetPrize(dbPrize);
-			tempTourney.SetBrackSize(dbBracketSize);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(countQry);
-			while(result.next())
-			{
-				dbCount = result.getInt("num");
-			}
-			tempTourney.SetTeamsJoined(dbCount);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return tempTourney;
-		
-	}
-
 	/**
 	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
 	 * @return
