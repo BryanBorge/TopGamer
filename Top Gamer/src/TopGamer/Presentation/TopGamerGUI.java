@@ -871,7 +871,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData();
+		codSNDTourney.LoadTournamentData(1);
 
 		btnCreateTeam.setOnAction(e->{
 			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
@@ -1048,8 +1048,9 @@ public class TopGamerGUI extends Application
 		aPane.setPrefWidth(600);
 		
 		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData();
-		//se.JoinTeam(testUser.GetUsername(),"Test");
+		codSNDTourney.LoadTournamentData(1);
+		SQLConnection se = new SQLConnection();
+		se.JoinTeam(testUser.GetUsername(),"Test");
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
@@ -1061,6 +1062,17 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutX(220.0);
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
+		btnJoinTeam.setOnAction(e->{
+			se.JoinTeam(testUser.GetUsername(),"Test");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Teamed Joined");
+			alert.setHeaderText("Team Joined");
+			alert.setContentText("You have joined the team: Team");
+			alert.showAndWait();
+			
+			OpenCodTourney();
+			
+			});
 		
 		JFXButton btnReturn = new JFXButton("<");
 		btnReturn.setOnAction(e->OpenCodTourney());
@@ -1075,10 +1087,8 @@ public class TopGamerGUI extends Application
 		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
 		
 		joinTeam = new Scene(aPane);
-		
 	}
 
-	
 	public void OpenJoinTeam()
 	{
 		CreateJoinTeam();

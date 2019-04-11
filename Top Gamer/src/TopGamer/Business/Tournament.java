@@ -30,12 +30,12 @@ public class Tournament
 	private ArrayList<Team> m_teamName;
 	
 	
-	public void LoadTournamentData()
+	public void LoadTournamentData(int id)
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String tournamentQry = "select TournamentID,TournamentName, Prize, BracketSize from tblTournaments";
-		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = 1";
+		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = " + id;
 		
 		Connection connection = dbConnection.connect();
 		Statement statement = null;
@@ -64,7 +64,6 @@ public class Tournament
 			e.printStackTrace();
 		}
 		
-		
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(countQry);
@@ -78,10 +77,7 @@ public class Tournament
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
+
 	/**
 	 *Tournament default constructor
 	 * 
@@ -133,13 +129,11 @@ public class Tournament
 	}
 	
 	
-	
 	/**
 	 * Sets TournamentName Member Variable
 	 * 
 	 * @param TournamentName
 	 */
-
 	public void SetTournamentName(String TournamentName) 
 	{
 		m_tournamentName = TournamentName;
