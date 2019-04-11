@@ -32,9 +32,6 @@ public class SQLConnection {
     	connect();
     }
     
-    //adding a test for the branch
-    //test again
-    
     /**
      * Establishes a connection to the database
      */
