@@ -1,5 +1,6 @@
 package TopGamer.Presentation;
 
+import java.awt.event.MouseWheelEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,18 +18,6 @@ public class Driver {
 		// TODO Auto-generated method stub
 	
 		Application.launch(TopGamerGUI.class,args);
-		
-	
-		
-		
-		/*
-		SQLConnection sql = new SQLConnection();
-		ArrayList<String> test = new ArrayList<String>();
-		test = sql.LoadAllOpenTeams();
-		for(String t : test)
-		{
-			System.out.println(t);
-		}*/
 		
 	}
 }

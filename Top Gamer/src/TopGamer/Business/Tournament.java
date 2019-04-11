@@ -25,11 +25,16 @@ public class Tournament
 	private String m_prize;
 	private int m_tournamentID;
 	private int m_bracketSize;
-	private int m_teamJoined;
+	private int m_teamsJoined;
 	private Game m_game;
 	private ArrayList<Team> m_teamName;
 	
-	
+	public int GetTeamsJoined() {
+		return m_teamsJoined;
+	}
+	public void SetTeamsJoined(int n) {
+		m_teamsJoined = n;
+	}
 
 	/**
 	 *Tournament default constructor

@@ -34,6 +34,7 @@ import javax.lang.model.AnnotatedConstruct;
 
 import org.controlsfx.control.textfield.TextFields;
 import org.sqlite.SQLiteException;
+import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
@@ -104,7 +105,7 @@ public class TopGamerGUI extends Application
 		CreateFortniteScene();		
 		CreateCODScene();	
 		CreateHaloScene();
-		CreateCodTourneyScene();
+		//CreateCodTourneyScene();
 		CreateTeamTournament1();
 		CreateJoinTeam();
 		
@@ -864,7 +865,6 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
-		btnCreateTeam.setOnAction(e->OpenCreateTeamTournament1());
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		btnJoinTeam.setOnAction(e-> OpenJoinTeam());
 		JFXButton btnReturn = new JFXButton("<-");
@@ -874,6 +874,20 @@ public class TopGamerGUI extends Application
 		SQLConnection se = new SQLConnection();
 		se.connect();
 		codSNDTourney = se.LoadTournamentData();
+		final int count = codSNDTourney.GetTeamsJoined();
+		btnCreateTeam.setOnAction(e->{
+			
+			if(count < 3)
+				OpenCreateTeamTournament1();			
+			else {		
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Error");
+				alert.setHeaderText("Cannot create team");
+				alert.setContentText("Bracket size has been reached");
+				alert.showAndWait();
+				return;
+			}			
+	});
 		
 		Label lblTitle = new Label(codSNDTourney.GetTournamentName());
 		lblTitle.setFont(new Font(24));
@@ -884,7 +898,7 @@ public class TopGamerGUI extends Application
 		
 		Label lblPrizeAmt = new Label("$" + codSNDTourney.GetPrize());
 		Label lblBracketAmt = new Label("5");
-		Label lblTeamsJoinedVal = new Label("0");
+		Label lblTeamsJoinedVal = new Label(String.valueOf(codSNDTourney.GetTeamsJoined()));
 		
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
@@ -929,6 +943,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenCodTourney()
 	{
+		CreateCodTourneyScene();
 		window.setScene(codTourney);
 	}
 
@@ -995,6 +1010,11 @@ public class TopGamerGUI extends Application
 					alert.setHeaderText("Team created");
 					alert.setContentText("Team has been successfully created");
 					alert.showAndWait();
+					txtTeamName.setText("");
+					txtMember1.setText("");
+					txtMember2.setText("");
+					txtMember3.setText("");
+					OpenCodTourney();
 				}
 			}			
 		});

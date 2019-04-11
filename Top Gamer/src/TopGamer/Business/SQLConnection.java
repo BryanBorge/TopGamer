@@ -175,32 +175,48 @@ public class SQLConnection {
 	public Tournament LoadTournamentData() { 
 	
 		Tournament tempTourney = new Tournament();
-		String query = "select TournamentID,TournamentName, Prize from tblTournaments";
-		
+		String tournamentQry = "select TournamentID,TournamentName, Prize from tblTournaments";
+		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = 1";
 		Statement statement = null;
 		ResultSet result;
 		
 		
 		String dbTourneyName = null, dbPrize = null;
-		int dbTourneyID = 0;
+		int dbTourneyID = 0, dbCount = 0;
 		
 		try {
 			statement = connection.createStatement();
-			result = statement.executeQuery(query);
+			result = statement.executeQuery(tournamentQry);
 			while(result.next())
 			{
 				dbTourneyID = result.getInt("TournamentID");
 				dbTourneyName = result.getString("TournamentName");
 				dbPrize = result.getString("Prize");
 			}
+			tempTourney.SetTeamsJoined(dbCount);
 			tempTourney.SetID(dbTourneyID);
 			tempTourney.SetTournamentName(dbTourneyName);
 			tempTourney.SetPrize(dbPrize);
-			return tempTourney;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(countQry);
+			while(result.next())
+			{
+				dbCount = result.getInt("num");
+			}
+			tempTourney.SetTeamsJoined(dbCount);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return tempTourney;
+		
 	}
 
 	/**
