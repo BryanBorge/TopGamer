@@ -80,6 +80,13 @@ public class TopGamerGUI extends Application
 	JFXTextField txtEmail;
 	JFXTextField txtUserName;
 	JFXPasswordField txtPass;
+	RadioButton rbXbox;
+	RadioButton rbPS4;
+	RadioButton rbPC;
+	RadioButton rbSelectedPlatform;
+	String platformName;
+	ToggleGroup platformGroup;
+	
 	
 	//Profile drop down
 	JFXButton btnProfile = new JFXButton("Profile");
@@ -411,16 +418,15 @@ public class TopGamerGUI extends Application
 		
 		HBox platformHbox = new HBox();
 		platformHbox.setSpacing(5);
-		ToggleGroup platformGroup = new ToggleGroup();
-		RadioButton rbXbox = new RadioButton("Xbox One");
+		platformGroup = new ToggleGroup();
+		rbXbox = new RadioButton("Xbox One");
 		rbXbox.setToggleGroup(platformGroup);
-		RadioButton rbPS4 = new RadioButton("PS3");
+		rbPS4 = new RadioButton("PS4");
 		rbPS4.setToggleGroup(platformGroup);
-		RadioButton rbPC = new RadioButton("PC");
+		rbPC = new RadioButton("PC");
 		rbPC.setToggleGroup(platformGroup);
 		platformHbox.getChildren().addAll(rbXbox, rbPS4, rbPC);
-		
-		
+
 				
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
@@ -451,11 +457,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(txtPass, 226.0);
 		AnchorPane.setTopAnchor(txtPass, 296.0);
 		
-		AnchorPane.setLeftAnchor(platformHbox, 226.0);
+		AnchorPane.setLeftAnchor(platformHbox, 220.0);
 		AnchorPane.setTopAnchor(platformHbox, 335.0);
 		
-		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
-		AnchorPane.setTopAnchor(btnSignUp, 365.0);
+		AnchorPane.setLeftAnchor(btnSignUp, 255.0);
+		AnchorPane.setTopAnchor(btnSignUp, 360.0);
 		
 		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass,platformHbox);
 		registerScene = new Scene(ap,600,400);
@@ -471,7 +477,8 @@ public class TopGamerGUI extends Application
 		
 			try {
 				SQLConnection s = new SQLConnection();
-				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+				rbSelectedPlatform = (RadioButton)platformGroup.getSelectedToggle();
+				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText(),rbSelectedPlatform.getText());
 				btnProfile.setText(txtUserName.getText());
 				txtFName.setText("");
 				txtLName.setText("");

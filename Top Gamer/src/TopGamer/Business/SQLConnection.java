@@ -72,16 +72,12 @@ public class SQLConnection {
 	 * @param userName UserName
 	 * @param password Password
 	 */
-	public void AddUser(String firstName, String lastName, String email, String userName, String password) throws SQLiteException
+	public void AddUser(String firstName, String lastName, String email, String userName, String password, String platform) throws SQLiteException
 	{
 		//adds user info from the registration form
-		String query = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password) " +
-		              "Values ( \'" + firstName + "\', \'" + lastName + "\', \'" + email + "\', \'" + userName + "\', \'" + password +"\');";
-		
-		//test query to add any data
-		String q =  "INSERT INTO tblUsers (FirstName, LastName, Email, UserName,Password) " +
-	              "Values ( 'f', 'l', 'email', 'a', 'p');";
-		
+		String query = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password,PlatformID) " +
+		              "Values ( \'" + firstName + "\', \'" + lastName + "\', \'" + email + "\', \'" + userName + "\', \'" + password +"\', " + 
+				"(Select PlatformID from tblPlatform where PlatformName = \'" + platform + "\'))"; 
 		
 		try {
 			Statement statement = connection.createStatement();
