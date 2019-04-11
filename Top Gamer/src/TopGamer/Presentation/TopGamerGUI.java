@@ -871,13 +871,10 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 		Tournament codSNDTourney = new Tournament();
-		SQLConnection se = new SQLConnection();
-		se.connect();
-		codSNDTourney = se.LoadTournamentData();
-		final int teamCount = codSNDTourney.GetTeamsJoined();
-		final int bracketSize = codSNDTourney.GetBrackSize();
+		codSNDTourney.LoadTournamentData();
+
 		btnCreateTeam.setOnAction(e->{
-			if(teamCount < bracketSize)
+			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
 				OpenCreateTeamTournament1();			
 			else {		
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -897,8 +894,8 @@ public class TopGamerGUI extends Application
 		Label lblTeamsJoined = new Label("Teams Joined");
 		
 		Label lblPrizeAmt = new Label("$" + codSNDTourney.GetPrize());
-		Label lblBracketAmt = new Label(String.valueOf(bracketSize));
-		Label lblTeamsJoinedVal = new Label(String.valueOf(teamCount));
+		Label lblBracketAmt = new Label(String.valueOf(codSNDTourney.GetBrackSize()));
+		Label lblTeamsJoinedVal = new Label(String.valueOf(codSNDTourney.GetTeamsJoined()));
 		
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
@@ -1051,10 +1048,8 @@ public class TopGamerGUI extends Application
 		aPane.setPrefWidth(600);
 		
 		Tournament codSNDTourney = new Tournament();
-		SQLConnection se = new SQLConnection();
-		se.connect();
-		codSNDTourney = se.LoadTournamentData();
-		se.JoinTeam(testUser.GetUsername(),"Test");
+		codSNDTourney.LoadTournamentData();
+		//se.JoinTeam(testUser.GetUsername(),"Test");
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);

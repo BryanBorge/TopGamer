@@ -29,20 +29,59 @@ public class Tournament
 	private Game m_game;
 	private ArrayList<Team> m_teamName;
 	
-	public int GetTeamsJoined() {
-		return m_teamsJoined;
-	}
-	public void SetTeamsJoined(int n) {
-		m_teamsJoined = n;
+	
+	public void LoadTournamentData()
+	{
+		SQLConnection dbConnection = new SQLConnection();
+		
+		String tournamentQry = "select TournamentID,TournamentName, Prize, BracketSize from tblTournaments";
+		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = 1";
+		
+		Connection connection = dbConnection.connect();
+		Statement statement = null;
+		ResultSet result;
+
+		String dbTourneyName = null, dbPrize = null;
+		int dbTourneyID = 0, dbCount = 0, dbBracketSize = 0;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(tournamentQry);
+			while(result.next())
+			{
+				dbTourneyID = result.getInt("TournamentID");
+				dbTourneyName = result.getString("TournamentName");
+				dbPrize = result.getString("Prize");
+				dbBracketSize = result.getInt("BracketSize");
+			}
+			this.SetTeamsJoined(dbCount);
+			this.SetID(dbTourneyID);
+			this.SetTournamentName(dbTourneyName);
+			this.SetPrize(dbPrize);
+			this.SetBrackSize(dbBracketSize);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(countQry);
+			while(result.next())
+			{
+				dbCount = result.getInt("num");
+			}
+			this.SetTeamsJoined(dbCount);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public int GetBrackSize() {
-		return m_bracketSize;
-	}
-	public void SetBrackSize(int b) {
-		m_bracketSize = b;
-	}
-
+	
+	
+	
 	/**
 	 *Tournament default constructor
 	 * 
@@ -62,7 +101,19 @@ public class Tournament
 		return m_tournamentID;
 	}
 	
+	public int GetTeamsJoined() {
+		return m_teamsJoined;
+	}
+	public void SetTeamsJoined(int n) {
+		m_teamsJoined = n;
+	}
 	
+	public int GetBrackSize() {
+		return m_bracketSize;
+	}
+	public void SetBrackSize(int b) {
+		m_bracketSize = b;
+	}
 	
 	
 	/**
