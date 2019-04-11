@@ -37,20 +37,6 @@ public class SQLConnection {
      */
 	public void connect() 
 	{     
-		/* This is the old database connection. Leaving it here just in case
-        try {
-        	//location of the database file
-        	String databaseLocation = "jdbc:sqlite:TopGamerDB1.1.db";
-            
-        	//create a connection to the database
-            connection = DriverManager.getConnection(databaseLocation);
-            
-            System.out.println("Connection to SQLite has been established.\n");
-            
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }*/
-		
 		// Connect to database
         String hostName = "topgamer1.database.windows.net";
         String dbName = "topgamer1";
@@ -64,8 +50,6 @@ public class SQLConnection {
 		try {
 			// get connection
 			connection = DriverManager.getConnection(url); 
-			String schema = connection.getSchema();
-			System.out.println(schema);
 		}
 		catch (SQLException e)
 		{
