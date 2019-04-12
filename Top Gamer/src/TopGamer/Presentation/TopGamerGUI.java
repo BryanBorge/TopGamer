@@ -677,50 +677,45 @@ public class TopGamerGUI extends Application
 		JFXButton btnReturn = new JFXButton("<-");
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnPS4 = new JFXButton("PS4");
-		JFXButton btnXbox = new JFXButton("Xbox One");
-		JFXButton btnPC = new JFXButton("PC");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+		
 		
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
 		fortniteLogo.setFitWidth(104);
 		fortniteLogo.setFitHeight(148);
 		
 		
-		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
+		/*ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
 		psLogo.setFitHeight(30);
 		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		btnPS4.setGraphic(psLogo);*/
+		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
 		xboxLogo.setFitHeight(30);
 		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
-		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
-		pcLogo.setFitHeight(30);
-		pcLogo.setFitWidth(30);
-		btnPC.setGraphic(pcLogo);
+		btnXbox.setGraphic(xboxLogo);*/
 		
-		AnchorPane.setTopAnchor(fortniteLogo, 64.0);
-		AnchorPane.setLeftAnchor(fortniteLogo, 196.0);
+		
+		AnchorPane.setTopAnchor(fortniteLogo, 25.0);
+		AnchorPane.setLeftAnchor(fortniteLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 118.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 50.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnPS4, 228.0);
-		AnchorPane.setLeftAnchor(btnPS4, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 264.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
 		
-		AnchorPane.setTopAnchor(btnPC, 300.0);
-		AnchorPane.setLeftAnchor(btnPC, 230.0);
 	
-		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		fortniteScene = new Scene(ap,600,400);
 	
@@ -747,52 +742,49 @@ public class TopGamerGUI extends Application
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnPS4 = new JFXButton("PS4");
-		JFXButton btnXbox = new JFXButton("Xbox One");
-		JFXButton btnPC = new JFXButton("PC");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+		
 		
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(104);
 		codLogo.setFitHeight(148);
 		
-		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
+		/*ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
 		psLogo.setFitHeight(30);
 		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		btnPS4.setGraphic(psLogo);*/
+		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
 		xboxLogo.setFitHeight(30);
 		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
-		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
-		pcLogo.setFitHeight(30);
-		pcLogo.setFitWidth(30);
-		btnPC.setGraphic(pcLogo);
+		btnXbox.setGraphic(xboxLogo);*/
 		
-		AnchorPane.setTopAnchor(codLogo, 64.0);
-		AnchorPane.setLeftAnchor(codLogo, 196.0);
+		
+		AnchorPane.setTopAnchor(codLogo, 25.0);
+		AnchorPane.setLeftAnchor(codLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 155.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 85.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnPS4, 228.0);
-		AnchorPane.setLeftAnchor(btnPS4, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 264.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
 		
-		AnchorPane.setTopAnchor(btnPC, 300.0);
-		AnchorPane.setLeftAnchor(btnPC, 230.0);
 	
-		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		codScene = new Scene(ap,600,400);
 	}
+	
+	
 	
 	/**
 	 * Set main window to the codScene
@@ -817,34 +809,38 @@ public class TopGamerGUI extends Application
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		JFXButton btnXbox = new JFXButton("Xbox One");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(104);
 		haloLogo.setFitHeight(148);
 	
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
+		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
 		xboxLogo.setFitHeight(30);
 		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
+		btnXbox.setGraphic(xboxLogo);*/
 		
-		AnchorPane.setTopAnchor(haloLogo, 64.0);
-		AnchorPane.setLeftAnchor(haloLogo, 196.0);
+		AnchorPane.setTopAnchor(haloLogo, 25.0);
+		AnchorPane.setLeftAnchor(haloLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 118.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 45.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 228.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-	
-		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnXbox,btnReturn);
+		AnchorPane.setTopAnchor(btnTournament2, 300.0);
+		AnchorPane.setBottomAnchor(btnTournament2, 400.0);
+		
+		
+		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		haloScene = new Scene(ap,600,400);
 	}
