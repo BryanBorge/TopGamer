@@ -707,17 +707,6 @@ public class TopGamerGUI extends Application
 		fortniteLogo.setFitWidth(104);
 		fortniteLogo.setFitHeight(148);
 		
-		
-		/*ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
-		psLogo.setFitHeight(30);
-		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);*/
-		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);*/
-		
-		
 		AnchorPane.setTopAnchor(fortniteLogo, 25.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 50.0);
 
@@ -771,17 +760,7 @@ public class TopGamerGUI extends Application
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(104);
 		codLogo.setFitHeight(148);
-		
-		/*ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
-		psLogo.setFitHeight(30);
-		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);*/
-		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);*/
-		
-		
+
 		AnchorPane.setTopAnchor(codLogo, 25.0);
 		AnchorPane.setLeftAnchor(codLogo, 50.0);
 
@@ -837,11 +816,6 @@ public class TopGamerGUI extends Application
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(104);
 		haloLogo.setFitHeight(148);
-	
-		/*ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);*/
 		
 		AnchorPane.setTopAnchor(haloLogo, 25.0);
 		AnchorPane.setLeftAnchor(haloLogo, 50.0);
@@ -858,9 +832,8 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnTournament1, 228.0);
 		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 300.0);
-		AnchorPane.setBottomAnchor(btnTournament2, 400.0);
-		
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
 		
 		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
