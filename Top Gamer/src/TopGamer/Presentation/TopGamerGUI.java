@@ -1072,7 +1072,6 @@ public class TopGamerGUI extends Application
 		Tournament codSNDTourney = new Tournament();
 		codSNDTourney.LoadTournamentData(1);
 		SQLConnection se = new SQLConnection();
-		se.JoinTeam(testUser.GetUsername(),"Test");
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
@@ -1085,7 +1084,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(testUser.GetUsername(),"Test");
+			se.JoinTeam(testUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");
