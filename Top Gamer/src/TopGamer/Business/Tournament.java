@@ -33,6 +33,7 @@ public class Tournament
 	/**
 	 * Loads in all tournament data
 	 * Calls LoadGameData and LoadPlatformData
+	 * Will call LoadTeamData when it is written
 	 * @param id
 	 */
 	public void LoadTournamentData(int id)
