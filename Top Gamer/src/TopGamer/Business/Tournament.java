@@ -156,7 +156,7 @@ public class Tournament
 	 * 
 	 * @return teamName arrayList
 	 */
-	public ArrayList<Team> GetTeamName()
+	public ArrayList<Team> GetTeams()
 	{
 		return m_teams;
 	}
@@ -167,7 +167,7 @@ public class Tournament
 	 * @param targetTeam = team being searched for
 	 * @return team name if found, null otherwise
 	 */
-	public Team GetTeamName(Team targetTeam)
+	public Team GetTeam(Team targetTeam)
 	{
 		boolean found = false;
 		Team foundTeam = new Team();

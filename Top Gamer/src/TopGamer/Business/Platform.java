@@ -1,21 +1,13 @@
 package TopGamer.Business;
 
-
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Platform 
 {
-	/**
-	 * Enum definition for PlatformType
-	 * @author Bryan
-	 *
-	 */
-	enum PlatformType
-	{
-		NOTAVAILABLE,PC,XBOX,PS4
-	}
-	
-	
-	private PlatformType m_platform;
+	private String m_platformName;
 	
 	/**
 	 * Platform default constructor
@@ -24,7 +16,7 @@ public class Platform
 	 */
 	public Platform()
 	{
-		m_platform = PlatformType.valueOf("NOTAVAILABLE");
+		m_platformName = "N/A";
 	}
 	
 	/**
@@ -34,7 +26,7 @@ public class Platform
 	 */
 	public void SetPlatform(String platform)
 	{
-		m_platform = PlatformType.valueOf(platform);
+		m_platformName = platform;
 	}
 	
 	/**
@@ -44,6 +36,32 @@ public class Platform
 	 */
 	public String GetPlatform()
 	{
-		return m_platform.toString();
+		return m_platformName.toString();
 	}
+	
+	public void LoadPlatformData(int id)
+	{
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		Statement statement = null;
+		ResultSet result;
+		
+		String platformQry = "Select PlatformName from tblPlatform where PlatformID = " + id;
+		String dbPlatformName = null;
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(platformQry);
+			while(result.next())
+			{
+				dbPlatformName = result.getString("PlatformName");
+			}
+			this.m_platformName = dbPlatformName;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
 }
