@@ -24,7 +24,7 @@ public class Platform
 	 * Sets platform member variable
 	 * @param platform - Platform value
 	 */
-	public void SetPlatform(String platform)
+	public void SetPlatformName(String platform)
 	{
 		m_platformName = platform;
 	}
@@ -34,7 +34,7 @@ public class Platform
 	 * Returns value of platform member
 	 * @return value of platform
 	 */
-	public String GetPlatform()
+	public String GetPlatformName()
 	{
 		return m_platformName.toString();
 	}

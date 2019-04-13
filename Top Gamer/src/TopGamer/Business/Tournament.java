@@ -34,31 +34,27 @@ public class Tournament
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String tournamentQry = "select TournamentID,TournamentName, Prize, BracketSize from tblTournaments";
+		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize from tblTournaments where TournamentID = " + id;
 		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = " + id;
 		
 		Connection connection = dbConnection.connect();
 		Statement statement = null;
 		ResultSet result;
 
-		String dbTourneyName = null, dbPrize = null;
-		int dbTourneyID = 0, dbCount = 0, dbBracketSize = 0;
+		int dbGameID = 0;
 		
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(tournamentQry);
 			while(result.next())
 			{
-				dbTourneyID = result.getInt("TournamentID");
-				dbTourneyName = result.getString("TournamentName");
-				dbPrize = result.getString("Prize");
-				dbBracketSize = result.getInt("BracketSize");
+				this.SetID(result.getInt("TournamentID"));
+				this.SetTournamentName(result.getString("TournamentName"));
+				dbGameID = result.getInt("GameID");
+				this.SetPrize(result.getString("Prize"));
+				this.SetBrackSize(result.getInt("BracketSize"));
 			}
-			this.SetTeamsJoined(dbCount);
-			this.SetID(dbTourneyID);
-			this.SetTournamentName(dbTourneyName);
-			this.SetPrize(dbPrize);
-			this.SetBrackSize(dbBracketSize);
+			this.m_game.LoadGameData(dbGameID);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,9 +65,8 @@ public class Tournament
 			result = statement.executeQuery(countQry);
 			while(result.next())
 			{
-				dbCount = result.getInt("num");
+				this.SetTeamsJoined(result.getInt("num"));
 			}
-			this.SetTeamsJoined(dbCount);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -87,6 +82,7 @@ public class Tournament
 	{
 		m_tournamentName = "N/A";
 		m_teams = new ArrayList<Team>();
+		m_game = new Game();
 	}
 	
 	public void SetID(int id) {
@@ -182,6 +178,14 @@ public class Tournament
 			return foundTeam;
 		else
 			return null;
+	}
+	
+	
+	
+	@Override
+	public String toString()
+	{
+		return GetTournamentName() + " " + m_game.GetGameName() + " " + m_game.GetPlatform().GetPlatformName();
 	}
 		
 }
