@@ -23,7 +23,7 @@ public class SQLConnection {
     
   
     public SQLConnection() {
-    	connect();
+    //	connect();
 	}
     
     

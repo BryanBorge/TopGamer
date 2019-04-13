@@ -29,7 +29,7 @@ public class Game
 	public Game(String name, String platform)
 	{
 		m_gameName = name;
-		m_platform.SetPlatform(platform);
+		m_platform.SetPlatformName(platform);
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class Game
 	}
 	
 	/**
-	 * GetGameName
+	 * GetGameNamed
 	 * Returns value of gameName member variable
 	 * @return gameName
 	 */
@@ -59,7 +59,7 @@ public class Game
 	 */
 	public void SetGamePlatform(String platform)
 	{
-		m_platform.SetPlatform(platform);
+		m_platform.SetPlatformName(platform);
 	}
 
 	public Platform GetPlatform()
