@@ -862,7 +862,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData(1);
+		codSNDTourney.LoadTournamentData(3);
 
 		btnCreateTeam.setOnAction(e->{
 			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
@@ -992,7 +992,7 @@ public class TopGamerGUI extends Application
 				else {
 					SQLConnection sqlConnection = new SQLConnection();
 					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 1);
+					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Team Created");
 					alert.setHeaderText("Team created");
@@ -1024,8 +1024,7 @@ public class TopGamerGUI extends Application
 		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
 		
 		createTeam = new Scene(aPane);
-	}
-	
+	}	
 	public void OpenCreateTeamTournament1()
 	{
 		window.setScene(createTeam);
@@ -1078,7 +1077,6 @@ public class TopGamerGUI extends Application
 		
 		joinTeam = new Scene(aPane);
 	}
-
 	public void OpenJoinTeam()
 	{
 		CreateJoinTeam();

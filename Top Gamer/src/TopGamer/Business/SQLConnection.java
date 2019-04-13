@@ -16,14 +16,12 @@ import java.sql.*;
 
 public class SQLConnection {
    
-	//used for joining an open team
-	//select TeamName, count() as NUMOFPLAyERS from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by t.TeamID HAVING count() < 4
 
     private Connection connection;
     
   
     public SQLConnection() {
-    //	connect();
+    	connect();
 	}
     
     
@@ -236,39 +234,6 @@ public class SQLConnection {
 		}
 	}
 	
-	/**
-	 * Loads team members into teamMemebers array
-	 * returns team instance using data from database
-	 * @return Team
-	 */
-	public Team LoadTeamData(String teamName) 
-	{
-		Team teamObj = new Team();
-		String teamQuery = "select FirstName, LastName, UserName from Users u JOIN Team t on u.TeamID = t.TeamID where u.TeamID = (select TeamID from Team where TeamName = \"" + teamName + "\")";
-
-		Statement statement = null;
-		ResultSet result;
-		String dbFirstName = null;
-		String dbLastName = null;
-		String dbUsername = null;
-		
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(teamQuery);
-			while(result.next()) 
-			{
-					dbFirstName = result.getString("FirstName");
-					dbLastName = result.getString("LastName");
-					dbUsername = result.getString("UserName");
-					teamObj.AddTeamMember(new User(dbFirstName,dbLastName,dbUsername));
-			}
-			return teamObj;
-		} catch (SQLException e ) {
-			e.printStackTrace();
-			
-		}
-		return teamObj;
-	}
 	
 	
 	
