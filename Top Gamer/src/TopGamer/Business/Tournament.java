@@ -30,6 +30,11 @@ public class Tournament
 	private ArrayList<Team> m_teams;
 	
 	
+	/**
+	 * Loads in all tournament data
+	 * Calls LoadGameData and LoadPlatformData
+	 * @param id
+	 */
 	public void LoadTournamentData(int id)
 	{
 		SQLConnection dbConnection = new SQLConnection();
@@ -85,24 +90,48 @@ public class Tournament
 		m_game = new Game();
 	}
 	
+	/**
+	 * Sets the tournamentID member
+	 * @param id
+	 */
 	public void SetID(int id) {
 		m_tournamentID = id;
 	}
-	
+	/**
+	 * Returns the tournamentID member
+	 * @return
+	 */
 	public int GetID() {
 		return m_tournamentID;
 	}
 	
+	/**
+	 * Returns number of teams joined
+	 * @return 
+	 */
 	public int GetTeamsJoined() {
 		return m_teamsJoined;
 	}
+	/**
+	 * Setst the number of teams joined
+	 * @param n
+	 */
 	public void SetTeamsJoined(int n) {
 		m_teamsJoined = n;
 	}
 	
+	/**
+	 * Sets the bracket size
+	 * @return
+	 */
 	public int GetBrackSize() {
 		return m_bracketSize;
 	}
+	
+	/**
+	 * Returns the brack size
+	 * @param b
+	 */
 	public void SetBrackSize(int b) {
 		m_bracketSize = b;
 	}
@@ -140,7 +169,6 @@ public class Tournament
 	 * 
 	 * @returns TournamentName
 	 */
-
 	public String GetTournamentName() 
 	{
 		return m_tournamentName;
