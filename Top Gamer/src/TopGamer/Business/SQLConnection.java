@@ -22,15 +22,10 @@ public class SQLConnection {
     private Connection connection;
     
   
-    /**
-     * SQLConnection Constructor 
-     * 
-     * Calls connect each time an object is created
-     */
-    public SQLConnection()
-    {
+    public SQLConnection() {
     	connect();
-    }
+	}
+    
     
     /**
      * Establishes a connection to the database

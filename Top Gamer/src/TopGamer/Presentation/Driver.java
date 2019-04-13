@@ -19,5 +19,10 @@ public class Driver {
 	
 		Application.launch(TopGamerGUI.class,args);
 		
+		Game test = new Game();
+		test.LoadGameData(3);
+		System.out.println(test.GetGameName() + " " + test.GetPlatform().GetPlatform());
+		
+		
 	}
 }

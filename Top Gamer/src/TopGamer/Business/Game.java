@@ -1,5 +1,10 @@
 package TopGamer.Business;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Game 
 {
 	private String m_gameName;
@@ -56,7 +61,31 @@ public class Game
 	{
 		m_platform.SetPlatform(platform);
 	}
+
+	public Platform GetPlatform()
+	{
+		return m_platform;
+	}
 	
+	public void LoadGameData(int id)
+	{
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		Statement statement = null;
+		ResultSet result;
+		
+		String gameQry = "select GameName, PlatformID from tblGames where GameID =" + id;
 	
-	
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(gameQry);
+			while(result.next())
+			{
+				m_gameName = result.getString("GameName");
+				m_platform.LoadPlatformData(result.getInt("PlatformID"));
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
