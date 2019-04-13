@@ -18,13 +18,13 @@ public class Driver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	
-	//	Application.launch(TopGamerGUI.class,args);
+		Application.launch(TopGamerGUI.class,args);
 		
-		Team test = new Team();
+		/*Team test = new Team();
 		test.LoadTeamData("Test");
 		for(User u : test.GetAllTeamMembers()) {
-			System.out.println(u.GetUsername());
+			System.out.println(u.GetUsername());*/
 		}
 		
 	}
-}
+
