@@ -581,7 +581,6 @@ public class TopGamerGUI extends Application
 			OpenLoginScene();
 		});
 	
-		//this event should be changed in the future using the loggedIn bool to change the profile option text
 		btnLogOut.setOnAction(e -> {
 			loggedIn = false;
 			btnProfile.setText("Profile");
