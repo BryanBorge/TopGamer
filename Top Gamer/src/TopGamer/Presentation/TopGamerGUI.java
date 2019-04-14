@@ -48,7 +48,7 @@ import TopGamer.Business.*;
 public class TopGamerGUI extends Application
 {
 	
-	User testUser = new User();
+	User currentUser = new User();
 	Tournament testTourney = new Tournament();
 	boolean loggedIn = false;
 	
@@ -66,7 +66,7 @@ public class TopGamerGUI extends Application
 	JFXTextField txtLoginName;
 	JFXPasswordField txtLoginPass;
 	JFXButton btnUserLogin;
-	JFXButton btnSignUp;
+	JFXButton btnSignUp;                                                    
 	JFXButton btnContinue;
 	
 	//Registration
@@ -242,7 +242,7 @@ public class TopGamerGUI extends Application
 			boolean Valid = false;
 					try
 					{
-						Valid = testUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
+						Valid = currentUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
 					}
 						catch(SQLException e)
 					{
@@ -561,8 +561,8 @@ public class TopGamerGUI extends Application
 	public void OpenMainDashboard()
 	{
 		if(loggedIn)
-			btnProfile.setText(testUser.GetUsername());
-		 System.out.println(testUser.GetFirstName() + " " + testUser.GetLastName() + " " + testUser.GetEmail());
+			btnProfile.setText(currentUser.GetUsername());
+		 System.out.println(currentUser.GetFirstName() + " " + currentUser.GetLastName() + " " + currentUser.GetEmail());
 		 window.setScene(mainDashboardScene);
 	}	
 	
@@ -576,26 +576,31 @@ public class TopGamerGUI extends Application
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e -> OpenLoginScene());
+		btnReturn.setOnAction(e ->{ 
+			
+			OpenLoginScene();
+		});
 	
 		//this event should be changed in the future using the loggedIn bool to change the profile option text
 		btnLogOut.setOnAction(e -> {
 			loggedIn = false;
 			btnProfile.setText("Profile");
-			testUser.SetFirstName("");
-			testUser.SetLastName("");
-			testUser.SetEmail("");
+			currentUser.SetFirstName("");
+			currentUser.SetLastName("");
+			currentUser.SetEmail("");
 			OpenLoginScene();}
 		);
 		nodeList = new JFXNodesList();
+		nodeList.setRotate(90);
+		nodeList.setSpacing(30.0);
 		nodeList.addAnimatedNode(btnProfile);
-		nodeList.addAnimatedNode(btnEditProfile);
 		nodeList.addAnimatedNode(btnLogOut);
+		nodeList.addAnimatedNode(btnEditProfile);
 		
 		VBox mainVbox = new VBox();
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setLayoutX(0.0);
-		mainScroll.setLayoutY(32.0);
+		mainScroll.setLayoutY(40.0);
 		AnchorPane anchorScroll = new AnchorPane();
 		AnchorPane anchorHeader = new AnchorPane();
 		anchorHeader.setPrefHeight(47);
@@ -990,7 +995,7 @@ public class TopGamerGUI extends Application
 				}
 				else {
 					SQLConnection sqlConnection = new SQLConnection();
-					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
 					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Team Created");
@@ -1051,7 +1056,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(testUser.GetUsername(),txtTeamName.getText());
+			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");
