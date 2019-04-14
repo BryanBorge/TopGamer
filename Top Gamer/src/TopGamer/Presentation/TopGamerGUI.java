@@ -240,10 +240,9 @@ public class TopGamerGUI extends Application
 		else
 		{
 			boolean Valid = false;
-		    SQLConnection dbLogin = new SQLConnection();
 					try
 					{
-						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText(),testUser);	
+						Valid = testUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
 					}
 						catch(SQLException e)
 					{
@@ -492,7 +491,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				window.setScene(mainDashboardScene);
 			} catch (SQLiteException e) {
-				System.out.println("Error saving user to database. Make sure it is closed");
+				System.out.println("Error saving user to database");
 			}
 			
 			
