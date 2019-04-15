@@ -218,7 +218,11 @@ public class Tournament
 	}
 		
 
-
+	/**
+	 * Returns the registered teams for a tournament 
+	 * @param tournament id
+	 * @return the registerd teams for the tournament
+	 */
 	 public Team ViewRegisterdTeams(int tournamentID) {
 		 
 		 SQLConnection dbConnection = new SQLConnection();
@@ -234,7 +238,7 @@ public class Tournament
 			 while(result.next())
 			 {
 				 
-				 test.SetTeamName(result.getString("TeamName"));
+				 test.SetTeamName(result.getString("TeamName")) ;
 				 test.AddTeamMember(new User(result.getString("username")));
 			 }
 			 return test;
@@ -248,7 +252,7 @@ public class Tournament
 
 }
 
-
+ 
 
 
 	
