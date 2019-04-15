@@ -217,6 +217,38 @@ public class Tournament
 		return GetTournamentName() + " " + m_game.GetGameName() + " " + m_game.GetPlatform().GetPlatformName();
 	}
 		
+
+
+	 public Team ViewRegisterdTeams(int tournamentID) {
+		 
+		 SQLConnection dbConnection = new SQLConnection();
+		 String registeredteamsQry= "select  UserName, TeamName from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID  ;
+		 Connection connection =dbConnection.connect();
+		 Statement statment =null;
+		 ResultSet result;
+		 
+		 Team test = new Team();
+		 try {
+			 statment=connection.createStatement();
+			 result=statment.executeQuery(registeredteamsQry);
+			 while(result.next())
+			 {
+				 
+				 test.SetTeamName(result.getString("TeamName"));
+				 test.AddTeamMember(new User(result.getString("username")));
+			 }
+			 return test;
+		 } catch (SQLException e) {
+				 e.printStackTrace();
+			 }
+		 return test; 
+
+	 }
+
+
 }
+
+
+
 
 	
