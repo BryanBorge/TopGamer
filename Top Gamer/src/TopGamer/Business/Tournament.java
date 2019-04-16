@@ -1,8 +1,7 @@
-/*
+/**
  * Tournament class definition
  * 
  * @author Talha
- * 
  * 
  */
 
@@ -22,63 +21,15 @@ import java.sql.Connection;
 public class Tournament 
 {
 	private String m_tournamentName;
-	private String m_prize;
+	private int m_prize;
+	private String m_date;
+	private String m_location;
 	private int m_tournamentID;
 	private int m_bracketSize;
 	private int m_teamsJoined;
 	private Game m_game;
 	private ArrayList<Team> m_teams;
 	
-	
-	/**
-	 * Loads in all tournament data
-	 * Calls LoadGameData and LoadPlatformData
-	 * Will call LoadTeamData when it is written
-	 * @param id
-	 */
-	public void LoadTournamentData(int id)
-	{
-		SQLConnection dbConnection = new SQLConnection();
-		
-		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize from tblTournaments where TournamentID = " + id;
-		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = " + id;
-		
-		Connection connection = dbConnection.connect();
-		Statement statement = null;
-		ResultSet result;
-
-		int dbGameID = 0;
-		
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(tournamentQry);
-			while(result.next())
-			{
-				this.SetID(result.getInt("TournamentID"));
-				this.SetTournamentName(result.getString("TournamentName"));
-				dbGameID = result.getInt("GameID");
-				this.SetPrize(result.getString("Prize"));
-				this.SetBrackSize(result.getInt("BracketSize"));
-			}
-			this.m_game.LoadGameData(dbGameID);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(countQry);
-			while(result.next())
-			{
-				this.SetTeamsJoined(result.getInt("num"));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 *Tournament default constructor
 	 * 
@@ -89,7 +40,31 @@ public class Tournament
 		m_tournamentName = "N/A";
 		m_teams = new ArrayList<Team>();
 		m_game = new Game();
+		m_prize = 0;
+		m_date = "0/0/0";
+		m_location = "N/A";
+		m_bracketSize = 0;
+		m_teamsJoined = 0;
 	}
+	
+	public void SetDate(String date)
+	{
+		m_date = date;
+	}
+	
+	public String GetDate() {
+		return m_date;
+	}
+	
+	public void SetLocation(String loc) {
+		m_location = loc;
+	}
+	
+	public String GetLocation()
+	{
+		return m_location;
+	}
+	
 	
 	/**
 	 * Sets the tournamentID member
@@ -142,7 +117,7 @@ public class Tournament
 	 * Sets prize member variable
 	 * @param p
 	 */
-	public void SetPrize(String p) {
+	public void SetPrize(int p) {
 		m_prize = p;
 	}
 	
@@ -150,10 +125,9 @@ public class Tournament
 	 * Returns prize member variable
 	 * @return
 	 */
-	public String GetPrize() {
+	public int GetPrize() {
 		return m_prize;
 	}
-	
 	
 	/**
 	 * Sets TournamentName Member Variable
@@ -175,7 +149,6 @@ public class Tournament
 		return m_tournamentName;
 	}
 
-	
 	/**
 	 * Returns entire teamName arraylist
 	 * 
@@ -185,7 +158,6 @@ public class Tournament
 	{
 		return m_teams;
 	}
-	
 	
 	/**
 	 * Returns single team if it exists in the tournament
@@ -215,6 +187,57 @@ public class Tournament
 	}
 	
 	/**
+	 * Loads in all tournament data
+	 * Calls LoadGameData and LoadPlatformData
+	 * Will call LoadTeamData when it is written
+	 * @param id
+	 */
+	public void LoadTournamentData(int id)
+	{
+		SQLConnection dbConnection = new SQLConnection();
+		
+		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = " + id + "), 110) as Date, Location from tblTournaments where TournamentID = " + id;
+		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = " + id;
+		
+		Connection connection = dbConnection.connect();
+		Statement statement = null;
+		ResultSet result;
+
+		int dbGameID = 0;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(tournamentQry);
+			while(result.next())
+			{
+				this.SetID(result.getInt("TournamentID"));
+				this.SetTournamentName(result.getString("TournamentName"));
+				dbGameID = result.getInt("GameID");
+				this.SetPrize(result.getInt("Prize"));
+				this.SetBrackSize(result.getInt("BracketSize"));
+				this.SetLocation(result.getString("Location"));
+				this.SetDate(result.getString("Date"));
+			}
+			this.m_game.LoadGameData(dbGameID);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(countQry);
+			while(result.next())
+			{
+				this.SetTeamsJoined(result.getInt("num"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
 	 * @return
 	 */
@@ -240,8 +263,6 @@ public class Tournament
 		return users;
 	}
 	
-		
-
 	/**
 	 * Returns the registered teams for a tournament 
 	 * @param tournament id

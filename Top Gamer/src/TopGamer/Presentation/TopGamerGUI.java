@@ -904,7 +904,7 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label(codSNDTourney.GetTournamentName() + "(" + codSNDTourney.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
-		Label lblLocation = new Label("NY - 5 Teams");
+		Label lblLocation = new Label(codSNDTourney.GetLocation() + " " + codSNDTourney.GetDate());
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -920,7 +920,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(lblTitle, 137.0);
 		
 		AnchorPane.setTopAnchor(lblLocation, 79.0);
-		AnchorPane.setLeftAnchor(lblLocation, 258.0);
+		AnchorPane.setLeftAnchor(lblLocation, 210.0);
 		
 		AnchorPane.setTopAnchor(lblPrize, 149.0);
 		AnchorPane.setLeftAnchor(lblPrize, 137.0);
