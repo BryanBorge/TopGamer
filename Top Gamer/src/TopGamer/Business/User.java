@@ -117,6 +117,60 @@ public class User
 		return m_username;
 	}
 	
+	/**
+	 * Returns true and loads user data if login exists and false otherwise
+	 * @param userName From registration form
+	 * @param password From registration form
+	 * @return true/false
+	 * @throws SQLException
+	 */
+	public boolean Login(String userName, String password) throws SQLException
+	{
+		
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		Boolean validLogin = false;
+		String query = "select * from tblUsers where UserName= \'" + userName + "\' and Password= \'" + password + "\'  ";
+		
+		Statement statement = null;
+		ResultSet result;
+		
+		String dbUserName = null,dbPassword= null,dbFirstName = null, dbLastName = null,dbEmail = null;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(query);
+			while(result.next())
+			{
+				dbFirstName = result.getString("FirstName");
+				dbLastName = result.getString("LastName");
+				dbEmail = result.getString("Email");
+				dbUserName = result.getString("UserName");
+				dbPassword = result.getString("Password");
+			}
+			if(userName.equals(dbUserName) && password.equals(dbPassword))
+			{
+				//if successful, load all data to user
+				System.out.println("User login successful");
+				this.SetFirstName(dbFirstName);
+				this.SetLastName(dbLastName);
+				this.SetEmail(dbEmail);
+				this.SetUsername(dbUserName);
+				validLogin = true;
+			}
+			if(!userName.equals(dbUserName) || !password.equals(dbPassword))
+			{
+				validLogin = false;
+			}
+			return validLogin;
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+	}
+	
+	
 	public void LoadUserData(String userName) 
 	{
 		SQLConnection dbConnection = new SQLConnection();

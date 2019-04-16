@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.Event;
@@ -37,6 +38,8 @@ import org.sqlite.SQLiteException;
 import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -48,7 +51,7 @@ import TopGamer.Business.*;
 public class TopGamerGUI extends Application
 {
 	
-	User testUser = new User();
+	User currentUser = new User();
 	Tournament testTourney = new Tournament();
 	boolean loggedIn = false;
 	
@@ -66,7 +69,7 @@ public class TopGamerGUI extends Application
 	JFXTextField txtLoginName;
 	JFXPasswordField txtLoginPass;
 	JFXButton btnUserLogin;
-	JFXButton btnSignUp;
+	JFXButton btnSignUp;                                                    
 	JFXButton btnContinue;
 	
 	//Registration
@@ -97,6 +100,10 @@ public class TopGamerGUI extends Application
 	//Labels to display if login info isnt valid
 	Label lblValidLoginUser,lblValidLoginPass;
 	
+	
+	//Tournaments 
+	Tournament codSNDTourney;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{		
@@ -112,9 +119,9 @@ public class TopGamerGUI extends Application
 		CreateFortniteScene();		
 		CreateCODScene();	
 		CreateHaloScene();
-		//CreateCodTourneyScene();
+		CreateCodTourneyScene();
 		CreateTeamTournament1();
-		//CreateJoinTeam();
+		CreateJoinTeam();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -240,10 +247,9 @@ public class TopGamerGUI extends Application
 		else
 		{
 			boolean Valid = false;
-		    SQLConnection dbLogin = new SQLConnection();
 					try
 					{
-						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText(),testUser);	
+						Valid = currentUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
 					}
 						catch(SQLException e)
 					{
@@ -492,7 +498,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				window.setScene(mainDashboardScene);
 			} catch (SQLiteException e) {
-				System.out.println("Error saving user to database. Make sure it is closed");
+				System.out.println("Error saving user to database");
 			}
 			
 			
@@ -562,8 +568,8 @@ public class TopGamerGUI extends Application
 	public void OpenMainDashboard()
 	{
 		if(loggedIn)
-			btnProfile.setText(testUser.GetUsername());
-		 System.out.println(testUser.GetFirstName() + " " + testUser.GetLastName() + " " + testUser.GetEmail());
+			btnProfile.setText(currentUser.GetUsername());
+		 System.out.println(currentUser.GetFirstName() + " " + currentUser.GetLastName() + " " + currentUser.GetEmail());
 		 window.setScene(mainDashboardScene);
 	}	
 	
@@ -577,26 +583,45 @@ public class TopGamerGUI extends Application
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e -> OpenLoginScene());
+		btnReturn.setOnAction(e ->{ 		
+			OpenLoginScene();
+		});
 	
-		//this event should be changed in the future using the loggedIn bool to change the profile option text
 		btnLogOut.setOnAction(e -> {
 			loggedIn = false;
 			btnProfile.setText("Profile");
-			testUser.SetFirstName("");
-			testUser.SetLastName("");
-			testUser.SetEmail("");
-			OpenLoginScene();}
-		);
+			currentUser.SetFirstName("");
+			currentUser.SetLastName("");
+			currentUser.SetEmail("");
+			currentUser.SetUsername("");
+			String logOutTitle = "Logged Out";
+			String logOutContent = "You have successfully logged out";
+			
+			JFXDialogLayout dialogContent = new JFXDialogLayout();
+			dialogContent.setHeading(new Text(logOutTitle));
+			dialogContent.setBody(new Text(logOutContent));
+			StackPane stackPane = new StackPane();
+			stackPane.autosize();
+			JFXDialog dialog = new JFXDialog(stackPane,dialogContent, JFXDialog.DialogTransition.LEFT);
+			JFXButton btn = new JFXButton("Okay");
+			dialog.show();
+			
+			
+			OpenLoginScene();
+			
+		});
+		
 		nodeList = new JFXNodesList();
+		nodeList.setRotate(90);
+		nodeList.setSpacing(30.0);
 		nodeList.addAnimatedNode(btnProfile);
-		nodeList.addAnimatedNode(btnEditProfile);
 		nodeList.addAnimatedNode(btnLogOut);
+		nodeList.addAnimatedNode(btnEditProfile);
 		
 		VBox mainVbox = new VBox();
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setLayoutX(0.0);
-		mainScroll.setLayoutY(32.0);
+		mainScroll.setLayoutY(40.0);
 		AnchorPane anchorScroll = new AnchorPane();
 		AnchorPane anchorHeader = new AnchorPane();
 		anchorHeader.setPrefHeight(47);
@@ -861,7 +886,7 @@ public class TopGamerGUI extends Application
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		Tournament codSNDTourney = new Tournament();
+		codSNDTourney = new Tournament();
 		codSNDTourney.LoadTournamentData(3);
 
 		btnCreateTeam.setOnAction(e->{
@@ -877,7 +902,7 @@ public class TopGamerGUI extends Application
 			}			
 	});
 		
-		Label lblTitle = new Label(codSNDTourney.GetTournamentName());
+		Label lblTitle = new Label(codSNDTourney.GetTournamentName() + "(" + codSNDTourney.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label("NY - 5 Teams");
 		Label lblPrize = new Label("Prize");
@@ -936,7 +961,6 @@ public class TopGamerGUI extends Application
 	}
 
 	
-	
 	public void CreateTeamTournament1() 
 	{
 		AnchorPane	aPane = new AnchorPane();
@@ -991,7 +1015,7 @@ public class TopGamerGUI extends Application
 				}
 				else {
 					SQLConnection sqlConnection = new SQLConnection();
-					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
 					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Team Created");
@@ -1013,10 +1037,8 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		//load all users not currently on a team
-		//to be used for text field auto completion
 		ArrayList<String> users = new ArrayList<String>();
-		SQLConnection sqlConnection = new SQLConnection();
-		users = sqlConnection.LoadAllAvailavleUsernames();
+		users = codSNDTourney.LoadAllAvailavleUsernames();
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1052,7 +1074,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(testUser.GetUsername(),txtTeamName.getText());
+			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");

@@ -16,21 +16,7 @@ import javafx.application.Application;
 public class Driver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-	
-	Application.launch(TopGamerGUI.class,args);
-		
-		/*Tournament test= new Tournament ();
-		test.ViewRegisterdTeams (3) ;
-		Team team = new Team();
-		team = 	test.ViewRegisterdTeams (3);
-		System.out.println(team.GetTeamName());
-		for(User u : team.GetAllTeamMembers())
-		{
-			System.out.println(u.GetUsername());
-		}
-		}
-		*/
-	
+
+		Application.launch(TopGamerGUI.class,args);
 	}
 }
