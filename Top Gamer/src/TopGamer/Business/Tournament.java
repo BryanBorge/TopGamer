@@ -209,13 +209,37 @@ public class Tournament
 			return null;
 	}
 	
-	
-	
-	@Override
-	public String toString()
+	public Game GetGame()
 	{
-		return GetTournamentName() + " " + m_game.GetGameName() + " " + m_game.GetPlatform().GetPlatformName();
+		return m_game;
 	}
+	
+	/**
+	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
+	 * @return
+	 */
+	public ArrayList<String> LoadAllAvailavleUsernames()
+	{
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		
+		String query = "select UserName from tblUsers where TeamID is NULL and PlatformID = " + m_game.GetPlatform().GetID();
+		ArrayList<String> users = new ArrayList<String>();
+	
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			while(result.next())
+			{
+				users.add(result.getString("UserName"));
+			}
+			return users;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return users;
+	}
+	
 		
 }
 

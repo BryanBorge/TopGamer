@@ -92,7 +92,8 @@ public class SQLConnection {
 	 */
 	public ArrayList<String> LoadAllAvailavleUsernames()
 	{
-		String query = "select UserName from tblUsers where TeamID is NULL";
+		//need tournamentID as a parameter?
+		String query = "select UserName from tblUsers where TeamID is NULL ";
 		ArrayList<String> users = new ArrayList<String>();
 	
 		try {
@@ -111,6 +112,7 @@ public class SQLConnection {
 	
 	public ArrayList<String>LoadAllOpenTeams()
 	{
+		//need TournamentID has a parameter? 
 		String query = "select TeamName, count(t.TeamID) as num from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by TeamName HAVING count(t.TeamID) < 4";
 		ArrayList<String> openTeams = new ArrayList<String>();
 		Statement statement = null;

@@ -8,6 +8,7 @@ import java.sql.Statement;
 public class Platform 
 {
 	private String m_platformName;
+	private int m_platformID;
 	
 	/**
 	 * Platform default constructor
@@ -18,6 +19,17 @@ public class Platform
 	{
 		m_platformName = "N/A";
 	}
+	
+	public void SetID(int id)
+	{
+		m_platformID = id;
+	}
+	
+	public int GetID()
+	{
+		return m_platformID;
+	}
+	
 	
 	/**
 	 * SetPlatform
@@ -36,26 +48,26 @@ public class Platform
 	 */
 	public String GetPlatformName()
 	{
-		return m_platformName.toString();
+		return m_platformName;
 	}
 	
-	public void LoadPlatformData(int id)
+	public void LoadPlatformData(int gameID)
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		Statement statement = null;
 		ResultSet result;
 		
-		String platformQry = "Select PlatformName from tblPlatform where PlatformID = " + id;
+		String q = "Select p.PlatformID,PlatformName from tblPlatform p JOIN tblGames g on p.PlatformID = g.PlatformID where g.GameID = " + gameID;
 		String dbPlatformName = null;
 		try {
 			statement = connection.createStatement();
-			result = statement.executeQuery(platformQry);
+			result = statement.executeQuery(q);
 			while(result.next())
 			{
-				dbPlatformName = result.getString("PlatformName");
+				this.m_platformID = result.getInt("PlatformID");
+				this.m_platformName = result.getString("PlatformName");
 			}
-			this.m_platformName = dbPlatformName;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

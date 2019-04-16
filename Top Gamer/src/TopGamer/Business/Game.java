@@ -74,7 +74,7 @@ public class Game
 		Statement statement = null;
 		ResultSet result;
 		
-		String gameQry = "select GameName, PlatformID from tblGames where GameID =" + id;
+		String gameQry = "select GameID,GameName from tblGames where GameID =" + id;
 	
 		try {
 			statement = connection.createStatement();
@@ -82,7 +82,7 @@ public class Game
 			while(result.next())
 			{
 				m_gameName = result.getString("GameName");
-				m_platform.LoadPlatformData(result.getInt("PlatformID"));
+				m_platform.LoadPlatformData(result.getInt("GameID"));
 			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
