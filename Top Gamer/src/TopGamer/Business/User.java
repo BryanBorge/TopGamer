@@ -32,6 +32,12 @@ public class User
 		m_username = "N/A";
 	}
 	
+	public User(String username) {
+		m_username=username;
+		
+	}
+	
+	
 	public User(String fName, String lName, String uName, String email) {
 		m_firstName = fName;
 		m_lastName = lName;
