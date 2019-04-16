@@ -17,6 +17,6 @@ public class Driver {
 
 	public static void main(String[] args) {
 
-		Application.launch(TopGamerGUI.class,args);
+		Application.launch(TopGamerGUI.class,args);		
 	}
 }
