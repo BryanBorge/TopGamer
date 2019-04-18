@@ -1119,7 +1119,12 @@ public class TopGamerGUI extends Application
 		
 		Tournament codSNDTourney = new Tournament();
 		codSNDTourney.LoadTournamentData(1);
-		SQLConnection se = new SQLConnection();
+		
+		Team registered= new Team();
+		registered=codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		for (User u: registered.GetAllTeamMembers() ) {
+			System.out.println(u.GetUsername());
+		}
 		
 		/*JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
