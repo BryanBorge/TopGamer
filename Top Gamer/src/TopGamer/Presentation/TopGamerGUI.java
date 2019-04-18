@@ -59,7 +59,7 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 	Scene codTourney;
-	Scene createTeam, joinTeam;
+	Scene createTeam, joinTeam, viewRTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
@@ -879,10 +879,13 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateCodTourneyScene()
 	{
+		//Tournament tourn = new Tournament(); // Tom
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
+		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams()); // Tom
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
@@ -946,7 +949,10 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
 		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam);
+		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
 		
 		codTourney = new Scene(ap, 600,400);
 	}
@@ -969,7 +975,7 @@ public class TopGamerGUI extends Application
 		
 		
 		JFXTextField txtTeamName = new JFXTextField();
-		txtTeamName.setLabelFloat(true);
+		txtTeamName.setLabelFloat(false);
 		txtTeamName.setPromptText("Team name");
 		txtTeamName.setLayoutX(211.0);
 		txtTeamName.setLayoutY(78.0);
@@ -1106,8 +1112,37 @@ public class TopGamerGUI extends Application
 	}
 
 
+	public void CreateViewRegisteredTeams(){
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		Tournament codSNDTourney = new Tournament();
+		codSNDTourney.LoadTournamentData(1);
+		SQLConnection se = new SQLConnection();
+		
+		/*JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team Name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(166.0);
+		*/
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenCodTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		aPane.getChildren().addAll(btnReturn);
+		
+		
+		viewRTeam= new Scene(aPane);
+	}
 
-
+	public void OpenViewRegisteredTeams()
+	{
+		CreateViewRegisteredTeams();
+		window.setScene(viewRTeam);
+	}
 
 
 
