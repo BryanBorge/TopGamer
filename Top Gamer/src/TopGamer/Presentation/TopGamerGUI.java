@@ -975,7 +975,7 @@ public class TopGamerGUI extends Application
 		
 		
 		JFXTextField txtTeamName = new JFXTextField();
-		txtTeamName.setLabelFloat(false);
+		txtTeamName.setLabelFloat(true);
 		txtTeamName.setPromptText("Team name");
 		txtTeamName.setLayoutX(211.0);
 		txtTeamName.setLayoutY(78.0);
@@ -1112,7 +1112,7 @@ public class TopGamerGUI extends Application
 	}
 
 
-	public void CreateViewRegisteredTeams(){
+	public void CreateViewRegisteredTeams(){ 	//tom
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
@@ -1133,12 +1133,15 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		aPane.getChildren().addAll(btnReturn);
-		
+		// need to use viewregisterdteams function from tournamnet, however it request a team id as input so if hardcoded in this 
+		// function it wont work properly, also you cant just leave it in herre for when you call the function it has no paramaters
+		// after you will use the viewregisterdteams function it will read in and return the value , should it be returning to a 
+		// array list paramter? then use a grid pane to display?
 		
 		viewRTeam= new Scene(aPane);
 	}
 
-	public void OpenViewRegisteredTeams()
+	public void OpenViewRegisteredTeams()	//tom
 	{
 		CreateViewRegisteredTeams();
 		window.setScene(viewRTeam);
