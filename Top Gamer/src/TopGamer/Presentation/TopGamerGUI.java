@@ -4,6 +4,8 @@ package TopGamer.Presentation;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -884,13 +886,15 @@ public class TopGamerGUI extends Application
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
+
+		codSNDTourney = new Tournament();
+		codSNDTourney.LoadTournamentData(3);
+		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
-		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams()); // Tom
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData(3);
 
 		btnCreateTeam.setOnAction(e->{
 			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
@@ -1120,26 +1124,28 @@ public class TopGamerGUI extends Application
 		Tournament codSNDTourney = new Tournament();
 		codSNDTourney.LoadTournamentData(3);
 		
-		Team registered= new Team();
-		registered=codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
-		System.out.println(registered.GetTeamName());
-		for (User u: registered.GetAllTeamMembers() ) {
-			System.out.println(u.GetUsername());
-			
+		ArrayList<Team> registered= new ArrayList<Team>();
+		registered =  codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		
+		ListView<Team> teamlist= new ListView <Team>();	
+		teamlist.setLayoutX(40.0);
+		teamlist.setLayoutY(90.0);
+		
+		ObservableList<Team> teamitems = FXCollections.observableArrayList();
+		teamlist.setItems(teamitems);
+		
+		for(Team t : registered) {
+			teamitems.add(t);
 		}
 		
-		/*JFXTextField txtTeamName = new JFXTextField();
-		txtTeamName.setLabelFloat(true);
-		txtTeamName.setPromptText("Team Name");
-		txtTeamName.setLayoutX(211.0);
-		txtTeamName.setLayoutY(166.0);
-		*/
+		
+		
 		JFXButton btnReturn = new JFXButton("<");
 		btnReturn.setOnAction(e->OpenCodTourney());
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
-		aPane.getChildren().addAll(btnReturn);
+		aPane.getChildren().addAll(btnReturn, teamlist);
 		// need to use viewregisterdteams function from tournamnet, however it request a team id as input so if hardcoded in this 
 		// function it wont work properly, also you cant just leave it in herre for when you call the function it has no paramaters
 		// after you will use the viewregisterdteams function it will read in and return the value , should it be returning to a 

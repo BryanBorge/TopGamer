@@ -35,6 +35,13 @@ public class Team {
 		m_losses = 0;	
 	}
 	
+	public Team(String name, User user)
+	{
+		m_teamName = name;
+		m_teamMembers.add(user);
+	}
+	
+	
 	/**
 	 * sets TeamName member variable
 	 * 
@@ -152,10 +159,19 @@ public class Team {
 			e.printStackTrace();
 		}
 		
-	
 	}
 	
-	 
+	@Override
+	public String toString()
+	{
+		String returnStr = this.GetTeamName();
+		for(User u : this.GetAllTeamMembers())
+		{
+			returnStr += "\n" + u.GetUsername();
+		}
+		return returnStr;
+	}
+
 		 
 	 
 	 
