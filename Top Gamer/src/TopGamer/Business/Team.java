@@ -31,6 +31,13 @@ public class Team {
 		m_losses = 0;	
 	}
 	
+	public Team(String name, int wins, int losses)
+	{
+		m_teamName = name;
+		m_wins = wins;
+		m_losses = losses;
+	}
+	
 	/**
 	 * sets TeamName member variable
 	 * 

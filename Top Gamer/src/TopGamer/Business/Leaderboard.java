@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 public class Leaderboard {
 
-	private ArrayList<Team> m_leaderBoard;
-	
-	private Team m_team;
+	private ArrayList<Team> m_teams;
 	
 	/**
 	 * Load leader board data
@@ -23,30 +21,18 @@ public class Leaderboard {
 		Connection connection = dbConnection.connect();
 		Statement statement = null;
 		ResultSet result;
-		
-		String dbTeamName = null;
-		int dbWins = 0; 
-		int dbLosses = 0;
+	
 		try {
 			statement = connection.createStatement();
 			result = statement.executeQuery(lbQry);
 			
 			while(result.next())
 			{
-				dbTeamName = result.getString("TeamName");
-				dbWins = result.getInt("Wins");
-				dbLosses = result.getInt("Losses");
-			}// ends while result.next() loop
-			
-			m_team.SetTeamName(dbTeamName);
-			m_team.SetWins(dbWins);
-			m_team.SetLosses(dbLosses);
+				m_teams.add(new Team(result.getString("TeamName"), result.getInt("Wins"), result.getInt("Losses")));
+			}
 		}
 		catch(SQLException e){
 			e.printStackTrace();
-		}// ends try catch for connection query
-
-		
-	}// ends load leader board data
-	
-}// end class Leader board
+		}
+	}
+}
