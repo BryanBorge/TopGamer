@@ -1118,12 +1118,14 @@ public class TopGamerGUI extends Application
 		aPane.setPrefWidth(600);
 		
 		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData(1);
+		codSNDTourney.LoadTournamentData(3);
 		
 		Team registered= new Team();
 		registered=codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		System.out.println(registered.GetTeamName());
 		for (User u: registered.GetAllTeamMembers() ) {
 			System.out.println(u.GetUsername());
+			
 		}
 		
 		/*JFXTextField txtTeamName = new JFXTextField();

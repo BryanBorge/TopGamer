@@ -284,7 +284,7 @@ public class Tournament
 			 {
 				 
 				 test.SetTeamName(result.getString("TeamName")) ;
-				 test.AddTeamMember(new User(result.getString("username")));
+				 test.AddTeamMember(new User(result.getString("Username")));
 			 }
 			 return test;
 		 } catch (SQLException e) {
