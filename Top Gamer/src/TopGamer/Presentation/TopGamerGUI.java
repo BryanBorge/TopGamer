@@ -4,6 +4,8 @@ package TopGamer.Presentation;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.Event;
@@ -37,6 +40,8 @@ import org.sqlite.SQLiteException;
 import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -48,7 +53,7 @@ import TopGamer.Business.*;
 public class TopGamerGUI extends Application
 {
 	
-	User testUser = new User();
+	User currentUser = new User();
 	Tournament testTourney = new Tournament();
 	boolean loggedIn = false;
 	
@@ -56,7 +61,7 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 	Scene codTourney;
-	Scene createTeam, joinTeam;
+	Scene createTeam, joinTeam, viewRTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
 	
@@ -66,7 +71,7 @@ public class TopGamerGUI extends Application
 	JFXTextField txtLoginName;
 	JFXPasswordField txtLoginPass;
 	JFXButton btnUserLogin;
-	JFXButton btnSignUp;
+	JFXButton btnSignUp;                                                    
 	JFXButton btnContinue;
 	
 	//Registration
@@ -80,6 +85,13 @@ public class TopGamerGUI extends Application
 	JFXTextField txtEmail;
 	JFXTextField txtUserName;
 	JFXPasswordField txtPass;
+	RadioButton rbXbox;
+	RadioButton rbPS4;
+	RadioButton rbPC;
+	RadioButton rbSelectedPlatform;
+	String platformName;
+	ToggleGroup platformGroup;
+	
 	
 	//Profile drop down
 	JFXButton btnProfile = new JFXButton("Profile");
@@ -89,6 +101,10 @@ public class TopGamerGUI extends Application
 	
 	//Labels to display if login info isnt valid
 	Label lblValidLoginUser,lblValidLoginPass;
+	
+	
+	//Tournaments 
+	Tournament codSNDTourney;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -105,9 +121,9 @@ public class TopGamerGUI extends Application
 		CreateFortniteScene();		
 		CreateCODScene();	
 		CreateHaloScene();
-		//CreateCodTourneyScene();
+		CreateCodTourneyScene();
 		CreateTeamTournament1();
-		//CreateJoinTeam();
+		CreateJoinTeam();
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -233,10 +249,9 @@ public class TopGamerGUI extends Application
 		else
 		{
 			boolean Valid = false;
-		    SQLConnection dbLogin = new SQLConnection();
 					try
 					{
-						Valid = dbLogin.Login(txtLoginName.getText(), txtLoginPass.getText(),testUser);	
+						Valid = currentUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
 					}
 						catch(SQLException e)
 					{
@@ -409,6 +424,17 @@ public class TopGamerGUI extends Application
 		btnSignUp.setStyle( "-jfx-button-type: RAISED; -fx-background-color: white; -fx-text-fill: black;");
 		btnSignUp.setOnAction(e -> RegisterUser());
 		
+		HBox platformHbox = new HBox();
+		platformHbox.setSpacing(5);
+		platformGroup = new ToggleGroup();
+		rbXbox = new RadioButton("Xbox One");
+		rbXbox.setToggleGroup(platformGroup);
+		rbPS4 = new RadioButton("PS4");
+		rbPS4.setToggleGroup(platformGroup);
+		rbPC = new RadioButton("PC");
+		rbPC.setToggleGroup(platformGroup);
+		platformHbox.getChildren().addAll(rbXbox, rbPS4, rbPC);
+
 				
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
@@ -439,10 +465,13 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(txtPass, 226.0);
 		AnchorPane.setTopAnchor(txtPass, 296.0);
 		
-		AnchorPane.setLeftAnchor(btnSignUp, 226.0);
-		AnchorPane.setTopAnchor(btnSignUp, 344.0);
+		AnchorPane.setLeftAnchor(platformHbox, 220.0);
+		AnchorPane.setTopAnchor(platformHbox, 335.0);
 		
-		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass);
+		AnchorPane.setLeftAnchor(btnSignUp, 255.0);
+		AnchorPane.setTopAnchor(btnSignUp, 360.0);
+		
+		ap.getChildren().addAll(btnReturn,txtFName,txtLName,txtEmail,txtUserName,txtPass,btnSignUp,lblValidFirstName,lblValidLastName,lblValidEmail,lblValidUserName,lblValidPass,platformHbox);
 		registerScene = new Scene(ap,600,400);
 	}
 	/**
@@ -456,7 +485,8 @@ public class TopGamerGUI extends Application
 		
 			try {
 				SQLConnection s = new SQLConnection();
-				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText());
+				rbSelectedPlatform = (RadioButton)platformGroup.getSelectedToggle();
+				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText(),rbSelectedPlatform.getText());
 				btnProfile.setText(txtUserName.getText());
 				txtFName.setText("");
 				txtLName.setText("");
@@ -470,7 +500,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				window.setScene(mainDashboardScene);
 			} catch (SQLiteException e) {
-				System.out.println("Error saving user to database. Make sure it is closed");
+				System.out.println("Error saving user to database");
 			}
 			
 			
@@ -540,8 +570,8 @@ public class TopGamerGUI extends Application
 	public void OpenMainDashboard()
 	{
 		if(loggedIn)
-			btnProfile.setText(testUser.GetUsername());
-		 System.out.println(testUser.GetFirstName() + " " + testUser.GetLastName() + " " + testUser.GetEmail());
+			btnProfile.setText(currentUser.GetUsername());
+		 System.out.println(currentUser.GetFirstName() + " " + currentUser.GetLastName() + " " + currentUser.GetEmail());
 		 window.setScene(mainDashboardScene);
 	}	
 	
@@ -555,26 +585,45 @@ public class TopGamerGUI extends Application
 		btnEditProfile = new JFXButton("Edit profile");
 		btnLogOut= new JFXButton("Log out");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e -> OpenLoginScene());
+		btnReturn.setOnAction(e ->{ 		
+			OpenLoginScene();
+		});
 	
-		//this event should be changed in the future using the loggedIn bool to change the profile option text
 		btnLogOut.setOnAction(e -> {
 			loggedIn = false;
 			btnProfile.setText("Profile");
-			testUser.SetFirstName("");
-			testUser.SetLastName("");
-			testUser.SetEmail("");
-			OpenLoginScene();}
-		);
+			currentUser.SetFirstName("");
+			currentUser.SetLastName("");
+			currentUser.SetEmail("");
+			currentUser.SetUsername("");
+			String logOutTitle = "Logged Out";
+			String logOutContent = "You have successfully logged out";
+			
+			JFXDialogLayout dialogContent = new JFXDialogLayout();
+			dialogContent.setHeading(new Text(logOutTitle));
+			dialogContent.setBody(new Text(logOutContent));
+			StackPane stackPane = new StackPane();
+			stackPane.autosize();
+			JFXDialog dialog = new JFXDialog(stackPane,dialogContent, JFXDialog.DialogTransition.LEFT);
+			JFXButton btn = new JFXButton("Okay");
+			dialog.show();
+			
+			
+			OpenLoginScene();
+			
+		});
+		
 		nodeList = new JFXNodesList();
+		nodeList.setRotate(90);
+		nodeList.setSpacing(30.0);
 		nodeList.addAnimatedNode(btnProfile);
-		nodeList.addAnimatedNode(btnEditProfile);
 		nodeList.addAnimatedNode(btnLogOut);
+		nodeList.addAnimatedNode(btnEditProfile);
 		
 		VBox mainVbox = new VBox();
 		ScrollPane mainScroll = new ScrollPane();
 		mainScroll.setLayoutX(0.0);
-		mainScroll.setLayoutY(32.0);
+		mainScroll.setLayoutY(40.0);
 		AnchorPane anchorScroll = new AnchorPane();
 		AnchorPane anchorHeader = new AnchorPane();
 		anchorHeader.setPrefHeight(47);
@@ -677,50 +726,34 @@ public class TopGamerGUI extends Application
 		JFXButton btnReturn = new JFXButton("<-");
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnPS4 = new JFXButton("PS4");
-		JFXButton btnXbox = new JFXButton("Xbox One");
-		JFXButton btnPC = new JFXButton("PC");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+		
 		
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
 		fortniteLogo.setFitWidth(104);
 		fortniteLogo.setFitHeight(148);
 		
-		
-		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
-		psLogo.setFitHeight(30);
-		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
-		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
-		pcLogo.setFitHeight(30);
-		pcLogo.setFitWidth(30);
-		btnPC.setGraphic(pcLogo);
-		
-		AnchorPane.setTopAnchor(fortniteLogo, 64.0);
-		AnchorPane.setLeftAnchor(fortniteLogo, 196.0);
+		AnchorPane.setTopAnchor(fortniteLogo, 25.0);
+		AnchorPane.setLeftAnchor(fortniteLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 118.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 50.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnPS4, 228.0);
-		AnchorPane.setLeftAnchor(btnPS4, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 264.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
 		
-		AnchorPane.setTopAnchor(btnPC, 300.0);
-		AnchorPane.setLeftAnchor(btnPC, 230.0);
 	
-		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		fortniteScene = new Scene(ap,600,400);
 	
@@ -747,52 +780,39 @@ public class TopGamerGUI extends Application
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnPS4 = new JFXButton("PS4");
-		JFXButton btnXbox = new JFXButton("Xbox One");
-		JFXButton btnPC = new JFXButton("PC");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+		
 		
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(104);
 		codLogo.setFitHeight(148);
-		
-		ImageView psLogo = new ImageView(new Image("ps4Logo.png"));
-		psLogo.setFitHeight(30);
-		psLogo.setFitWidth(30);
-		btnPS4.setGraphic(psLogo);
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
-		ImageView pcLogo = new ImageView(new Image("pcIcon.png"));
-		pcLogo.setFitHeight(30);
-		pcLogo.setFitWidth(30);
-		btnPC.setGraphic(pcLogo);
-		
-		AnchorPane.setTopAnchor(codLogo, 64.0);
-		AnchorPane.setLeftAnchor(codLogo, 196.0);
+
+		AnchorPane.setTopAnchor(codLogo, 25.0);
+		AnchorPane.setLeftAnchor(codLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 155.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 85.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnPS4, 228.0);
-		AnchorPane.setLeftAnchor(btnPS4, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 264.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
 		
-		AnchorPane.setTopAnchor(btnPC, 300.0);
-		AnchorPane.setLeftAnchor(btnPC, 230.0);
 	
-		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnPS4,btnXbox,btnPC,btnReturn);
+		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		codScene = new Scene(ap,600,400);
 	}
+	
+	
 	
 	/**
 	 * Set main window to the codScene
@@ -817,34 +837,32 @@ public class TopGamerGUI extends Application
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		JFXButton btnXbox = new JFXButton("Xbox One");
+		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		JFXButton btnTournament2 = new JFXButton("Tournament 2");
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(104);
 		haloLogo.setFitHeight(148);
-	
-		ImageView xboxLogo = new ImageView(new Image("xboxLogo.png"));
-		xboxLogo.setFitHeight(30);
-		xboxLogo.setFitWidth(30);
-		btnXbox.setGraphic(xboxLogo);
 		
-		AnchorPane.setTopAnchor(haloLogo, 64.0);
-		AnchorPane.setLeftAnchor(haloLogo, 196.0);
+		AnchorPane.setTopAnchor(haloLogo, 25.0);
+		AnchorPane.setLeftAnchor(haloLogo, 50.0);
 
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 87.0);
-		AnchorPane.setLeftAnchor(lblTitle, 320.0);
+		AnchorPane.setTopAnchor(lblTitle, 15.0);
+		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 118.0);
-		AnchorPane.setLeftAnchor(lblDesc, 320.0);
+		AnchorPane.setTopAnchor(lblDesc, 45.0);
+		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnXbox, 228.0);
-		AnchorPane.setLeftAnchor(btnXbox, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 228.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
 		
-	
-		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnXbox,btnReturn);
+		AnchorPane.setTopAnchor(btnTournament2, 264.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
+		
+		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
 		haloScene = new Scene(ap,600,400);
 	}
@@ -863,15 +881,20 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateCodTourneyScene()
 	{
+		//Tournament tourn = new Tournament(); // Tom
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
+		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
+
+		codSNDTourney = new Tournament();
+		codSNDTourney.LoadTournamentData(3);
+		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData();
 
 		btnCreateTeam.setOnAction(e->{
 			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
@@ -886,9 +909,9 @@ public class TopGamerGUI extends Application
 			}			
 	});
 		
-		Label lblTitle = new Label(codSNDTourney.GetTournamentName());
+		Label lblTitle = new Label(codSNDTourney.GetTournamentName() + "(" + codSNDTourney.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
-		Label lblLocation = new Label("NY - 5 Teams");
+		Label lblLocation = new Label(codSNDTourney.GetLocation() + " " + codSNDTourney.GetDate());
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -904,7 +927,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(lblTitle, 137.0);
 		
 		AnchorPane.setTopAnchor(lblLocation, 79.0);
-		AnchorPane.setLeftAnchor(lblLocation, 258.0);
+		AnchorPane.setLeftAnchor(lblLocation, 210.0);
 		
 		AnchorPane.setTopAnchor(lblPrize, 149.0);
 		AnchorPane.setLeftAnchor(lblPrize, 137.0);
@@ -930,7 +953,10 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
 		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam);
+		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
 		
 		codTourney = new Scene(ap, 600,400);
 	}
@@ -944,7 +970,6 @@ public class TopGamerGUI extends Application
 		window.setScene(codTourney);
 	}
 
-	
 	
 	public void CreateTeamTournament1() 
 	{
@@ -1000,8 +1025,8 @@ public class TopGamerGUI extends Application
 				}
 				else {
 					SQLConnection sqlConnection = new SQLConnection();
-					sqlConnection.CreateTeam(txtTeamName.getText(), testUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 1);
+					sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Team Created");
 					alert.setHeaderText("Team created");
@@ -1022,10 +1047,8 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		//load all users not currently on a team
-		//to be used for text field auto completion
 		ArrayList<String> users = new ArrayList<String>();
-		SQLConnection sqlConnection = new SQLConnection();
-		users = sqlConnection.LoadAllAvailavleUsernames();
+		users = codSNDTourney.LoadAllAvailavleUsernames();
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1033,8 +1056,7 @@ public class TopGamerGUI extends Application
 		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
 		
 		createTeam = new Scene(aPane);
-	}
-	
+	}	
 	public void OpenCreateTeamTournament1()
 	{
 		window.setScene(createTeam);
@@ -1048,8 +1070,8 @@ public class TopGamerGUI extends Application
 		aPane.setPrefWidth(600);
 		
 		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData();
-		//se.JoinTeam(testUser.GetUsername(),"Test");
+		codSNDTourney.LoadTournamentData(1);
+		SQLConnection se = new SQLConnection();
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
@@ -1061,6 +1083,17 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutX(220.0);
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
+		btnJoinTeam.setOnAction(e->{
+			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Teamed Joined");
+			alert.setHeaderText("Team Joined");
+			alert.setContentText("You have joined the team: Team");
+			alert.showAndWait();
+			
+			OpenCodTourney();
+			
+			});
 		
 		JFXButton btnReturn = new JFXButton("<");
 		btnReturn.setOnAction(e->OpenCodTourney());
@@ -1075,10 +1108,7 @@ public class TopGamerGUI extends Application
 		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
 		
 		joinTeam = new Scene(aPane);
-		
 	}
-
-	
 	public void OpenJoinTeam()
 	{
 		CreateJoinTeam();
@@ -1086,8 +1116,49 @@ public class TopGamerGUI extends Application
 	}
 
 
+	public void CreateViewRegisteredTeams(){ 	//tom
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		Tournament codSNDTourney = new Tournament();
+		codSNDTourney.LoadTournamentData(3);
+		
+		ArrayList<Team> registered= new ArrayList<Team>();
+		registered =  codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		
+		ListView<Team> teamlist= new ListView <Team>();	
+		teamlist.setLayoutX(40.0);
+		teamlist.setLayoutY(90.0);
+		
+		ObservableList<Team> teamitems = FXCollections.observableArrayList();
+		teamlist.setItems(teamitems);
+		
+		for(Team t : registered) {
+			teamitems.add(t);
+		}
+		
+		
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenCodTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		aPane.getChildren().addAll(btnReturn, teamlist);
+		// need to use viewregisterdteams function from tournamnet, however it request a team id as input so if hardcoded in this 
+		// function it wont work properly, also you cant just leave it in herre for when you call the function it has no paramaters
+		// after you will use the viewregisterdteams function it will read in and return the value , should it be returning to a 
+		// array list paramter? then use a grid pane to display?
+		
+		viewRTeam= new Scene(aPane);
+	}
 
-
+	public void OpenViewRegisteredTeams()	//tom
+	{
+		CreateViewRegisteredTeams();
+		window.setScene(viewRTeam);
+	}
 
 
 

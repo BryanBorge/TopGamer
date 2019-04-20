@@ -7,6 +7,10 @@
 
 package TopGamer.Business;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Team {
@@ -31,30 +35,28 @@ public class Team {
 		m_losses = 0;	
 	}
 	
-	public Team(String name, int wins, int losses)
+
+	public Team(String name, User user)
 	{
 		m_teamName = name;
-		m_wins = wins;
-		m_losses = losses;
+		m_teamMembers.add(user);
 	}
 	
+
 	/**
 	 * sets TeamName member variable
 	 * 
 	 * @param TeamName
 	 */
-	
 	public void SetTeamName(String TeamName)
 	{
 		m_teamName = TeamName;
 	}
 		
-
 	/**
 	 * gets TeamName member variable
 	 * @returns TeamName 
 	 */
-	
 	public String GetTeamName() 
 	{
 	   return m_teamName;
@@ -134,5 +136,48 @@ public class Team {
 	   return m_losses;
 	}
 
+	public void LoadTeamData(String teamName)
+	{
 
-}
+		SQLConnection dbConnection = new SQLConnection();
+		
+		String teamQry = "select UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamName = \'" + teamName + "\'";
+	
+		Connection connection = dbConnection.connect();
+		Statement statement = null;
+		ResultSet result;
+		
+		try {
+			statement = connection.createStatement();
+			result = statement.executeQuery(teamQry);
+			while(result.next())
+			{
+				User user = new User(result.getString("FirstName"),result.getString("LastName"),result.getString("UserName"),result.getString("Email"));
+				m_teamMembers.add(user);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public String toString()
+	{
+		String returnStr = this.GetTeamName();
+		for(User u : this.GetAllTeamMembers())
+		{
+			returnStr += "\n" + u.GetUsername();
+		}
+		return returnStr;
+	}
+
+		 
+	 
+	 
+	 
+ }
+	
+	
+	
