@@ -60,7 +60,9 @@ public class TopGamerGUI extends Application
 	Stage window,gameStage;
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
-	Scene codTourney, halotourney;
+
+	Scene codTourney, fortniteTourney, haloTourney;
+	
 	Scene createTeam, joinTeam, viewRTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
@@ -104,7 +106,13 @@ public class TopGamerGUI extends Application
 	
 	
 	//Tournaments 
-	Tournament codSNDTourney, haloSNDTourney;
+
+	Tournament codSNDTourney;
+	Tournament FortniteTourney ;
+  Tournament haloSNDTourney;
+
+
+
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -726,8 +734,8 @@ public class TopGamerGUI extends Application
 		JFXButton btnReturn = new JFXButton("<-");
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnTournament1 = new JFXButton("Tournament 1");
-		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+		JFXButton btnTournament1 = new JFXButton("Friday Fortnite");
+		btnTournament1.setOnAction(e->OpenFortniteTourney());
 		
 		
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
@@ -749,11 +757,10 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnTournament1, 200.0);
 		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 230.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
+		
 		
 	
-		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
+		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnReturn);
 	
 		fortniteScene = new Scene(ap,600,400);
 	
@@ -779,10 +786,12 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e-> OpenMainDashboard()); //////////////////////
-		JFXButton btnTournament1 = new JFXButton("Tournament 1");
-		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+
+		btnReturn.setOnAction(e-> OpenMainDashboard());
+		JFXButton btnTournament1 = new JFXButton("4v4 Cod Tourney");
+
 		
+		btnTournament1.setOnAction(e->OpenCodTourney());
 		
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(104);
@@ -803,11 +812,9 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnTournament1, 200.0);
 		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 240.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
 		
 	
-		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
+		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnReturn);
 	
 		codScene = new Scene(ap,600,400);
 	}
@@ -837,9 +844,11 @@ public class TopGamerGUI extends Application
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
-		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+
+		JFXButton btnTournament1 = new JFXButton("4v4 Team Slayer");
+		
 		btnTournament1.setOnAction(e->OpenHaloTourney());
-		JFXButton btnTournament2 = new JFXButton("Tournament 2");
+
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(104);
@@ -860,10 +869,9 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnTournament1, 200.0);
 		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 240.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
 		
-		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
+		
+		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnReturn);
 	
 		haloScene = new Scene(ap,600,400);
 	}
@@ -982,8 +990,10 @@ public void OpenHaloTourney() {
 		codSNDTourney.LoadTournamentData(3);
 		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codSNDTourney));
 		JFXButton btnReturn = new JFXButton("<-");
+
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 
@@ -1052,6 +1062,102 @@ public void OpenHaloTourney() {
 		codTourney = new Scene(ap, 600,400);
 	}
 
+	
+	/**
+	 * Create a scene to join fortnite tournament
+	 */
+	public void CreateFortniteTourneyScene() {
+		
+		AnchorPane ap = new AnchorPane();
+		JFXButton btnCreateTeam = new JFXButton("Create team");
+		JFXButton btnJoinTeam = new JFXButton("Join team");
+		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
+
+		FortniteTourney = new Tournament();
+		FortniteTourney.LoadTournamentData(6);
+		
+		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
+		JFXButton btnReturn = new JFXButton("/<-");
+		btnReturn.setOnAction(e-> OpenMainDashboard());
+		
+
+		btnCreateTeam.setOnAction(e->{
+			if(FortniteTourney.GetTeamsJoined() < FortniteTourney.GetBrackSize())
+				OpenCreateTeamTournament1();			
+			else {		
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Error");
+				alert.setHeaderText("Cannot create team");
+				alert.setContentText("Bracket size has been reached");
+				alert.showAndWait();
+				return;
+			}			
+	});
+		
+		Label lblTitle = new Label(FortniteTourney.GetTournamentName() + "(" + FortniteTourney.GetGame().GetPlatform().GetPlatformName() + ")");
+		lblTitle.setFont(new Font(24));
+		Label lblLocation = new Label(FortniteTourney.GetLocation() + " " + FortniteTourney.GetDate());
+		Label lblPrize = new Label("Prize");
+		Label lblBracketSize = new Label("Bracket Size");
+		Label lblTeamsJoined = new Label("Teams Joined");
+		
+		Label lblPrizeAmt = new Label("$" + FortniteTourney.GetPrize());
+		Label lblBracketAmt = new Label(String.valueOf(FortniteTourney.GetBrackSize()));
+		Label lblTeamsJoinedVal = new Label(String.valueOf(FortniteTourney.GetTeamsJoined()));
+		
+		AnchorPane.setTopAnchor(btnReturn, 14.0);
+		AnchorPane.setLeftAnchor(btnReturn, 14.0);
+		
+		AnchorPane.setTopAnchor(lblTitle, 42.0);
+		AnchorPane.setLeftAnchor(lblTitle, 137.0);
+		
+		AnchorPane.setTopAnchor(lblLocation, 79.0);
+		AnchorPane.setLeftAnchor(lblLocation, 210.0);
+		
+		AnchorPane.setTopAnchor(lblPrize, 149.0);
+		AnchorPane.setLeftAnchor(lblPrize, 137.0);
+		
+		AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+		AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
+		
+		AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+		AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
+		
+		AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+		AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
+		
+		AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
+		AnchorPane.setLeftAnchor(lblBracketAmt, 342.0);
+		
+		AnchorPane.setTopAnchor(lblTeamsJoinedVal, 223.0);
+		AnchorPane.setLeftAnchor(lblTeamsJoinedVal, 342.0);
+
+		AnchorPane.setTopAnchor(btnJoinTeam, 267.0);
+		AnchorPane.setLeftAnchor(btnJoinTeam, 120.0);
+		
+		AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
+		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
+		
+		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+		
+		fortniteTourney = new Scene(ap, 600,400);
+		
+		
+		
+		
+	}
+	
+	public void OpenFortniteTourney() 
+	{
+		CreateFortniteTourneyScene();
+		window.setScene(fortniteTourney);
+	}
+	
+	
 	/**
 	 * Set main window to the codTourney scene
 	 */
