@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 import java.sql.Connection;
 
 
@@ -164,15 +167,15 @@ public class Tournament
 	 * @param targetTeam = team being searched for
 	 * @return team name if found, null otherwise
 	 */
-	public Team GetTeam(Team targetTeam)
+	public Team GetTeam(String targetTeam)
 	{
 		boolean found = false;
 		Team foundTeam = new Team();
 		for(Team t : m_teams)
 		{
-			if(t.GetTeamName().equals(targetTeam.GetTeamName())) {
+			if(t.GetTeamName().equals(targetTeam)) {
 				found = true;
-				foundTeam = targetTeam;
+				foundTeam = t;
 			}
 		}
 		if(found)
@@ -268,30 +271,39 @@ public class Tournament
 	 * @param tournament id
 	 * @return the registerd teams for the tournament
 	 */
-	 public Team ViewRegisterdTeams(int tournamentID) {
+	 public ArrayList<Team> ViewRegisterdTeams(int tournamentID) {
 		 
 		 SQLConnection dbConnection = new SQLConnection();
-		 String registeredteamsQry= "select  UserName, TeamName from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID  ;
+		 String teamNameQry = "select DISTINCT TeamName from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID;
+		 String registeredteamsQry= "select  UserName  from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID  ;
 		 Connection connection =dbConnection.connect();
 		 Statement statment =null;
 		 ResultSet result;
 		 
-		 Team test = new Team();
+		 ArrayList <Team>  returnTeam = new ArrayList<Team>();
+		 //loads team data from the database
+		 Team loadTeam;
+		 
+		 String dbTeamName = null;
+		 
 		 try {
 			 statment=connection.createStatement();
-			 result=statment.executeQuery(registeredteamsQry);
+			 result=statment.executeQuery(teamNameQry);
 			 while(result.next())
 			 {
-				 
-				 test.SetTeamName(result.getString("TeamName")) ;
-				 test.AddTeamMember(new User(result.getString("username")));
+				loadTeam = new Team();
+				loadTeam.SetTeamName(result.getString("TeamName"));
+				loadTeam.LoadTeamData(result.getString("TeamName"));
+				returnTeam.add(loadTeam);
 			 }
-			 return test;
+			 return returnTeam;
+			 
+			 
 		 } catch (SQLException e) {
 				 e.printStackTrace();
 			 }
-		 return test; 
-
+		 return returnTeam;
+		 
 	 }
 
 
