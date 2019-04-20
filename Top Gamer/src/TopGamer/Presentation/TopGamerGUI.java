@@ -60,7 +60,7 @@ public class TopGamerGUI extends Application
 	Stage window,gameStage;
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
-	Scene codTourney;
+	Scene codTourney, halotourney;
 	Scene createTeam, joinTeam, viewRTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
@@ -104,7 +104,7 @@ public class TopGamerGUI extends Application
 	
 	
 	//Tournaments 
-	Tournament codSNDTourney;
+	Tournament codSNDTourney, haloSNDTourney;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -838,6 +838,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 		JFXButton btnTournament1 = new JFXButton("Tournament 1");
+		btnTournament1.setOnAction(e->OpenHaloTourney());
 		JFXButton btnTournament2 = new JFXButton("Tournament 2");
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
@@ -875,7 +876,97 @@ public class TopGamerGUI extends Application
 		window.setScene(haloScene);
 	}
 
+public void OpenHaloTourney() {
+	
+	CreateHaloTourneyScene();
+	window.setScene(halotourney);
+}
+	
+	public void CreateHaloTourneyScene(){
+		//Tournament tourn = new Tournament(); // Tom
+				AnchorPane ap = new AnchorPane();
+				JFXButton btnCreateTeam = new JFXButton("Create team");
+				JFXButton btnJoinTeam = new JFXButton("Join team");
+				JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
 
+				haloSNDTourney = new Tournament();
+				haloSNDTourney.LoadTournamentData(11);
+				
+				btnJoinTeam.setOnAction(e->OpenJoinTeam());
+				btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloSNDTourney));
+				JFXButton btnReturn = new JFXButton("<-");
+				btnReturn.setOnAction(e-> OpenHaloScene()); // open halo?
+				
+
+				btnCreateTeam.setOnAction(e->{
+					if(haloSNDTourney.GetTeamsJoined() < haloSNDTourney.GetBrackSize())
+						OpenCreateTeamTournament1();			
+					else {		
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Error");
+						alert.setHeaderText("Cannot create team");
+						alert.setContentText("Bracket size has been reached");
+						alert.showAndWait();
+						return;
+					}			
+			});
+				
+				Label lblTitle = new Label(haloSNDTourney.GetTournamentName() + "(" + haloSNDTourney.GetGame().GetPlatform().GetPlatformName() + ")");
+				lblTitle.setFont(new Font(24));
+				Label lblLocation = new Label(haloSNDTourney.GetLocation() + " " + haloSNDTourney.GetDate());
+				Label lblPrize = new Label("Prize");
+				Label lblBracketSize = new Label("Bracket Size");
+				Label lblTeamsJoined = new Label("Teams Joined");
+				
+				Label lblPrizeAmt = new Label("$" + haloSNDTourney.GetPrize());
+				Label lblBracketAmt = new Label(String.valueOf(haloSNDTourney.GetBrackSize()));
+				Label lblTeamsJoinedVal = new Label(String.valueOf(haloSNDTourney.GetTeamsJoined()));
+				
+				AnchorPane.setTopAnchor(btnReturn, 14.0);
+				AnchorPane.setLeftAnchor(btnReturn, 14.0);
+				
+				AnchorPane.setTopAnchor(lblTitle, 42.0);
+				AnchorPane.setLeftAnchor(lblTitle, 137.0);
+				
+				AnchorPane.setTopAnchor(lblLocation, 79.0);
+				AnchorPane.setLeftAnchor(lblLocation, 210.0);
+				
+				AnchorPane.setTopAnchor(lblPrize, 149.0);
+				AnchorPane.setLeftAnchor(lblPrize, 137.0);
+				
+				AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+				AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
+				
+				AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+				AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
+				
+				AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+				AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
+				
+				AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
+				AnchorPane.setLeftAnchor(lblBracketAmt, 342.0);
+				
+				AnchorPane.setTopAnchor(lblTeamsJoinedVal, 223.0);
+				AnchorPane.setLeftAnchor(lblTeamsJoinedVal, 342.0);
+
+				AnchorPane.setTopAnchor(btnJoinTeam, 267.0);
+				AnchorPane.setLeftAnchor(btnJoinTeam, 120.0);
+				
+				AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
+				AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
+				
+				AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+				AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+				
+				ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+				
+				halotourney = new Scene(ap, 600,400);
+		
+		
+		
+		
+	}
+	
 	/**
 	 * Creates scene to join Call Of Duty tournament
 	 */
