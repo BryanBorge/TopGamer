@@ -61,7 +61,7 @@ public class TopGamerGUI extends Application
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
 
-	Scene codTourney, fortniteTourney, haloTourney;
+	Scene codTourney, fortniteTourney, halotourney;
 	
 	Scene createTeam, joinTeam, viewRTeam;
 	
@@ -109,7 +109,7 @@ public class TopGamerGUI extends Application
 
 	Tournament codSNDTourney;
 	Tournament FortniteTourney ;
-  Tournament haloSNDTourney;
+	Tournament haloSNDTourney;
 
 
 
@@ -884,14 +884,14 @@ public class TopGamerGUI extends Application
 		window.setScene(haloScene);
 	}
 
-public void OpenHaloTourney() {
+	public void OpenHaloTourney() {
 	
 	CreateHaloTourneyScene();
 	window.setScene(halotourney);
 }
 	
 	public void CreateHaloTourneyScene(){
-		//Tournament tourn = new Tournament(); // Tom
+		
 				AnchorPane ap = new AnchorPane();
 				JFXButton btnCreateTeam = new JFXButton("Create team");
 				JFXButton btnJoinTeam = new JFXButton("Join team");
@@ -1077,7 +1077,7 @@ public void OpenHaloTourney() {
 		FortniteTourney.LoadTournamentData(6);
 		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
-		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(FortniteTourney));
 		JFXButton btnReturn = new JFXButton("/<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
