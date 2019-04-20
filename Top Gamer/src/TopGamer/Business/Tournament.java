@@ -281,6 +281,9 @@ public class Tournament
 		 ResultSet result;
 		 
 		 ArrayList <Team>  returnTeam = new ArrayList<Team>();
+
+		 //loads team data from the database
+
 		 Team loadTeam;
 		 
 		 String dbTeamName = null;
