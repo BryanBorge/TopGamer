@@ -779,7 +779,7 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
-		btnReturn.setOnAction(e-> OpenMainDashboard());
+		btnReturn.setOnAction(e-> OpenMainDashboard()); //////////////////////
 		JFXButton btnTournament1 = new JFXButton("Tournament 1");
 		JFXButton btnTournament2 = new JFXButton("Tournament 2");
 		
@@ -891,7 +891,7 @@ public class TopGamerGUI extends Application
 		codSNDTourney.LoadTournamentData(3);
 		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
-		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codSNDTourney));
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
@@ -1116,16 +1116,15 @@ public class TopGamerGUI extends Application
 	}
 
 
-	public void CreateViewRegisteredTeams(){ 	//tom
+	public void CreateViewRegisteredTeams(Tournament t){ 	//tom
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
 		
-		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData(3);
+	
 		
 		ArrayList<Team> registered= new ArrayList<Team>();
-		registered =  codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		registered =  codSNDTourney.ViewRegisterdTeams(t.GetID());
 		
 		ListView<Team> teamlist= new ListView <Team>();	
 		teamlist.setLayoutX(40.0);
@@ -1134,8 +1133,8 @@ public class TopGamerGUI extends Application
 		ObservableList<Team> teamitems = FXCollections.observableArrayList();
 		teamlist.setItems(teamitems);
 		
-		for(Team t : registered) {
-			teamitems.add(t);
+		for(Team team : registered) {
+			teamitems.add(team);
 		}
 		
 		
@@ -1154,9 +1153,9 @@ public class TopGamerGUI extends Application
 		viewRTeam= new Scene(aPane);
 	}
 
-	public void OpenViewRegisteredTeams()	//tom
+	public void OpenViewRegisteredTeams(Tournament t)	//tom
 	{
-		CreateViewRegisteredTeams();
+		CreateViewRegisteredTeams(t);
 		window.setScene(viewRTeam);
 	}
 
