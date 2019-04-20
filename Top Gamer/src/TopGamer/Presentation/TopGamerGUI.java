@@ -130,8 +130,12 @@ public class TopGamerGUI extends Application
 		CreateCODScene();	
 		CreateHaloScene();
 		CreateCodTourneyScene();
-		CreateTeamTournament1();
-		CreateJoinTeam();
+		CreateTeamTournamentCOD();// CreateTeamTournament1()
+		CreateJoinTeamCOD(); //CreateJoinTeam1()
+		//CreateTeamTournamentFortnite
+		//CreatJoinTeamFortnite
+		//CreateTeamTournamentHalo
+		//CreateJoinTeamHalo
 		
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -890,7 +894,7 @@ public class TopGamerGUI extends Application
 	window.setScene(halotourney);
 }
 	
-	public void CreateHaloTourneyScene(){
+	public void CreateHaloTourneyScene(){// tom
 		
 				AnchorPane ap = new AnchorPane();
 				JFXButton btnCreateTeam = new JFXButton("Create team");
@@ -900,7 +904,7 @@ public class TopGamerGUI extends Application
 				haloSNDTourney = new Tournament();
 				haloSNDTourney.LoadTournamentData(11);
 				
-				btnJoinTeam.setOnAction(e->OpenJoinTeam());
+				btnJoinTeam.setOnAction(e->OpenJoinTeamHalo());
 				btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloSNDTourney));
 				JFXButton btnReturn = new JFXButton("<-");
 				btnReturn.setOnAction(e-> OpenHaloScene()); // open halo?
@@ -908,7 +912,7 @@ public class TopGamerGUI extends Application
 
 				btnCreateTeam.setOnAction(e->{
 					if(haloSNDTourney.GetTeamsJoined() < haloSNDTourney.GetBrackSize())
-						OpenCreateTeamTournament1();			
+						OpenCreateTeamTournamentHalo();			
 					else {		
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Error");
@@ -989,7 +993,7 @@ public class TopGamerGUI extends Application
 		codSNDTourney = new Tournament();
 		codSNDTourney.LoadTournamentData(3);
 		
-		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+		btnJoinTeam.setOnAction(e->OpenJoinTeamCOD());
 
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codSNDTourney));
 		JFXButton btnReturn = new JFXButton("<-");
@@ -999,7 +1003,7 @@ public class TopGamerGUI extends Application
 
 		btnCreateTeam.setOnAction(e->{
 			if(codSNDTourney.GetTeamsJoined() < codSNDTourney.GetBrackSize())
-				OpenCreateTeamTournament1();			
+				OpenCreateTeamTournamentCOD();			
 			else {		
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Error");
@@ -1066,7 +1070,7 @@ public class TopGamerGUI extends Application
 	/**
 	 * Create a scene to join fortnite tournament
 	 */
-	public void CreateFortniteTourneyScene() {
+	public void CreateFortniteTourneyScene() { // tom
 		
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
@@ -1076,7 +1080,7 @@ public class TopGamerGUI extends Application
 		FortniteTourney = new Tournament();
 		FortniteTourney.LoadTournamentData(6);
 		
-		btnJoinTeam.setOnAction(e->OpenJoinTeam());
+		btnJoinTeam.setOnAction(e->OpenJoinTeamFortnite());
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(FortniteTourney));
 		JFXButton btnReturn = new JFXButton("/<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
@@ -1084,7 +1088,7 @@ public class TopGamerGUI extends Application
 
 		btnCreateTeam.setOnAction(e->{
 			if(FortniteTourney.GetTeamsJoined() < FortniteTourney.GetBrackSize())
-				OpenCreateTeamTournament1();			
+				OpenCreateTeamTournamentFortnite();			
 			else {		
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Error");
@@ -1168,7 +1172,7 @@ public class TopGamerGUI extends Application
 	}
 
 	
-	public void CreateTeamTournament1() 
+	public void CreateTeamTournamentCOD() // CreateTeamTournament1()
 	{
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
@@ -1254,13 +1258,198 @@ public class TopGamerGUI extends Application
 		
 		createTeam = new Scene(aPane);
 	}	
-	public void OpenCreateTeamTournament1()
+	public void OpenCreateTeamTournamentCOD()// OpenCreateTeamTournament1()
+	{
+		window.setScene(createTeam);
+	}
+	public void CreatTeamTournamentFornite() {// tom
+
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(78.0);
+		
+		JFXTextField txtMember1 = new JFXTextField();
+		txtMember1.setLabelFloat(true);
+		txtMember1.setPromptText("Team member 1");
+		txtMember1.setLayoutX(211.0);
+		txtMember1.setLayoutY(125.0);
+		
+		JFXTextField txtMember2 = new JFXTextField();
+		txtMember2.setLabelFloat(true);
+		txtMember2.setPromptText("Team member 2");
+		txtMember2.setLayoutX(211.0);
+		txtMember2.setLayoutY(166.0);
+		
+		JFXTextField txtMember3 = new JFXTextField();
+		txtMember3.setLabelFloat(true);
+		txtMember3.setLabelFloat(true);
+		txtMember3.setPromptText("Team member 3");
+		txtMember3.setLayoutX(211.0);
+		txtMember3.setLayoutY(212.0);
+		
+		JFXButton btnCreateTeam = new JFXButton("Create team");
+		btnCreateTeam.setLayoutX(220.0);
+		btnCreateTeam.setLayoutY(279.0);
+		btnCreateTeam.prefWidth(135.0);
+		
+		
+		//if user is not logged in/not registered they cannot create a team
+		btnCreateTeam.setOnAction(e->{
+			if(!loggedIn) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Not logged in");
+				alert.setContentText("Please log in to create a team");
+				alert.showAndWait();
+			}else {
+				
+				if(Empty(txtTeamName)) {
+					System.out.println("Team name empty");
+					e.consume();
+				}
+				else {
+					SQLConnection sqlConnection = new SQLConnection();
+					sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Team Created");
+					alert.setHeaderText("Team created");
+					alert.setContentText("Team has been successfully created");
+					alert.showAndWait();
+					txtTeamName.setText("");
+					txtMember1.setText("");
+					txtMember2.setText("");
+					txtMember3.setText("");
+					OpenFortniteTourney();
+				}
+			}			
+		});
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenFortniteTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		//load all users not currently on a team
+		ArrayList<String> users = new ArrayList<String>();
+		users = FortniteTourney.LoadAllAvailavleUsernames();
+		TextFields.bindAutoCompletion(txtMember1, users);
+		TextFields.bindAutoCompletion(txtMember2, users);
+		TextFields.bindAutoCompletion(txtMember3, users);
+		
+		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
+		
+		createTeam = new Scene(aPane);
+		
+	}
+	public void OpenCreateTeamTournamentFortnite() {//tom
+		
+		{
+			window.setScene(createTeam);
+		}
+		
+	}
+	public void CreatTeamTournamentHalo() {// tom
+
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(78.0);
+		
+		JFXTextField txtMember1 = new JFXTextField();
+		txtMember1.setLabelFloat(true);
+		txtMember1.setPromptText("Team member 1");
+		txtMember1.setLayoutX(211.0);
+		txtMember1.setLayoutY(125.0);
+		
+		JFXTextField txtMember2 = new JFXTextField();
+		txtMember2.setLabelFloat(true);
+		txtMember2.setPromptText("Team member 2");
+		txtMember2.setLayoutX(211.0);
+		txtMember2.setLayoutY(166.0);
+		
+		JFXTextField txtMember3 = new JFXTextField();
+		txtMember3.setLabelFloat(true);
+		txtMember3.setLabelFloat(true);
+		txtMember3.setPromptText("Team member 3");
+		txtMember3.setLayoutX(211.0);
+		txtMember3.setLayoutY(212.0);
+		
+		JFXButton btnCreateTeam = new JFXButton("Create team");
+		btnCreateTeam.setLayoutX(220.0);
+		btnCreateTeam.setLayoutY(279.0);
+		btnCreateTeam.prefWidth(135.0);
+		
+		
+		//if user is not logged in/not registered they cannot create a team
+		btnCreateTeam.setOnAction(e->{
+			if(!loggedIn) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Not logged in");
+				alert.setContentText("Please log in to create a team");
+				alert.showAndWait();
+			}else {
+				
+				if(Empty(txtTeamName)) {
+					System.out.println("Team name empty");
+					e.consume();
+				}
+				else {
+					SQLConnection sqlConnection = new SQLConnection();
+					sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+					sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Team Created");
+					alert.setHeaderText("Team created");
+					alert.setContentText("Team has been successfully created");
+					alert.showAndWait();
+					txtTeamName.setText("");
+					txtMember1.setText("");
+					txtMember2.setText("");
+					txtMember3.setText("");
+					OpenHaloTourney();
+				}
+			}			
+		});
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenHaloTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		//load all users not currently on a team
+		ArrayList<String> users = new ArrayList<String>();
+		users = haloSNDTourney.LoadAllAvailavleUsernames();
+		TextFields.bindAutoCompletion(txtMember1, users);
+		TextFields.bindAutoCompletion(txtMember2, users);
+		TextFields.bindAutoCompletion(txtMember3, users);
+		
+		aPane.getChildren().addAll(txtTeamName,txtMember1,txtMember2,txtMember3,btnCreateTeam,btnReturn);
+		
+		createTeam = new Scene(aPane);
+		
+	}
+	public void OpenCreateTeamTournamentHalo()//tom
 	{
 		window.setScene(createTeam);
 	}
 
-
-	public void CreateJoinTeam()
+	
+	public void CreateJoinTeamCOD()//CreateJoinTeam()
 	{
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
@@ -1306,14 +1495,116 @@ public class TopGamerGUI extends Application
 		
 		joinTeam = new Scene(aPane);
 	}
-	public void OpenJoinTeam()
+	public void OpenJoinTeamCOD()//OpenJoinTeam()
 	{
-		CreateJoinTeam();
+		CreateJoinTeamCOD();
 		window.setScene(joinTeam);
 	}
-
-
-	public void CreateViewRegisteredTeams(Tournament t){ 	//tom
+	public void CreateJoinTeamFortnite()//tom
+	{
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		Tournament FortniteTourney = new Tournament();
+		FortniteTourney.LoadTournamentData(1); // Whats this number coming from
+		SQLConnection se = new SQLConnection();
+		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team Name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(166.0);
+		
+		JFXButton btnJoinTeam = new JFXButton("Join Team");
+		btnJoinTeam.setLayoutX(220.0);
+		btnJoinTeam.setLayoutY(279.0);
+		btnJoinTeam.prefWidth(135.0);
+		btnJoinTeam.setOnAction(e->{
+			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Teamed Joined");
+			alert.setHeaderText("Team Joined");
+			alert.setContentText("You have joined the team: Team");
+			alert.showAndWait();
+			
+			OpenFortniteTourney();
+			
+			});
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenFortniteTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		ArrayList<String> openTeams = new ArrayList<String>();
+		SQLConnection sqlConnection = new SQLConnection();
+		openTeams = sqlConnection.LoadAllOpenTeams();
+		TextFields.bindAutoCompletion(txtTeamName, openTeams);
+		
+		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
+		
+		joinTeam = new Scene(aPane);
+	}
+	public void OpenJoinTeamFortnite()//tom
+	{
+		CreateJoinTeamFortnite();
+		window.setScene(joinTeam);
+	}
+	public void CreateJoinTeamHalo()//tom
+	{
+		AnchorPane	aPane = new AnchorPane();
+		aPane.setPrefHeight(400);
+		aPane.setPrefWidth(600);
+		
+		Tournament haloSNDTourney = new Tournament();
+		haloSNDTourney.LoadTournamentData(1); // whats this number come from
+		SQLConnection se = new SQLConnection();
+		
+		JFXTextField txtTeamName = new JFXTextField();
+		txtTeamName.setLabelFloat(true);
+		txtTeamName.setPromptText("Team Name");
+		txtTeamName.setLayoutX(211.0);
+		txtTeamName.setLayoutY(166.0);
+		
+		JFXButton btnJoinTeam = new JFXButton("Join Team");
+		btnJoinTeam.setLayoutX(220.0);
+		btnJoinTeam.setLayoutY(279.0);
+		btnJoinTeam.prefWidth(135.0);
+		btnJoinTeam.setOnAction(e->{
+			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Teamed Joined");
+			alert.setHeaderText("Team Joined");
+			alert.setContentText("You have joined the team: Team");
+			alert.showAndWait();
+			
+			OpenHaloTourney();
+			
+			});
+		
+		JFXButton btnReturn = new JFXButton("<");
+		btnReturn.setOnAction(e->OpenHaloTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		ArrayList<String> openTeams = new ArrayList<String>();
+		SQLConnection sqlConnection = new SQLConnection();
+		openTeams = sqlConnection.LoadAllOpenTeams();
+		TextFields.bindAutoCompletion(txtTeamName, openTeams);
+		
+		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
+		
+		joinTeam = new Scene(aPane);
+	}
+	public void OpenJoinTeamHalo()//tom
+	{
+		CreateJoinTeamHalo();
+		window.setScene(joinTeam);
+	}
+	
+	
+	public void CreateViewRegisteredTeams(Tournament t){ 	
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
@@ -1350,7 +1641,7 @@ public class TopGamerGUI extends Application
 		viewRTeam= new Scene(aPane);
 	}
 
-	public void OpenViewRegisteredTeams(Tournament t)	//tom
+	public void OpenViewRegisteredTeams(Tournament t)	
 	{
 		CreateViewRegisteredTeams(t);
 		window.setScene(viewRTeam);
