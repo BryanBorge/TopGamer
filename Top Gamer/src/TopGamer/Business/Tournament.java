@@ -281,7 +281,10 @@ public class Tournament
 		 ResultSet result;
 		 
 		 ArrayList <Team>  returnTeam = new ArrayList<Team>();
-		 Team loadTeam  = new Team();
+
+		 //loads team data from the database
+
+		 Team loadTeam;
 		 
 		 String dbTeamName = null;
 		 
@@ -290,6 +293,7 @@ public class Tournament
 			 result=statment.executeQuery(teamNameQry);
 			 while(result.next())
 			 {
+				loadTeam = new Team();
 				loadTeam.SetTeamName(result.getString("TeamName"));
 				loadTeam.LoadTeamData(result.getString("TeamName"));
 				returnTeam.add(loadTeam);

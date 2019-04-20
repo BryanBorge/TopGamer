@@ -60,7 +60,9 @@ public class TopGamerGUI extends Application
 	Stage window,gameStage;
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
+
 	Scene codTourney, fortniteTourney, haloTourney;
+	
 	Scene createTeam, joinTeam, viewRTeam;
 	
 	ImageView backArrow = new ImageView(new Image("back arrow.png"));
@@ -104,8 +106,13 @@ public class TopGamerGUI extends Application
 	
 	
 	//Tournaments 
+
 	Tournament codSNDTourney;
-	Tournament FortniteTourney;
+	Tournament FortniteTourney ;
+  Tournament haloSNDTourney;
+
+
+
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
@@ -779,8 +786,10 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblDesc = new Label("Activision");
 		JFXButton btnReturn = new JFXButton("<-");
+
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		JFXButton btnTournament1 = new JFXButton("4v4 Cod Tourney");
+
 		
 		btnTournament1.setOnAction(e->OpenCodTourney());
 		
@@ -835,8 +844,11 @@ public class TopGamerGUI extends Application
 		//btnReturn.setGraphic(backArrow);
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
+
 		JFXButton btnTournament1 = new JFXButton("4v4 Team Slayer");
 		
+		btnTournament1.setOnAction(e->OpenHaloTourney());
+
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(104);
@@ -872,7 +884,97 @@ public class TopGamerGUI extends Application
 		window.setScene(haloScene);
 	}
 
+public void OpenHaloTourney() {
+	
+	CreateHaloTourneyScene();
+	window.setScene(halotourney);
+}
+	
+	public void CreateHaloTourneyScene(){
+		//Tournament tourn = new Tournament(); // Tom
+				AnchorPane ap = new AnchorPane();
+				JFXButton btnCreateTeam = new JFXButton("Create team");
+				JFXButton btnJoinTeam = new JFXButton("Join team");
+				JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
 
+				haloSNDTourney = new Tournament();
+				haloSNDTourney.LoadTournamentData(11);
+				
+				btnJoinTeam.setOnAction(e->OpenJoinTeam());
+				btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloSNDTourney));
+				JFXButton btnReturn = new JFXButton("<-");
+				btnReturn.setOnAction(e-> OpenHaloScene()); // open halo?
+				
+
+				btnCreateTeam.setOnAction(e->{
+					if(haloSNDTourney.GetTeamsJoined() < haloSNDTourney.GetBrackSize())
+						OpenCreateTeamTournament1();			
+					else {		
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Error");
+						alert.setHeaderText("Cannot create team");
+						alert.setContentText("Bracket size has been reached");
+						alert.showAndWait();
+						return;
+					}			
+			});
+				
+				Label lblTitle = new Label(haloSNDTourney.GetTournamentName() + "(" + haloSNDTourney.GetGame().GetPlatform().GetPlatformName() + ")");
+				lblTitle.setFont(new Font(24));
+				Label lblLocation = new Label(haloSNDTourney.GetLocation() + " " + haloSNDTourney.GetDate());
+				Label lblPrize = new Label("Prize");
+				Label lblBracketSize = new Label("Bracket Size");
+				Label lblTeamsJoined = new Label("Teams Joined");
+				
+				Label lblPrizeAmt = new Label("$" + haloSNDTourney.GetPrize());
+				Label lblBracketAmt = new Label(String.valueOf(haloSNDTourney.GetBrackSize()));
+				Label lblTeamsJoinedVal = new Label(String.valueOf(haloSNDTourney.GetTeamsJoined()));
+				
+				AnchorPane.setTopAnchor(btnReturn, 14.0);
+				AnchorPane.setLeftAnchor(btnReturn, 14.0);
+				
+				AnchorPane.setTopAnchor(lblTitle, 42.0);
+				AnchorPane.setLeftAnchor(lblTitle, 137.0);
+				
+				AnchorPane.setTopAnchor(lblLocation, 79.0);
+				AnchorPane.setLeftAnchor(lblLocation, 210.0);
+				
+				AnchorPane.setTopAnchor(lblPrize, 149.0);
+				AnchorPane.setLeftAnchor(lblPrize, 137.0);
+				
+				AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+				AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
+				
+				AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+				AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
+				
+				AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+				AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
+				
+				AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
+				AnchorPane.setLeftAnchor(lblBracketAmt, 342.0);
+				
+				AnchorPane.setTopAnchor(lblTeamsJoinedVal, 223.0);
+				AnchorPane.setLeftAnchor(lblTeamsJoinedVal, 342.0);
+
+				AnchorPane.setTopAnchor(btnJoinTeam, 267.0);
+				AnchorPane.setLeftAnchor(btnJoinTeam, 120.0);
+				
+				AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
+				AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
+				
+				AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+				AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+				
+				ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+				
+				halotourney = new Scene(ap, 600,400);
+		
+		
+		
+		
+	}
+	
 	/**
 	 * Creates scene to join Call Of Duty tournament
 	 */
@@ -888,8 +990,10 @@ public class TopGamerGUI extends Application
 		codSNDTourney.LoadTournamentData(3);
 		
 		btnJoinTeam.setOnAction(e->OpenJoinTeam());
-		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams());
-		JFXButton btnReturn = new JFXButton("/<-");
+
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codSNDTourney));
+		JFXButton btnReturn = new JFXButton("<-");
+
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 
@@ -1209,16 +1313,15 @@ public class TopGamerGUI extends Application
 	}
 
 
-	public void CreateViewRegisteredTeams(){ 	//tom
+	public void CreateViewRegisteredTeams(Tournament t){ 	//tom
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
 		
-		Tournament codSNDTourney = new Tournament();
-		codSNDTourney.LoadTournamentData(3);
+	
 		
 		ArrayList<Team> registered= new ArrayList<Team>();
-		registered =  codSNDTourney.ViewRegisterdTeams(codSNDTourney.GetID());
+		registered =  codSNDTourney.ViewRegisterdTeams(t.GetID());
 		
 		ListView<Team> teamlist= new ListView <Team>();	
 		teamlist.setLayoutX(40.0);
@@ -1227,8 +1330,8 @@ public class TopGamerGUI extends Application
 		ObservableList<Team> teamitems = FXCollections.observableArrayList();
 		teamlist.setItems(teamitems);
 		
-		for(Team t : registered) {
-			teamitems.add(t);
+		for(Team team : registered) {
+			teamitems.add(team);
 		}
 		
 		
@@ -1247,9 +1350,9 @@ public class TopGamerGUI extends Application
 		viewRTeam= new Scene(aPane);
 	}
 
-	public void OpenViewRegisteredTeams()	//tom
+	public void OpenViewRegisteredTeams(Tournament t)	//tom
 	{
-		CreateViewRegisteredTeams();
+		CreateViewRegisteredTeams(t);
 		window.setScene(viewRTeam);
 	}
 
