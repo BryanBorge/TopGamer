@@ -746,11 +746,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblDesc, 50.0);
 		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 228.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 200.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 264.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 230.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
 		
 	
 		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
@@ -800,11 +800,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblDesc, 85.0);
 		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 228.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 200.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 264.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 240.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
 		
 	
 		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
@@ -856,11 +856,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblDesc, 45.0);
 		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 228.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 230.0);
+		AnchorPane.setTopAnchor(btnTournament1, 200.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
-		AnchorPane.setTopAnchor(btnTournament2, 264.0);
-		AnchorPane.setLeftAnchor(btnTournament2, 230.0);
+		AnchorPane.setTopAnchor(btnTournament2, 240.0);
+		AnchorPane.setLeftAnchor(btnTournament2, 62.0);
 		
 		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnTournament2,btnReturn);
 	
