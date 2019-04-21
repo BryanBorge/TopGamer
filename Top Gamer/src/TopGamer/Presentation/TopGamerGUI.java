@@ -868,7 +868,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
-			if(currentUser.GetPlatform().GetPlatformName() != codTournament.GetGame().GetPlatform().GetPlatformName()) {
+			if(!currentUser.GetPlatform().GetPlatformName().equals(haloTournament.GetGame().GetPlatform().GetPlatformName())) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Error");
 				alert.setHeaderText("Incompatiable Systems");
@@ -876,6 +876,8 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
+			else
+				OpenJoinTeamHalo();
 			});
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloTournament));
 		JFXButton btnReturn = new JFXButton("<-");
@@ -891,7 +893,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
-			if(currentUser.GetPlatform().GetPlatformName() != haloTournament.GetGame().GetPlatform().GetPlatformName()) {
+			if(!currentUser.GetPlatform().GetPlatformName().equals(haloTournament.GetGame().GetPlatform().GetPlatformName())) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Error");
 				alert.setHeaderText("Incompatiable Systems");
@@ -909,6 +911,8 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}			
+			
+			OpenCreateTeamTournamentHalo();
 	});
 		
 		Label lblTitle = new Label(haloTournament.GetTournamentName() + "(" + haloTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -985,6 +989,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
+			OpenJoinTeamFortnite();
 			});
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(fortniteTournament));
 		JFXButton btnReturn = new JFXButton("/<-");
@@ -1107,7 +1112,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
-			if(currentUser.GetPlatform().GetPlatformName() != codTournament.GetGame().GetPlatform().GetPlatformName()) {
+			if(!currentUser.GetPlatform().GetPlatformName().equals(codTournament.GetGame().GetPlatform().GetPlatformName())) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Error");
 				alert.setHeaderText("Incompatiable Systems");
@@ -1137,7 +1142,7 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
-			if(currentUser.GetPlatform().GetPlatformName() != codTournament.GetGame().GetPlatform().GetPlatformName()) {
+			if(!currentUser.GetPlatform().GetPlatformName().equals(codTournament.GetGame().GetPlatform().GetPlatformName())) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Error");
 				alert.setHeaderText("Incompatiable Systems");
@@ -1271,7 +1276,7 @@ public class TopGamerGUI extends Application
 		
 		//load all users not currently on a team
 		ArrayList<String> users = new ArrayList<String>();
-		users = codTournament.LoadAllAvailavleUsernames();
+		users = codTournament.LoadAllAvailavleUsernames(currentUser.GetUsername());
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1285,7 +1290,7 @@ public class TopGamerGUI extends Application
 		CreateTeamTournamentCOD();
 		window.setScene(createTeam);
 	}
-	public void CreatTeamTournamentFornite() {// tom
+	public void CreateTeamTournamentFornite() {// tom
 
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
@@ -1322,12 +1327,11 @@ public class TopGamerGUI extends Application
 		btnCreateTeam.setLayoutY(279.0);
 		btnCreateTeam.prefWidth(135.0);
 		
-		
-		//if user is not logged in/not registered they cannot create a team
+	
 		btnCreateTeam.setOnAction(e->{
 			SQLConnection sqlConnection = new SQLConnection();
 			sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-			sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
+			sqlConnection.AddTeamToTournament(txtTeamName.getText(), fortniteTournament.GetID()); 
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Team Created");
 			alert.setHeaderText("Team created");
@@ -1340,14 +1344,14 @@ public class TopGamerGUI extends Application
 			OpenFortniteTourney();	
 		});
 		
-		JFXButton btnReturn = new JFXButton("<");
+		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e->OpenFortniteTourney());
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
 		//load all users not currently on a team
 		ArrayList<String> users = new ArrayList<String>();
-		users = fortniteTournament.LoadAllAvailavleUsernames();
+		users = fortniteTournament.LoadAllAvailavleUsernames(currentUser.GetUsername());
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1358,13 +1362,10 @@ public class TopGamerGUI extends Application
 		
 	}
 	public void OpenCreateTeamTournamentFortnite() {//tom
-		
-		{
-			window.setScene(createTeam);
-		}
-		
+		CreateTeamTournamentFornite();
+		window.setScene(createTeam);
 	}
-	public void CreatTeamTournamentHalo() {// tom
+	public void CreateTeamTournamentHalo() {// tom
 
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
@@ -1402,11 +1403,11 @@ public class TopGamerGUI extends Application
 		btnCreateTeam.prefWidth(135.0);
 		
 		
-		//if user is not logged in/not registered they cannot create a team
+		
 		btnCreateTeam.setOnAction(e->{
 			SQLConnection sqlConnection = new SQLConnection();
 			sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-			sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
+			sqlConnection.AddTeamToTournament(txtTeamName.getText(), haloTournament.GetID());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Team Created");
 			alert.setHeaderText("Team created");
@@ -1426,7 +1427,7 @@ public class TopGamerGUI extends Application
 		
 		//load all users not currently on a team
 		ArrayList<String> users = new ArrayList<String>();
-		users = haloTournament.LoadAllAvailavleUsernames();
+		users = haloTournament.LoadAllAvailavleUsernames(currentUser.GetUsername());
 		TextFields.bindAutoCompletion(txtMember1, users);
 		TextFields.bindAutoCompletion(txtMember2, users);
 		TextFields.bindAutoCompletion(txtMember3, users);
@@ -1438,6 +1439,7 @@ public class TopGamerGUI extends Application
 	}
 	public void OpenCreateTeamTournamentHalo()//tom
 	{
+		CreateTeamTournamentHalo();
 		window.setScene(createTeam);
 	}
 
@@ -1597,15 +1599,12 @@ public class TopGamerGUI extends Application
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
 		
-	
-		
-		ArrayList<Team> registered= new ArrayList<Team>();
-		registered =  codTournament.ViewRegisterdTeams(t.GetID());
+		ArrayList<Team> registered = new ArrayList<Team>();
+		registered =  t.ViewRegisterdTeams(t.GetID());
 		
 		ListView<Team> teamlist= new ListView <Team>();	
 		teamlist.setLayoutX(40.0);
 		teamlist.setLayoutY(90.0);
-		
 		ObservableList<Team> teamitems = FXCollections.observableArrayList();
 		teamlist.setItems(teamitems);
 		
@@ -1621,11 +1620,6 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		aPane.getChildren().addAll(btnReturn, teamlist);
-		// need to use viewregisterdteams function from tournamnet, however it request a team id as input so if hardcoded in this 
-		// function it wont work properly, also you cant just leave it in herre for when you call the function it has no paramaters
-		// after you will use the viewregisterdteams function it will read in and return the value , should it be returning to a 
-		// array list paramter? then use a grid pane to display?
-		
 		viewRTeam= new Scene(aPane);
 	}
 	public void OpenViewRegisteredTeams(Tournament t)	
