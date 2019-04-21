@@ -4,13 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
-
-import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
-import javafx.scene.control.Alert;
 
 import java.sql.*;
 
@@ -37,7 +32,6 @@ public class SQLConnection {
         String password = "Password0505";
         String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;"
             + "hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
-        connection = null;
 		
 		try {
 			// get connection
@@ -56,6 +50,9 @@ public class SQLConnection {
 			
     }
 
+	
+	//all functions below here need to be moved into other classes which means they may need to have some changed made
+	
 	/**
 	 * Adds a user info from registration form to the database
 	 * 
@@ -68,32 +65,34 @@ public class SQLConnection {
 	public void AddUser(String firstName, String lastName, String email, String userName, String password, String platform) throws SQLiteException
 	{
 		//adds user info from the registration form
-		String query = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password,PlatformID) " +
-		              "Values ( \'" + firstName + "\', \'" + lastName + "\', \'" + email + "\', \'" + userName + "\', \'" + password +"\', " + 
-				"(Select PlatformID from tblPlatform where PlatformName = \'" + platform + "\'))"; 
+		String addUserQry = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password,PlatformID) " +
+	              "Values ( ?, ?, ?, ?, ?, " + "(Select PlatformID from tblPlatform where PlatformName = ?))"; 
 		
 		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(query);
+			PreparedStatement preparedStatement = connection.prepareStatement(addUserQry);
+			preparedStatement.setString(1, firstName);
+			preparedStatement.setString(2, lastName);
+			preparedStatement.setString(3, email);
+			preparedStatement.setString(4, userName);
+			preparedStatement.setString(5, password);
+			preparedStatement.setString(6, platform);
+			preparedStatement.executeUpdate();
 			System.out.println("User added successfully");
-			statement.close();
+			preparedStatement.close();
 		}
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 	}
 	
-	
-	
-	
 	/**
-	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
+	 * Loads user names of all players not currently on a team into an array for use with auto completion
 	 * @return
 	 */
 	public ArrayList<String> LoadAllAvailavleUsernames()
 	{
 		//need tournamentID as a parameter?
-		String query = "select UserName from tblUsers where TeamID is NULL ";
+		String query = "select UserName from tblUsers where TeamID is NULL";
 		ArrayList<String> users = new ArrayList<String>();
 	
 		try {
@@ -103,11 +102,11 @@ public class SQLConnection {
 			{
 				users.add(result.getString("UserName"));
 			}
-			return users;
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return users;
 	}
 	
 	public ArrayList<String>LoadAllOpenTeams()
@@ -125,21 +124,23 @@ public class SQLConnection {
 			{
 				openTeams.add(result.getString("TeamName"));
 			}
-			return openTeams;
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return openTeams;
 	}
 	
 	public void JoinTeam(String user, String teamName)
 	{
-		String joinTeamQry = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + teamName + "\') where UserName = \'" + user + "\'";
+		String joinTeamQry = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = ?) where UserName = ?";
 		
 		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(joinTeamQry);
-			statement.close();
+			PreparedStatement prepStatement = connection.prepareStatement(joinTeamQry);
+			prepStatement.setString(1, teamName);
+			prepStatement.setString(2, user);
+			prepStatement.executeQuery();
+			prepStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

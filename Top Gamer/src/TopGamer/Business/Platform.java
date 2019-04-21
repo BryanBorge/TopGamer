@@ -1,9 +1,16 @@
 package TopGamer.Business;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
+import java.util.logging.Logger;
+
+import javax.sql.ConnectionPoolDataSource;
+import javax.sql.PooledConnection;
 
 public class Platform 
 {
@@ -55,25 +62,49 @@ public class Platform
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
-		Statement statement = null;
 		ResultSet result;
+		String platformQry = "Select p.PlatformID,PlatformName from tblPlatform p JOIN tblGames g on p.PlatformID = g.PlatformID where g.GameID = ?";
 		
-		String q = "Select p.PlatformID,PlatformName from tblPlatform p JOIN tblGames g on p.PlatformID = g.PlatformID where g.GameID = " + gameID;
-		String dbPlatformName = null;
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(q);
+			PreparedStatement preparedStatement = connection.prepareStatement(platformQry);
+			preparedStatement.setInt(1, gameID);
+			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
 				this.m_platformID = result.getInt("PlatformID");
 				this.m_platformName = result.getString("PlatformName");
 			}
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+}
+	
+	public void Load(int platformID)
+	{
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		ResultSet result;
+		String platformQry = "Select PlatformID,PlatformName from tblPlatform where PlatformID = ?";
+		
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(platformQry);
+			preparedStatement.setInt(1, platformID);
+			result = preparedStatement.executeQuery();
+			while(result.next())
+			{
+				this.m_platformID = result.getInt("PlatformID");
+				this.m_platformName = result.getString("PlatformName");
+			}
+			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		
 	}
+	
+	
 	
 	
 }
