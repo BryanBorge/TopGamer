@@ -7,7 +7,9 @@
 
 package TopGamer.Business;
 
+import java.awt.dnd.DnDConstants;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +20,7 @@ public class User
 	private String m_lastName;
 	private String m_email;
 	private String m_username;
+	private Platform m_platform;
 	
 	/**
 	 * User constructor
@@ -30,6 +33,7 @@ public class User
 		m_lastName = "N/A";
 		m_email = "N/A";
 		m_username = "N/A";
+		m_platform = new Platform();
 	}
 	
 	public User(String username) {
@@ -118,6 +122,22 @@ public class User
 	}
 	
 	/**
+	 * SetGamePlatform
+	 * Sets platform member variable
+	 * @param platform - Platform of the game
+	 */
+	public void SetPlatform(String platform)
+	{
+		m_platform.SetPlatformName(platform);
+	}
+
+	public Platform GetPlatform()
+	{
+		return m_platform;
+	}
+	
+		
+	/**
 	 * Returns true and loads user data if login exists and false otherwise
 	 * @param userName From registration form
 	 * @param password From registration form
@@ -130,21 +150,19 @@ public class User
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		Boolean validLogin = false;
-		String query = "select * from tblUsers where UserName= \'" + userName + "\' and Password= \'" + password + "\'  ";
+		String query = "select UserName, Password from tblUsers where UserName= ? and Password= ?";
 		
-		Statement statement = null;
 		ResultSet result;
 		
-		String dbUserName = null,dbPassword= null,dbFirstName = null, dbLastName = null,dbEmail = null;
+		String dbUserName = null,dbPassword= null;
 		
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(query);
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, userName);
+			preparedStatement.setString(2, password);
+			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
-				dbFirstName = result.getString("FirstName");
-				dbLastName = result.getString("LastName");
-				dbEmail = result.getString("Email");
 				dbUserName = result.getString("UserName");
 				dbPassword = result.getString("Password");
 			}
@@ -152,16 +170,15 @@ public class User
 			{
 				//if successful, load all data to user
 				System.out.println("User login successful");
-				this.SetFirstName(dbFirstName);
-				this.SetLastName(dbLastName);
-				this.SetEmail(dbEmail);
 				this.SetUsername(dbUserName);
+				this.LoadUserData(dbUserName);
 				validLogin = true;
 			}
 			if(!userName.equals(dbUserName) || !password.equals(dbPassword))
 			{
 				validLogin = false;
 			}
+			preparedStatement.close();
 			return validLogin;
 			
 		} catch (SQLException e1) {
@@ -175,22 +192,25 @@ public class User
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String userQry = "select UserName, FirstName, LastName, Email from tblUsers where UserName = \'" + userName + "\'";
+		String userQry = "select FirstName, LastName, Email, PlatformID from tblUsers where UserName = ?";
 	
 		Connection connection = dbConnection.connect();
-		Statement statement = null;
 		ResultSet result;
+		int dbPlatformID = -1;
 		
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(userQry);
+			PreparedStatement prepStatement = connection.prepareStatement(userQry);
+			prepStatement.setString(1, userName);
+			result = prepStatement.executeQuery();
 			while(result.next())
 			{
 				this.SetFirstName(result.getString("FirstName"));
 				this.SetLastName(result.getString("LastName"));
-				this.SetUsername(result.getString("UserName"));
 				this.SetEmail(result.getString("Email"));
+				dbPlatformID = result.getInt("PlatformID");
 			}
+			this.m_platform.Load(dbPlatformID);
+			prepStatement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

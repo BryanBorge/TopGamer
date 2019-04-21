@@ -7,19 +7,11 @@
 
 package TopGamer.Business;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
-import java.sql.Connection;
-
-
 
 public class Tournament 
 {
@@ -199,18 +191,19 @@ public class Tournament
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = " + id + "), 110) as Date, Location from tblTournaments where TournamentID = " + id;
-		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = " + id;
+		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = ?), 110) as Date, Location from tblTournaments where TournamentID = ?";
+		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = ?";
 		
-		Connection connection = dbConnection.connect();
-		Statement statement = null;
+		Connection connection = dbConnection.connect();		
 		ResultSet result;
 
 		int dbGameID = 0;
 		
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(tournamentQry);
+			PreparedStatement prepStatement = connection.prepareStatement(tournamentQry);
+			prepStatement.setInt(1, id);
+			prepStatement.setInt(2, id);
+			result = prepStatement.executeQuery();
 			while(result.next())
 			{
 				this.SetID(result.getInt("TournamentID"));
@@ -221,6 +214,7 @@ public class Tournament
 				this.SetLocation(result.getString("Location"));
 				this.SetDate(result.getString("Date"));
 			}
+			prepStatement.close();
 			this.m_game.LoadGameData(dbGameID);
 			
 		} catch (SQLException e) {
@@ -228,12 +222,14 @@ public class Tournament
 		}
 		
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(countQry);
+			PreparedStatement preparedStatement= connection.prepareStatement(countQry);
+			preparedStatement.setInt(1, id);
+			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
 				this.SetTeamsJoined(result.getInt("num"));
 			}
+			preparedStatement.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -249,21 +245,22 @@ public class Tournament
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		
-		String query = "select UserName from tblUsers where TeamID is NULL and PlatformID = " + m_game.GetPlatform().GetID();
+		String query = "select UserName from tblUsers where TeamID is NULL and PlatformID = ?";
 		ArrayList<String> users = new ArrayList<String>();
 	
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(query);
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, this.GetGame().GetPlatform().GetID());
+			ResultSet result = preparedStatement.executeQuery();
 			while(result.next())
 			{
 				users.add(result.getString("UserName"));
 			}
-			return users;
+			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return users;
+	return users;
 	}
 	
 	/**
@@ -274,41 +271,33 @@ public class Tournament
 	 public ArrayList<Team> ViewRegisterdTeams(int tournamentID) {
 		 
 		 SQLConnection dbConnection = new SQLConnection();
-		 String teamNameQry = "select DISTINCT TeamName from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID;
-		 String registeredteamsQry= "select  UserName  from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = " + tournamentID  ;
-		 Connection connection =dbConnection.connect();
-		 Statement statment =null;
+		 String teamNameQry = "select DISTINCT TeamName from tblTeams team  JOIN tblTournaments t ON team.TournamentID = t.TournamentID " + 
+				 			  "JOIN tblUsers u on u.TeamID = team.TeamID where t.TournamentID = ?";
+		 
+		 Connection connection = dbConnection.connect();
 		 ResultSet result;
 		 
 		 ArrayList <Team>  returnTeam = new ArrayList<Team>();
-
-		 //loads team data from the database
-
 		 Team loadTeam;
-		 
-		 String dbTeamName = null;
-		 
+		
 		 try {
-			 statment=connection.createStatement();
-			 result=statment.executeQuery(teamNameQry);
+			 PreparedStatement preparedStatement = connection.prepareStatement(teamNameQry);
+			 preparedStatement.setInt(1, tournamentID);
+			 result=preparedStatement.executeQuery();
 			 while(result.next())
 			 {
 				loadTeam = new Team();
 				loadTeam.SetTeamName(result.getString("TeamName"));
 				loadTeam.LoadTeamData(result.getString("TeamName"));
 				returnTeam.add(loadTeam);
-			 }
-			 return returnTeam;
-			 
-			 
+			 } 
+			 preparedStatement.close();
 		 } catch (SQLException e) {
 				 e.printStackTrace();
 			 }
-		 return returnTeam;
 		 
+		 return returnTeam;
 	 }
-
-
 }
 
  
