@@ -1,48 +1,58 @@
 package TopGamer.Business;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.sun.javafx.scene.layout.region.BorderImageWidthConverter;
+
 
 public class Leaderboard {
-	// asfnskfn
 
-	private ArrayList<Team> m_leaderBoard;
+
+	private ArrayList<Team> m_Teams;
+	private Team loadTeam;
 	
-	private Team m_team;
+	/**
+	 * Leaderboard constructor
+	 */
+	public Leaderboard()
+	{
+		m_Teams = new ArrayList<Team>();
+	}
+	
+	public ArrayList<Team> GetTeams()
+	{
+		return m_Teams;
+	}
+	
 	
 	/**
 	 * Load leader board data
 	 */
-	public void LoadLeaderboardData() 
+	public void LoadLeaderboardData(Tournament t) 
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String lbQry = "SELECT TeamName, Wins, Losses from tblTeams team "
-				+ "JOIN tblTournaments t on team.TournamentID = t.TournamentID where t.GameID = 3";
-		Connection connection = dbConnection.connect();
-		Statement statement = null;
-		ResultSet result;
+				+ "JOIN tblTournaments t on team.TournamentID = t.TournamentID where t.GameID = ?";
 		
-		String dbTeamName = null;
-		int dbWins = 0; 
-		int dbLosses = 0;
+		Connection connection = dbConnection.connect();
+		ResultSet result;
+
 		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(lbQry);
+			PreparedStatement preparedStatement = connection.prepareStatement(lbQry);
+			preparedStatement.setInt(1,t.GetGame().GetID());
+			result = preparedStatement.executeQuery();
 			
 			while(result.next())
 			{
-				dbTeamName = result.getString("TeamName");
-				dbWins = result.getInt("Wins");
-				dbLosses = result.getInt("Losses");
-			}// ends while result.next() loop
-			
-			m_team.SetTeamName(dbTeamName);
-			m_team.SetWins(dbWins);
-			m_team.SetLosses(dbLosses);
+				loadTeam = new Team(result.getString("TeamName"),result.getInt("Wins"), result.getInt("Losses"));
+				m_Teams.add(loadTeam);
+			}
+		
 		}
 		catch(SQLException e){
 			e.printStackTrace();

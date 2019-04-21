@@ -10,6 +10,7 @@ public class Game
 {
 	private String m_gameName;
 	private Platform m_platform;
+	private int m_gameID;
 	
 	/**
 	 * Game default constructor 
@@ -20,6 +21,7 @@ public class Game
 	{
 		m_gameName = "N/A";
 		m_platform = new Platform();
+		m_gameID = -1;
 	}
 	
 	/**
@@ -53,6 +55,16 @@ public class Game
 		return m_gameName;
 	}
 	
+	public void SetID(int i)
+	{
+		m_gameID = i;
+	}
+	
+	public int GetID() {
+		return m_gameID;
+	}
+	
+	
 	/**
 	 * SetGamePlatform
 	 * Sets platform member variable
@@ -82,6 +94,7 @@ public class Game
 			while(result.next())
 			{
 				m_gameName = result.getString("GameName");
+				m_gameID = result.getInt("GameID");
 				m_platform.LoadPlatformData(result.getInt("GameID"));
 			}	
 			preparedStatement.close();
