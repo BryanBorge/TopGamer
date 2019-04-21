@@ -240,17 +240,27 @@ public class Tournament
 	 * Loads usernames of all players not currently on a team into an array for use with autocompletion
 	 * @return
 	 */
-	public ArrayList<String> LoadAllAvailavleUsernames()
+	public ArrayList<String> LoadAllAvailavleUsernames(String currUser)
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
-		
-		String query = "select UserName from tblUsers where TeamID is NULL and PlatformID = ?";
+		PreparedStatement preparedStatement = null;
+		String query = "select UserName from tblUsers where TeamID is NULL and PlatformID = ? and UserName <> ?";
 		ArrayList<String> users = new ArrayList<String>();
 	
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, this.GetGame().GetPlatform().GetID());
+			if(this.GetGame().GetPlatform().GetID() == 5)
+			{
+				String qry = "select UserName from tblUsers where UserName <> ?";
+				preparedStatement = connection.prepareStatement(qry);
+				preparedStatement.setString(1, currUser);
+			}
+			else {
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, this.GetGame().GetPlatform().GetID());
+				preparedStatement.setString(2, currUser);
+			}
+			
 			ResultSet result = preparedStatement.executeQuery();
 			while(result.next())
 			{

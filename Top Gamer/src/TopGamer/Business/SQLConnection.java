@@ -16,7 +16,7 @@ public class SQLConnection {
     
   
     public SQLConnection() {
-    	connect();
+    //	connect();
 	}
     
     
@@ -83,30 +83,6 @@ public class SQLConnection {
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Loads user names of all players not currently on a team into an array for use with auto completion
-	 * @return
-	 */
-	public ArrayList<String> LoadAllAvailavleUsernames()
-	{
-		//need tournamentID as a parameter?
-		String query = "select UserName from tblUsers where TeamID is NULL";
-		ArrayList<String> users = new ArrayList<String>();
-	
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(query);
-			while(result.next())
-			{
-				users.add(result.getString("UserName"));
-			}
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return users;
 	}
 	
 	public ArrayList<String>LoadAllOpenTeams()
