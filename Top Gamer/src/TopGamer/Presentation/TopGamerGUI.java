@@ -821,9 +821,9 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenFortniteScene()
 	{
+		CreateFortniteScene();
 		window.setScene(fortniteScene);
 	}
-	
 	
 	/**
 	 * Create/Add controls to the codScene
@@ -912,6 +912,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenCodScene()
 	{
+		CreateCODScene();
 		window.setScene(codScene);
 	}
 	
@@ -1006,6 +1007,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void OpenHaloScene()
 	{
+		CreateHaloScene();
 		window.setScene(haloScene);
 	}
 
@@ -1420,9 +1422,8 @@ public class TopGamerGUI extends Application
 		
 		//if user is not logged in/not registered they cannot create a team
 		btnCreateTeam.setOnAction(e->{
-			SQLConnection sqlConnection = new SQLConnection();
-			sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-			sqlConnection.AddTeamToTournament(txtTeamName.getText(), 3);
+			codTournament.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+			codTournament.AddTeamToTournament(txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Team Created");
 			alert.setHeaderText("Team created");
@@ -1495,9 +1496,8 @@ public class TopGamerGUI extends Application
 		
 	
 		btnCreateTeam.setOnAction(e->{
-			SQLConnection sqlConnection = new SQLConnection();
-			sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-			sqlConnection.AddTeamToTournament(txtTeamName.getText(), fortniteTournament.GetID()); 
+			fortniteTournament.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+			fortniteTournament.AddTeamToTournament(txtTeamName.getText()); 
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Team Created");
 			alert.setHeaderText("Team created");
@@ -1571,9 +1571,8 @@ public class TopGamerGUI extends Application
 		
 		
 		btnCreateTeam.setOnAction(e->{
-			SQLConnection sqlConnection = new SQLConnection();
-			sqlConnection.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
-			sqlConnection.AddTeamToTournament(txtTeamName.getText(), haloTournament.GetID());
+			haloTournament.CreateTeam(txtTeamName.getText(), currentUser.GetUsername(),txtMember1.getText(), txtMember2.getText(), txtMember3.getText());
+			haloTournament.AddTeamToTournament(txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Team Created");
 			alert.setHeaderText("Team created");
@@ -1615,8 +1614,6 @@ public class TopGamerGUI extends Application
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
-	
-		SQLConnection se = new SQLConnection();
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
@@ -1629,7 +1626,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			codTournament.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");
@@ -1646,8 +1643,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		ArrayList<String> openTeams = new ArrayList<String>();
-		SQLConnection sqlConnection = new SQLConnection();
-		openTeams = sqlConnection.LoadAllOpenTeams();
+		openTeams = codTournament.LoadAllOpenTeams();
 		TextFields.bindAutoCompletion(txtTeamName, openTeams);
 		
 		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
@@ -1664,10 +1660,7 @@ public class TopGamerGUI extends Application
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
 		aPane.setPrefWidth(600);
-		
-	
-		SQLConnection se = new SQLConnection();
-		
+			
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
 		txtTeamName.setPromptText("Team Name");
@@ -1679,7 +1672,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			fortniteTournament.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");
@@ -1696,8 +1689,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		ArrayList<String> openTeams = new ArrayList<String>();
-		SQLConnection sqlConnection = new SQLConnection();
-		openTeams = sqlConnection.LoadAllOpenTeams();
+		openTeams = fortniteTournament.LoadAllOpenTeams();
 		TextFields.bindAutoCompletion(txtTeamName, openTeams);
 		
 		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);
@@ -1713,9 +1705,7 @@ public class TopGamerGUI extends Application
 	{
 		AnchorPane	aPane = new AnchorPane();
 		aPane.setPrefHeight(400);
-		aPane.setPrefWidth(600);
-		
-		SQLConnection se = new SQLConnection();
+		aPane.setPrefWidth(600);		
 		
 		JFXTextField txtTeamName = new JFXTextField();
 		txtTeamName.setLabelFloat(true);
@@ -1728,7 +1718,7 @@ public class TopGamerGUI extends Application
 		btnJoinTeam.setLayoutY(279.0);
 		btnJoinTeam.prefWidth(135.0);
 		btnJoinTeam.setOnAction(e->{
-			se.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
+			haloTournament.JoinTeam(currentUser.GetUsername(),txtTeamName.getText());
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Teamed Joined");
 			alert.setHeaderText("Team Joined");
@@ -1745,8 +1735,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutY(14.0);
 		
 		ArrayList<String> openTeams = new ArrayList<String>();
-		SQLConnection sqlConnection = new SQLConnection();
-		openTeams = sqlConnection.LoadAllOpenTeams();
+		openTeams = haloTournament.LoadAllOpenTeams();
 		TextFields.bindAutoCompletion(txtTeamName, openTeams);
 		
 		aPane.getChildren().addAll(txtTeamName,btnJoinTeam,btnReturn);

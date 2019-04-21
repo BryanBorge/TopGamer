@@ -14,10 +14,9 @@ public class SQLConnection {
 
     private Connection connection;
     
-  
-    public SQLConnection() {
-    	connect();
-	}
+    //Removed constructor - it called connect() every time an instance was created slowing down the program so i got rid of it
+    // and moved all fucntions to other classes that call connect(). Speed was increased slightly
+    
     
     
     /**
@@ -50,11 +49,9 @@ public class SQLConnection {
 			
     }
 
-	
-	//all functions below here need to be moved into other classes which means they may need to have some changed made
-	
+	//AddUser is staying in this class because im not sure where to put it that would make sense	
 	/**
-	 * Adds a user info from registration form to the database
+	 * Adds all user info from registration form to the database
 	 * 
 	 * @param firstName First Name
 	 * @param lastName Last Name
@@ -67,7 +64,7 @@ public class SQLConnection {
 		//adds user info from the registration form
 		String addUserQry = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password,PlatformID) " +
 	              "Values ( ?, ?, ?, ?, ?, " + "(Select PlatformID from tblPlatform where PlatformName = ?))"; 
-		
+		Connection connection = connect();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(addUserQry);
 			preparedStatement.setString(1, firstName);
@@ -85,77 +82,9 @@ public class SQLConnection {
 		}
 	}
 	
-	public ArrayList<String>LoadAllOpenTeams()
-	{
-		//need TournamentID has a parameter? 
-		String query = "select TeamName, count(t.TeamID) as num from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID group by TeamName HAVING count(t.TeamID) < 4";
-		ArrayList<String> openTeams = new ArrayList<String>();
-		Statement statement = null;
-		ResultSet result;
 	
-		try {
-			statement = connection.createStatement();
-			result = statement.executeQuery(query);
-			while(result.next())
-			{
-				openTeams.add(result.getString("TeamName"));
-			}
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return openTeams;
-	}
 	
-	public void JoinTeam(String user, String teamName)
-	{
-		String joinTeamQry = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = ?) where UserName = ?";
-		
-		try {
-			PreparedStatement prepStatement = connection.prepareStatement(joinTeamQry);
-			prepStatement.setString(1, teamName);
-			prepStatement.setString(2, user);
-			prepStatement.executeQuery();
-			prepStatement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	
-	}
-	
-	public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
-	{
-		String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\'" + TeamName + "\')";
-		String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user1 + "\'";
-		String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user2 + "\'";
-		String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user3 + "\'";
-		String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user4 + "\'";
-		
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(createTeamQuery);
-			statement.executeUpdate(addUser1);
-			statement.executeUpdate(addUser2);
-			statement.executeUpdate(addUser3);
-			statement.executeUpdate(addUser4);
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void AddTeamToTournament(String teamName, int tournamentID)
-	{
-		String addTeamQuery = "Update tblTeams set TournamentID = " + tournamentID + " where TeamName = \'" + teamName + "\'";
-		
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(addTeamQuery);
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 
 	

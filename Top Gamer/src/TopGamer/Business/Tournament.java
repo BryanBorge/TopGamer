@@ -273,6 +273,24 @@ public class Tournament
 	return users;
 	}
 	
+	public void AddTeamToTournament(String teamName)
+	{
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		String addTeamQuery = "Update tblTeams set TournamentID = ? where TeamName = ?";
+		
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(addTeamQuery);
+			preparedStatement.setInt(1, this.GetID());
+			preparedStatement.setString(2, teamName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * Returns the registered teams for a tournament 
 	 * @param tournament id
@@ -308,6 +326,76 @@ public class Tournament
 		 
 		 return returnTeam;
 	 }
+	 
+	 public void CreateTeam(String TeamName, String user1, String user2, String user3, String user4)
+		{
+		 	SQLConnection sqlConnection = new SQLConnection();
+			Connection connection = sqlConnection.connect();
+			String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\'" + TeamName + "\')";
+			String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user1 + "\'";
+			String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user2 + "\'";
+			String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user3 + "\'";
+			String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user4 + "\'";
+			
+			try {
+				Statement statement = connection.createStatement();
+				statement.executeUpdate(createTeamQuery);
+				statement.executeUpdate(addUser1);
+				statement.executeUpdate(addUser2);
+				statement.executeUpdate(addUser3);
+				statement.executeUpdate(addUser4);
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	 
+	 
+	 public void JoinTeam(String user, String teamName)
+		{
+		 	SQLConnection sqlConnection = new SQLConnection();
+			String joinTeamQry = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = ?) where UserName = ?";
+			Connection connection = sqlConnection.connect();
+			try {
+				PreparedStatement prepStatement = connection.prepareStatement(joinTeamQry);
+				prepStatement.setString(1, teamName);
+				prepStatement.setString(2, user);
+				prepStatement.executeQuery();
+				prepStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+		}
+	 
+	 
+	 
+	 public ArrayList<String>LoadAllOpenTeams()
+		{
+		 	SQLConnection sqlConnection = new SQLConnection();
+		 	Connection connection = sqlConnection.connect();
+		 	
+			String query = "select TeamName, count(t.TeamID) as num from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TournamentID = ? group by TeamName HAVING count(t.TeamID) < 4";
+			ArrayList<String> openTeams = new ArrayList<String>();
+	
+			ResultSet result;
+		
+			try {
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, this.GetID());
+				result = preparedStatement.executeQuery();
+				while(result.next())
+				{
+					openTeams.add(result.getString("TeamName"));
+				}
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return openTeams;
+		}
+	 
+	 
 }
 
  
