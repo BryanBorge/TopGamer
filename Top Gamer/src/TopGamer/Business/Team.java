@@ -41,6 +41,13 @@ public class Team {
 		m_teamMembers.add(user);
 	}
 	
+	public Team(String name, int w, int l)
+	{
+		m_teamName = name;
+		m_wins = w;
+		m_losses = l;
+	}
+	
 	
 	/**
 	 * sets TeamName member variable
@@ -160,6 +167,18 @@ public class Team {
 		}
 		
 	}
+	
+	public String WinsToString()
+	{
+		return String.valueOf(m_wins);
+	}
+	
+	public String LossesToString()
+	{
+		return String.valueOf(m_losses);
+	}
+	
+	
 	
 	@Override
 	public String toString()
