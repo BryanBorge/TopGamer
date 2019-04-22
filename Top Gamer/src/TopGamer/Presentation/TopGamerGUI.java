@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import java.awt.Event;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.xml.transform.Templates;
 
@@ -47,7 +48,7 @@ public class TopGamerGUI extends Application
 	boolean loggedIn = false;
 	
 	Stage window,gameStage;
-	Scene loginScene, registerScene, mainDashboardScene;
+	Scene loginScene, registerScene, mainDashboardScene, profileScene;
 	Scene fortniteScene, codScene, haloScene;
 
 	Scene codTourneyScene, fortniteTourneyScene, haloTourneyScene;
@@ -602,7 +603,67 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e ->{ 		
 			OpenLoginScene();
 		});
-	
+		
+		//EDIT PROFILE BUTTON ACTION 
+		//a completely new scene might look better, pretty restricted with the dialog box.
+		btnEditProfile.setOnAction(e -> {  
+			//All the text for the Edit profile details/title
+			String editProfTitle = "Welcome to your profile";
+			String editProfContent =
+					"Name: " + currentUser.GetFirstName() + " " + currentUser.GetLastName()
+					+ "\n --------------------------------"
+					+ "\n"
+					+ "Username: " + currentUser.GetUsername()
+					+ "\n --------------------------------"
+					+ "\n"
+					+ "Email Address: " + currentUser.GetEmail() ;
+			JFXDialogLayout dialogContent = new JFXDialogLayout();
+			dialogContent.setHeading(new Text(editProfTitle));
+			dialogContent.setBody(new Text(editProfContent));
+			JFXDialog dialog = new JFXDialog();
+			
+			//Change first name BUTTON
+			JFXButton btnChangeFirstName = new JFXButton("Change First Name");
+			btnChangeFirstName.setOnAction(ev->{
+				if(currentUser.GetFirstName() != "N/A") { //If name is not N/A then prompt user to change name
+					TextInputDialog changeNameDialog = new TextInputDialog(currentUser.GetFirstName());
+					changeNameDialog.setTitle("Change Name");
+					changeNameDialog.setHeaderText("Enter your name");
+					changeNameDialog.setContentText("Name");
+					Optional<String> firstNameResult = changeNameDialog.showAndWait();
+					firstNameResult.ifPresent(firstName -> { //firstName = what the user inputed
+						currentUser.SetFirstName(firstName);
+						dialog.close(); //Dialog box closes so it forces user to report it which will update the new info added
+					});
+				} else {
+					System.out.println("userNA"); //for testing 
+				}
+			});
+			//Change last name BUTTON
+			JFXButton btnChangeLastName = new JFXButton("Change Last Name");
+			btnChangeLastName.setOnAction(ev->{
+				if(currentUser.GetLastName() != "N/A") { //If name is not N/A then prompt user to change name
+					TextInputDialog changeNameDialog = new TextInputDialog(currentUser.GetLastName());
+					changeNameDialog.setTitle("Change Name");
+					changeNameDialog.setHeaderText("Enter your name");
+					changeNameDialog.setContentText("Name");
+					Optional<String> lastNameResult = changeNameDialog.showAndWait();
+					lastNameResult.ifPresent(lastName -> { //if data present then change it
+						currentUser.SetLastName(lastName); //lastName = what the user inputed
+						dialog.close(); //Dialog box closes so it forces user to report it which will update the new info added
+					});
+				} else {
+					System.out.println("userNA"); //for testing
+				}
+			});
+			dialog.setContent(dialogContent);
+			dialog.getChildren().addAll(btnChangeFirstName,btnChangeLastName);
+			dialog.setDialogContainer(mainDashStack);
+			dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+			dialogContent.setActions(btnChangeFirstName,btnChangeLastName);
+			dialog.show();
+		});
+		
 		btnLogOut.setOnAction(e -> {
 	
 			String logOutTitle = "Logging out...";
