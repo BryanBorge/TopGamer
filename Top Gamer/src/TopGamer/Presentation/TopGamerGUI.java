@@ -607,7 +607,7 @@ public class TopGamerGUI extends Application
 		//EDIT PROFILE BUTTON ACTION 
 		//a completely new scene might look better, pretty restricted with the dialog box
 		btnEditProfile.setOnAction(e -> {  
-			//All the text for the Edit profile details/title
+			//All the text for the Edit profile details/title.
 			String editProfTitle = "Welcome to your profile";
 			String editProfContent =
 					"Name: " + currentUser.GetFirstName() + " " + currentUser.GetLastName()
