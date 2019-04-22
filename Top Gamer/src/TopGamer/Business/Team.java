@@ -93,12 +93,13 @@ public class Team {
 	 */
 	public User GetSpecificTeamMember(User teamMember)
 	{
+		User returnUser = new User();
 		for(User u : m_teamMembers)
 		{
 			if(u.GetUsername().equals(teamMember.GetUsername()))
-				return u;
+				returnUser = u;
 		}
-		return null;
+		return returnUser;
 	}
 	
 	/**
@@ -144,7 +145,6 @@ public class Team {
 
 	public void LoadTeamData(String teamName)
 	{
-
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String teamQry = "select UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamName = \'" + teamName + "\'";
@@ -177,8 +177,6 @@ public class Team {
 	{
 		return String.valueOf(m_losses);
 	}
-	
-	
 	
 	@Override
 	public String toString()

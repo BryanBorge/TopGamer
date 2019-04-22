@@ -1017,6 +1017,7 @@ public class TopGamerGUI extends Application
 	window.setScene(haloTourneyScene);
 }
 	public void CreateHaloTourneyScene(){// tom
+		
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
@@ -1024,8 +1025,6 @@ public class TopGamerGUI extends Application
 
 		Leaderboard leaderboard = new Leaderboard();
 		leaderboard.LoadLeaderboardData(haloTournament);
-		
-		
 		
 		btnJoinTeam.setOnAction(e->{
 			if(!loggedIn) {
@@ -1044,8 +1043,14 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
-			else
-				OpenJoinTeamHalo();
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			OpenJoinTeamHalo();
 			});
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloTournament));
 		JFXButton btnReturn = new JFXButton("<-");
@@ -1075,6 +1080,13 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			if(haloTournament.GetTeamsJoined() < haloTournament.GetBrackSize())
 				OpenCreateTeamTournamentHalo();	
 			else {		
@@ -1086,7 +1098,6 @@ public class TopGamerGUI extends Application
 				return;
 			}			
 			
-			OpenCreateTeamTournamentHalo();
 	});
 		
 		Label lblTitle = new Label(haloTournament.GetTournamentName() + "(" + haloTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -1160,6 +1171,13 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			OpenJoinTeamFortnite();
 			});
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(fortniteTournament));
@@ -1182,6 +1200,13 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
+			for(Team team : fortniteTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			if(fortniteTournament.GetTeamsJoined() < fortniteTournament.GetBrackSize())
 				OpenCreateTeamTournamentFortnite();		
 			else {		
@@ -1191,7 +1216,8 @@ public class TopGamerGUI extends Application
 				alert.setContentText("Bracket size has been reached");
 				alert.showAndWait();
 				return;
-			}			
+			}	
+			
 	});
 		
 		Label lblTitle = new Label(fortniteTournament.GetTournamentName() + "(" + fortniteTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -1288,6 +1314,14 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			OpenJoinTeamCOD();
 			});
 
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codTournament));
@@ -1327,7 +1361,15 @@ public class TopGamerGUI extends Application
 				alert.setContentText("Bracket size has been reached");
 				alert.showAndWait();
 				return;
-			}			
+			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			
 	});
 		
 		Label lblTitle = new Label(codTournament.GetTournamentName() + "(" + codTournament.GetGame().GetPlatform().GetPlatformName() + ")");
