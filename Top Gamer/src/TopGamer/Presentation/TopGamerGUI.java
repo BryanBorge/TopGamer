@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.PopupWindow.AnchorLocation;
 
 import java.awt.Event;
 import java.sql.SQLException;
@@ -35,6 +36,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import TopGamer.Business.*;
 
@@ -49,6 +51,7 @@ public class TopGamerGUI extends Application
 	Stage window,gameStage;
 	Scene loginScene, registerScene, mainDashboardScene;
 	Scene fortniteScene, codScene, haloScene;
+	Scene fortniteReportScore;
 
 	Scene codTourneyScene, fortniteTourneyScene, haloTourneyScene;
 	
@@ -770,21 +773,18 @@ public class TopGamerGUI extends Application
 		teamNameCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().GetTeamName()));
 				
 		//wins column
-		TableColumn<Team, String> winsCol = new TableColumn<>("Wins");
-		winsCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		winsCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().WinsToString()));
+		TableColumn<Team, String> scoreCol = new TableColumn<>("Score");
+		scoreCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		scoreCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().ScoreToString()));
 				
-		//losses column
-		TableColumn<Team, String> lossesCol = new TableColumn<>("Losses");
-		lossesCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		lossesCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().LossesToString()));
-				
+		
 		//add columns to the list view
-		leaderBoardTable.getColumns().addAll(teamNameCol,winsCol,lossesCol);
+		leaderBoardTable.getColumns().addAll(teamNameCol,scoreCol);
 				
 
 		//load leader board to hold data for that tournament
 		Leaderboard fortniteLeaderboard = new Leaderboard();
+		
 		fortniteLeaderboard.LoadLeaderboardData(fortniteTournament);
 				
 		//add each team to the list view
@@ -1017,6 +1017,7 @@ public class TopGamerGUI extends Application
 	window.setScene(haloTourneyScene);
 }
 	public void CreateHaloTourneyScene(){// tom
+		
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
@@ -1024,8 +1025,6 @@ public class TopGamerGUI extends Application
 
 		Leaderboard leaderboard = new Leaderboard();
 		leaderboard.LoadLeaderboardData(haloTournament);
-		
-		
 		
 		btnJoinTeam.setOnAction(e->{
 			if(!loggedIn) {
@@ -1044,8 +1043,14 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
-			else
-				OpenJoinTeamHalo();
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			OpenJoinTeamHalo();
 			});
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloTournament));
 		JFXButton btnReturn = new JFXButton("<-");
@@ -1075,6 +1080,13 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			if(haloTournament.GetTeamsJoined() < haloTournament.GetBrackSize())
 				OpenCreateTeamTournamentHalo();	
 			else {		
@@ -1086,7 +1098,6 @@ public class TopGamerGUI extends Application
 				return;
 			}			
 			
-			OpenCreateTeamTournamentHalo();
 	});
 		
 		Label lblTitle = new Label(haloTournament.GetTournamentName() + "(" + haloTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -1146,11 +1157,58 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateFortniteTourneyScene() { // tom
 		
+		StackPane stackPane = new StackPane();
 		AnchorPane ap = new AnchorPane();
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
-	
+		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(fortniteTournament));
+		JFXButton btnReportScore = new JFXButton("Report scores");
+		
+		
+		btnReportScore.setOnAction(e->{
+			if(!loggedIn) {
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Cannot access this"));
+				dialogContent.setBody(new Text("Must login to report scores"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
+				e.consume();
+				return;
+			}
+			for(Team team : fortniteTournament.GetTeams())
+			{
+				if(team.GetTeamID() == currentUser.GetTeamID())
+				{
+					if(team.GetScoreReported() == false)
+						OpenFortniteScoreReport();
+					else{
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Cannot report scores"));
+						dialogContent.setBody(new Text("Scores have already been reported"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(stackPane);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
+					}
+				}
+			}
+		});
+		JFXButton btnReturn = new JFXButton("<-");
+		
 		btnJoinTeam.setOnAction(e->{
 			if(!loggedIn) {
 				Alert alert = new Alert(AlertType.WARNING);
@@ -1160,10 +1218,17 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			OpenJoinTeamFortnite();
 			});
-		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(fortniteTournament));
-		JFXButton btnReturn = new JFXButton("/<-");
+		
+		
 		
 		//checks what scene we are coming from and returning to it
 		if(fortniteScene == window.getScene()) {
@@ -1182,6 +1247,13 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 				}
+			for(Team team : fortniteTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
 			if(fortniteTournament.GetTeamsJoined() < fortniteTournament.GetBrackSize())
 				OpenCreateTeamTournamentFortnite();		
 			else {		
@@ -1191,7 +1263,8 @@ public class TopGamerGUI extends Application
 				alert.setContentText("Bracket size has been reached");
 				alert.showAndWait();
 				return;
-			}			
+			}	
+			
 	});
 		
 		Label lblTitle = new Label(fortniteTournament.GetTournamentName() + "(" + fortniteTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -1241,9 +1314,12 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
 		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+		AnchorPane.setTopAnchor(btnReportScore, 310.0); 
+		AnchorPane.setLeftAnchor(btnReportScore, 300.0);
 		
-		fortniteTourneyScene = new Scene(ap, 600,400);
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, btnReportScore); // Tom
+		stackPane.getChildren().add(ap);
+		fortniteTourneyScene = new Scene(stackPane, 600,400);
 	}
 	public void OpenFortniteTourney() 
 	{
@@ -1288,6 +1364,14 @@ public class TopGamerGUI extends Application
 				alert.showAndWait();
 				return;
 			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			OpenJoinTeamCOD();
 			});
 
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(codTournament));
@@ -1327,7 +1411,15 @@ public class TopGamerGUI extends Application
 				alert.setContentText("Bracket size has been reached");
 				alert.showAndWait();
 				return;
-			}			
+			}
+			for(Team team : haloTournament.GetTeams())
+			{
+				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
+					System.out.println("Youre on a team");
+					return;
+				}
+			}
+			
 	});
 		
 		Label lblTitle = new Label(codTournament.GetTournamentName() + "(" + codTournament.GetGame().GetPlatform().GetPlatformName() + ")");
@@ -1769,8 +1861,15 @@ public class TopGamerGUI extends Application
 			teamitems.add(team);
 		}
 		
-		JFXButton btnReturn = new JFXButton("<");
-		btnReturn.setOnAction(e->OpenCodTourney());
+		JFXButton btnReturn = new JFXButton("<-");
+		
+		if(window.getScene() == codTourneyScene)
+			btnReturn.setOnAction(e->OpenCodTourney());
+		if(window.getScene() == fortniteTourneyScene)
+			btnReturn.setOnAction(e->OpenFortniteTourney());
+		if(window.getScene() == haloTourneyScene)
+			btnReturn.setOnAction(e->OpenHaloTourney());
+		
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
@@ -1784,6 +1883,95 @@ public class TopGamerGUI extends Application
 	}
 
 
+	
+	public void CreateFortniteScoreReport() {
+		
+		StackPane stackPane = new StackPane();
+		AnchorPane aPane = new AnchorPane();
+		//aPane.setPrefWidth(600);
+		//aPane.setPrefHeight(400);
+		
+		Label lblTitle = new Label("Please enter your points for each game");
+		lblTitle.setLayoutX(201);
+		lblTitle.setLayoutY(104);
+		
+		Label lblGame1 = new Label("Game 1:");
+		lblGame1.setLayoutX(201);
+		lblGame1.setLayoutY(136);
+		
+		Label lblGame2 = new Label("Game 2:");
+		lblGame2.setLayoutX(201);		
+		lblGame2.setLayoutY(169);
+		
+		Label lblGame3 = new Label("Game 3:");
+		lblGame3.setLayoutX(201);
+		lblGame3.setLayoutY(198);
+		
+		Label lblGame4 = new Label("Game 4:");
+		lblGame4.setLayoutX(201);
+		lblGame4.setLayoutY(231);
+		
+		
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setOnAction(e-> OpenFortniteTourney());
+		btnReturn.setLayoutX(14.0);
+		btnReturn.setLayoutY(14.0);
+		
+		JFXSlider sliderGame1 = new JFXSlider(0,25,0);
+		sliderGame1.setShowTickLabels(true);
+		sliderGame1.setShowTickMarks(true);
+		sliderGame1.setLayoutX(251);
+		sliderGame1.setLayoutY(137);
+
+		
+		JFXSlider sliderGame2 = new JFXSlider(0,25,0);
+		sliderGame2.setLayoutX(251);
+		sliderGame2.setLayoutY(170);
+		
+		JFXSlider sliderGame3 = new JFXSlider(0,25,0);
+		sliderGame3.setLayoutX(251);
+		sliderGame3.setLayoutY(199);
+		
+		JFXSlider sliderGame4 = new JFXSlider(0,25,0);
+		sliderGame4.setLayoutX(251);
+		sliderGame4.setLayoutY(232);
+		
+		JFXButton btnSubmit = new JFXButton("Submit");
+		btnSubmit.setLayoutX(281);
+		btnSubmit.setLayoutY(270);
+		btnSubmit.setOnAction(e->{
+		
+		double sum = Math.round(sliderGame1.getValue() + sliderGame2.getValue() + sliderGame3.getValue() + sliderGame4.getValue());
+		fortniteTournament.ReportScore(sum, currentUser.GetTeamID());
+		
+		JFXDialogLayout dialogContent = new JFXDialogLayout();
+		dialogContent.setHeading(new Text("Scores reported"));
+		dialogContent.setBody(new Text("Scores have been saved successfully"));
+		JFXDialog dialog = new JFXDialog();
+		JFXButton btnOkay = new JFXButton("Okay");
+		dialog.setContent(dialogContent);
+		dialog.getChildren().add(btnOkay);
+		dialog.setDialogContainer(stackPane);
+		dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+		dialogContent.setActions(btnOkay);
+		btnOkay.setOnAction(ev->OpenFortniteTourney());
+		dialog.show();
+		
+		sliderGame1.setValue(0);
+		sliderGame2.setValue(0);
+		sliderGame3.setValue(0);
+		sliderGame4.setValue(0);
+
+		});
+		
+		aPane.getChildren().addAll(lblTitle,lblGame1,lblGame2,lblGame3,lblGame4,btnReturn,sliderGame1,sliderGame2,sliderGame3,sliderGame4,btnSubmit);
+		stackPane.getChildren().add(aPane);
+		fortniteReportScore = new Scene(stackPane,600,400);
+	}
+	public void OpenFortniteScoreReport() {
+		CreateFortniteScoreReport();
+		window.setScene(fortniteReportScore);
+	}
 
 
 

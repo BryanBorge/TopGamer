@@ -36,7 +36,7 @@ public class Leaderboard {
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String lbQry = "SELECT TeamName, Wins, Losses from tblTeams team "
+		String lbQry = "SELECT TeamName, Wins, Losses, Score from tblTeams team "
 				+ "JOIN tblTournaments t on team.TournamentID = t.TournamentID where t.GameID = ?";
 		
 		Connection connection = dbConnection.connect();
@@ -49,16 +49,12 @@ public class Leaderboard {
 			
 			while(result.next())
 			{
-				loadTeam = new Team(result.getString("TeamName"),result.getInt("Wins"), result.getInt("Losses"));
+				loadTeam = new Team(result.getString("TeamName"),result.getInt("Wins"), result.getInt("Losses"), result.getInt("Score"));
 				m_Teams.add(loadTeam);
 			}
-		
 		}
 		catch(SQLException e){
 			e.printStackTrace();
-		}// ends try catch for connection query
-
-		
-	}// ends load leader board data
-	
-}// end class Leader board
+		}	
+	}	
+}

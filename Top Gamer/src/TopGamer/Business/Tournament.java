@@ -144,6 +144,12 @@ public class Tournament
 		return m_tournamentName;
 	}
 
+	
+	public void SetTeam(Team t)
+	{
+		m_teams.add(t);
+	}
+	
 	/**
 	 * Returns entire teamName arraylist
 	 * 
@@ -193,6 +199,9 @@ public class Tournament
 		
 		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = ?), 110) as Date, Location from tblTournaments where TournamentID = ?";
 		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = ?";
+		String teamNameQry = "select TeamName from tblTeams teams JOIN tblTournaments t ON teams.TournamentID = t.TournamentID where t.TournamentID = ?";
+		
+		Team loadTeam;
 		
 		Connection connection = dbConnection.connect();		
 		ResultSet result;
@@ -221,6 +230,7 @@ public class Tournament
 			e.printStackTrace();
 		}
 		
+		
 		try {
 			PreparedStatement preparedStatement= connection.prepareStatement(countQry);
 			preparedStatement.setInt(1, id);
@@ -234,6 +244,26 @@ public class Tournament
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			PreparedStatement preparedStatement= connection.prepareStatement(teamNameQry);
+			preparedStatement.setInt(1, id);
+			result = preparedStatement.executeQuery();
+			while(result.next())
+			{
+				loadTeam = new Team();
+				loadTeam.LoadTeamData(result.getString("TeamName"));
+				this.SetTeam(loadTeam);
+			}
+			preparedStatement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 	}
 	
 	/**
@@ -289,7 +319,6 @@ public class Tournament
 			e.printStackTrace();
 		}
 	}
-	
 	
 	/**
 	 * Returns the registered teams for a tournament 
@@ -350,7 +379,6 @@ public class Tournament
 			}
 		}
 	 
-	 
 	 public void JoinTeam(String user, String teamName)
 		{
 		 	SQLConnection sqlConnection = new SQLConnection();
@@ -367,8 +395,6 @@ public class Tournament
 			}
 		
 		}
-	 
-	 
 	 
 	 public ArrayList<String>LoadAllOpenTeams()
 		{
@@ -395,7 +421,33 @@ public class Tournament
 			return openTeams;
 		}
 	 
-	 
+	 public void ReportScore(double totalPoints, int teamID)
+		{
+			SQLConnection dbConnection = new SQLConnection();
+			
+			String scoreQry = "update tblTeams set Score = ?, ScoreReported = 1 where TeamID = ?";
+		
+			Connection connection = dbConnection.connect();
+			
+			try {
+				PreparedStatement prepStatement = connection.prepareStatement(scoreQry);
+				prepStatement.setDouble(1, totalPoints);
+				prepStatement.setInt(2, teamID);
+				int rowsAffected = prepStatement.executeUpdate();
+				prepStatement.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			for(Team team : m_teams)
+			{
+				if(team.GetTeamID() == teamID)
+				{
+					team.SetScoreReported(true);
+				}
+			}
+		}
 }
 
  
