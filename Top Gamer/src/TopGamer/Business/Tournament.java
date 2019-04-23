@@ -421,7 +421,33 @@ public class Tournament
 			return openTeams;
 		}
 	 
-	 
+	 public void ReportScore(double totalPoints, int teamID)
+		{
+			SQLConnection dbConnection = new SQLConnection();
+			
+			String scoreQry = "update tblTeams set Score = ?, ScoreReported = 1 where TeamID = ?";
+		
+			Connection connection = dbConnection.connect();
+			
+			try {
+				PreparedStatement prepStatement = connection.prepareStatement(scoreQry);
+				prepStatement.setDouble(1, totalPoints);
+				prepStatement.setInt(2, teamID);
+				int rowsAffected = prepStatement.executeUpdate();
+				prepStatement.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			for(Team team : m_teams)
+			{
+				if(team.GetTeamID() == teamID)
+				{
+					team.SetScoreReported(true);
+				}
+			}
+		}
 }
 
  

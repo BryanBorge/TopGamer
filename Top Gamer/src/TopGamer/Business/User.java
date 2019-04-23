@@ -20,6 +20,7 @@ public class User
 	private String m_lastName;
 	private String m_email;
 	private String m_username;
+	private int m_teamID;
 	private Platform m_platform;
 	
 	/**
@@ -136,7 +137,15 @@ public class User
 		return m_platform;
 	}
 	
-		
+	public void SetTeamID(int id)
+	{
+		m_teamID = id;
+	}
+	
+	public int GetTeamID() {
+		return m_teamID;
+	}
+	
 	/**
 	 * Returns true and loads user data if login exists and false otherwise
 	 * @param userName From registration form
@@ -193,7 +202,9 @@ public class User
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String userQry = "select FirstName, LastName, Email, PlatformID from tblUsers where UserName = ?";
-	
+		String teamQry = "select t.TeamID as ID from tblUsers u join tblTeams t on t.TeamID = u.TeamID where UserName = ?";
+		
+		
 		Connection connection = dbConnection.connect();
 		ResultSet result;
 		int dbPlatformID = -1;
@@ -210,6 +221,21 @@ public class User
 				dbPlatformID = result.getInt("PlatformID");
 			}
 			this.m_platform.Load(dbPlatformID);
+			prepStatement.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			PreparedStatement prepStatement = connection.prepareStatement(teamQry);
+			prepStatement.setString(1, userName);
+			result = prepStatement.executeQuery();
+			while(result.next())
+			{
+				m_teamID = result.getInt("ID");
+			}
 			prepStatement.close();
 			
 		} catch (SQLException e) {
