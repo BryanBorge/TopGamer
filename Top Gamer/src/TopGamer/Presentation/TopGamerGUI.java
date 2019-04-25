@@ -665,18 +665,10 @@ public class TopGamerGUI extends Application
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
 		fortniteLogo.setFitWidth(133);
 		fortniteLogo.setFitHeight(202);
-		
-		ImageView apexLogo = new ImageView(new Image("Apex.jpg"));
-		apexLogo.setFitWidth(133);
-		apexLogo.setFitHeight(202);
-		
+	
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(133);
 		codLogo.setFitHeight(202);
-		
-		ImageView fifaLogo = new ImageView(new Image("fifa.jpg"));
-		fifaLogo.setFitWidth(133);
-		fifaLogo.setFitHeight(202);
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
 		haloLogo.setFitWidth(133);
