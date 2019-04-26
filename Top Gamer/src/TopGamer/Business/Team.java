@@ -179,6 +179,8 @@ public class Team {
 		Connection connection = dbConnection.connect();
 		ResultSet result;
 		
+		this.m_teamName = teamName;
+		
 		try {
 			PreparedStatement prepStatement = connection.prepareStatement(teamQry);
 			prepStatement.setString(1, teamName);
@@ -197,6 +199,35 @@ public class Team {
 		}
 		
 	}
+	
+	public void LoadTeamData(int teamID)
+	{
+		SQLConnection dbConnection = new SQLConnection();
+		
+		String teamQry = "select TeamName,ScoreReported, UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamID = ?";
+	
+		Connection connection = dbConnection.connect();
+		ResultSet result;
+		
+		try {
+			PreparedStatement prepStatement = connection.prepareStatement(teamQry);
+			prepStatement.setInt(1, teamID);
+			result = prepStatement.executeQuery();
+			while(result.next())
+			{
+				m_teamName = result.getString("TeamName");
+				m_scoredReported = result.getBoolean("ScoreReported");
+				User user = new User(result.getString("FirstName"),result.getString("LastName"),result.getString("UserName"),result.getString("Email"));
+				m_teamMembers.add(user);
+			}
+			prepStatement.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	public void SetScoreReported(Boolean r)
 	{

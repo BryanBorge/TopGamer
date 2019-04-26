@@ -20,7 +20,7 @@ public class User
 	private String m_lastName;
 	private String m_email;
 	private String m_username;
-	private int m_teamID;
+	private Team m_Team;
 	private Platform m_platform;
 	
 	/**
@@ -35,6 +35,7 @@ public class User
 		m_email = "N/A";
 		m_username = "N/A";
 		m_platform = new Platform();
+		m_Team = new Team();
 	}
 	
 	public User(String username) {
@@ -137,14 +138,11 @@ public class User
 		return m_platform;
 	}
 	
-	public void SetTeamID(int id)
+	public Team GetTeam()
 	{
-		m_teamID = id;
+		return m_Team;
 	}
 	
-	public int GetTeamID() {
-		return m_teamID;
-	}
 	
 	/**
 	 * Returns true and loads user data if login exists and false otherwise
@@ -196,14 +194,13 @@ public class User
 		}
 	}
 	
-	
 	public void LoadUserData(String userName) 
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String userQry = "select FirstName, LastName, Email, PlatformID from tblUsers where UserName = ?";
-		String teamQry = "select t.TeamID as ID from tblUsers u join tblTeams t on t.TeamID = u.TeamID where UserName = ?";
-		
+		//String teamQry = "select t.TeamID as ID from tblUsers u join tblTeams t on t.TeamID = u.TeamID where UserName = ?";
+		String teamQry = "Select TeamID from tblUsers where UserName = ?";
 		
 		Connection connection = dbConnection.connect();
 		ResultSet result;
@@ -234,9 +231,11 @@ public class User
 			result = prepStatement.executeQuery();
 			while(result.next())
 			{
-				m_teamID = result.getInt("ID");
+				m_Team = new Team();
+				m_Team.LoadTeamData(result.getInt("TeamID"));
 			}
 			prepStatement.close();
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
