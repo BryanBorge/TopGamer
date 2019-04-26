@@ -388,7 +388,7 @@ public class Tournament
 				PreparedStatement prepStatement = connection.prepareStatement(joinTeamQry);
 				prepStatement.setString(1, teamName);
 				prepStatement.setString(2, user);
-				prepStatement.executeQuery();
+				prepStatement.executeUpdate();
 				prepStatement.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
