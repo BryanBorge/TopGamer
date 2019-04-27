@@ -881,7 +881,11 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label("Fortnite"); 
 		lblTitle.setFont(new Font(24));
-		Label lblDesc = new Label("Epic Games");
+		Label lblDesc = new Label("Leaderboard");
+		Label lblTournaments = new Label("Tournaments");
+		lblDesc.setStyle("-fx-font-weight: bold");
+		lblTournaments.setStyle("-fx-font-weight: bold");
+		
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		JFXButton btnTournament1 = new JFXButton("Friday Fortnite");
@@ -933,16 +937,20 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 50.0);
+		AnchorPane.setTopAnchor(lblDesc, 90.0);
 		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 200.0);
+		AnchorPane.setTopAnchor(lblTournaments, 175.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 69.0);
+		
+		
+		AnchorPane.setTopAnchor(btnTournament1, 220.0);
 		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 115.0);
 		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
 		
-		ap.getChildren().addAll(fortniteLogo,lblTitle,lblDesc,btnTournament1,btnReturn,leaderBoardTable);
+		ap.getChildren().addAll(fortniteLogo,lblTournaments,lblTitle,lblDesc,btnTournament1,btnReturn,leaderBoardTable);
 	
 		fortniteScene = new Scene(ap,600,400);
 	
@@ -1099,6 +1107,7 @@ public class TopGamerGUI extends Application
 		Label lblTitle = new Label(fortniteTournament.GetTournamentName() + "(" + fortniteTournament.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(fortniteTournament.GetLocation() + " " + fortniteTournament.GetDate());
+		Label lbltourney = new Label ("Each team will be able to play 4 games, first team to 100 points wins");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -1115,6 +1124,10 @@ public class TopGamerGUI extends Application
 		
 		AnchorPane.setTopAnchor(lblLocation, 79.0);
 		AnchorPane.setLeftAnchor(lblLocation, 210.0);
+		
+		AnchorPane.setTopAnchor(lbltourney, 105.0);
+		AnchorPane.setLeftAnchor(lbltourney, 135.0);
+		
 		
 		AnchorPane.setTopAnchor(lblPrize, 149.0);
 		AnchorPane.setLeftAnchor(lblPrize, 137.0);
@@ -1146,7 +1159,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnReportScore, 310.0); 
 		AnchorPane.setLeftAnchor(btnReportScore, 300.0);
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, btnReportScore); // Tom
+		ap.getChildren().addAll(btnReturn,lblTitle,lblLocation,lbltourney,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, btnReportScore); // Tom
 		stackPane.getChildren().add(ap);
 		fortniteTourneyScene = new Scene(stackPane, 600,400);
 	}
@@ -1846,7 +1859,10 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label("Halo 5"); 
 		lblTitle.setFont(new Font(24));
-		Label lblDesc = new Label("Bungee");
+		Label lblDesc = new Label("Leaderboards");
+		Label lblTournaments = new Label ("Tournaments");
+		lblDesc.setStyle("-fx-font-weight: bold");
+		lblTournaments.setStyle("-fx-font-weight: bold");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
@@ -1905,17 +1921,20 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 45.0);
+		AnchorPane.setTopAnchor(lblDesc, 55.0);
 		AnchorPane.setLeftAnchor(lblDesc, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 200.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
+		AnchorPane.setTopAnchor(btnTournament1, 220.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 59.0);
+		
+		AnchorPane.setTopAnchor(lblTournaments, 175.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 67.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 75.0);
 		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
 		
 		
-		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,btnReturn,leaderBoardTable);
+		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,lblTournaments,btnReturn,leaderBoardTable);
 	
 		haloScene = new Scene(ap,600,400);
 	}
@@ -2043,6 +2062,7 @@ public class TopGamerGUI extends Application
 		Label lblTitle = new Label(haloTournament.GetTournamentName() + "(" + haloTournament.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(haloTournament.GetLocation() + " " + haloTournament.GetDate());
+		Label lblTourneyDescription = new Label("Players are divided up into teams of 3-5 players Kill as many players as possible. \n this is a bracket style tournament, with 4 team elimination style");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -2060,16 +2080,19 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblLocation, 79.0);
 		AnchorPane.setLeftAnchor(lblLocation, 210.0);
 		
-		AnchorPane.setTopAnchor(lblPrize, 149.0);
+		AnchorPane.setTopAnchor(lblTourneyDescription, 100.0);
+		AnchorPane.setLeftAnchor(lblTourneyDescription,95.0);
+		
+		AnchorPane.setTopAnchor(lblPrize, 170.0);
 		AnchorPane.setLeftAnchor(lblPrize, 137.0);
 		
-		AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+		AnchorPane.setTopAnchor(lblBracketSize, 200.0);
 		AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
 		
-		AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+		AnchorPane.setTopAnchor(lblTeamsJoined, 230.0);
 		AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
 		
-		AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+		AnchorPane.setTopAnchor(lblPrizeAmt, 160.0);
 		AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
 		
 		AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
@@ -2087,7 +2110,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
 		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblTourneyDescription,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
 		stackPane.getChildren().add(ap);
 		haloTourneyScene = new Scene(stackPane, 600,400);
 	}
