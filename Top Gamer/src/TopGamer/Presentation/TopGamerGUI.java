@@ -766,6 +766,12 @@ public class TopGamerGUI extends Application
 		anchorHeader.setLayoutY(0.0);
 	
 		Label lblFeaturedGames = new Label("Featured Games");
+		Label lblTournaments= new Label ("Featured Tournaments");
+		Label lblCrossPlatform= new Label ("Cross Platform");
+		Label lblXboxPlatform= new Label ("Xbox One");
+		Label lblPS4Platform = new Label ("Playstation 4");
+		lblTournaments.setStyle("-fx-font-weight: bold");
+		lblFeaturedGames.setStyle("-fx-font-weight: bold");
 		
 		//Load images and set their size
 		ImageView profileIcon = new ImageView(new Image("profileIcon.png"));
@@ -808,19 +814,33 @@ public class TopGamerGUI extends Application
 		//Set image position on anchorScroll
 		AnchorPane.setTopAnchor(fortniteLogo, 50.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 24.0);
+		AnchorPane.setTopAnchor(lblCrossPlatform, 250.0);
+		AnchorPane.setLeftAnchor(lblCrossPlatform, 24.0);
+		
+		
 		AnchorPane.setTopAnchor(codLogo, 50.0);
 		AnchorPane.setLeftAnchor(codLogo, 167.0);
+		AnchorPane.setTopAnchor(lblPS4Platform, 250.0);
+		AnchorPane.setLeftAnchor(lblPS4Platform, 167.0);
+		
+		
 		AnchorPane.setTopAnchor(haloLogo, 50.0);
 		AnchorPane.setLeftAnchor(haloLogo, 308.0);
+		AnchorPane.setTopAnchor(lblXboxPlatform, 250.0);
+		AnchorPane.setLeftAnchor(lblXboxPlatform, 308.0);
+		
 		AnchorPane.setTopAnchor(lblFeaturedGames, 14.0);
 		AnchorPane.setLeftAnchor(lblFeaturedGames, 14.0);
+		AnchorPane.setTopAnchor(lblTournaments, 320.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 14.0);
+		
 		
 		//set button position on the anchorScroll
-		AnchorPane.setTopAnchor(codTourney, 300.0);
+		AnchorPane.setTopAnchor(codTourney, 350.0);
 		AnchorPane.setLeftAnchor(codTourney, 14.0);
-		AnchorPane.setTopAnchor(fortniteTourney, 350.0);
+		AnchorPane.setTopAnchor(fortniteTourney, 400.0);
 		AnchorPane.setLeftAnchor(fortniteTourney, 14.0);
-		AnchorPane.setTopAnchor(haloTourney, 400.0);
+		AnchorPane.setTopAnchor(haloTourney, 450.0);
 		AnchorPane.setLeftAnchor(haloTourney, 14.0);
 		
 		//this goes in the anchorHeader
@@ -829,7 +849,7 @@ public class TopGamerGUI extends Application
 		
 		//add images to anchor pane
 		anchorHeader.getChildren().addAll(nodeList);
-		anchorScroll.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,codTourney,fortniteTourney,haloTourney);
+		anchorScroll.getChildren().addAll(lblFeaturedGames,fortniteLogo,codLogo,haloLogo,codTourney,fortniteTourney,haloTourney,lblTournaments, lblCrossPlatform, lblPS4Platform, lblXboxPlatform);
 		mainScroll.setContent(anchorScroll);
 		mainVbox.getChildren().addAll(anchorHeader,mainScroll);
 		mainDashStack.getChildren().add(mainVbox);
@@ -1394,7 +1414,10 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label("Call Of Duty: \nAdvanced Warefare"); 
 		lblTitle.setFont(new Font(24));
-		Label lblDesc = new Label("Activision");
+		Label lblLeaderBoard = new Label("LeaderBoard");
+		Label lblTournaments= new Label ("Tournaments");
+		lblTournaments.setStyle("-fx-font-weight: bold");
+		lblLeaderBoard.setStyle("-fx-font-weight: bold");
 		JFXButton btnReturn = new JFXButton("<-");
 
 		btnReturn.setOnAction(e-> OpenMainDashboard());
@@ -1450,17 +1473,21 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 85.0);
-		AnchorPane.setLeftAnchor(lblDesc, 175.0);
+		AnchorPane.setTopAnchor(lblLeaderBoard, 85.0);
+		AnchorPane.setLeftAnchor(lblLeaderBoard, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 200.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
+		AnchorPane.setTopAnchor(lblTournaments, 180.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 50.0);
+		
+		
+		AnchorPane.setTopAnchor(btnTournament1, 215.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 50.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 115.0);
 		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
 		
 		
-		ap.getChildren().addAll(codLogo,lblTitle,lblDesc,btnTournament1,btnReturn,leaderBoardTable);
+		ap.getChildren().addAll(codLogo,lblTitle,lblLeaderBoard,btnTournament1,btnReturn,leaderBoardTable, lblTournaments);
 	
 		codScene = new Scene(ap,600,400);
 	}
@@ -1591,6 +1618,8 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(codTournament.GetLocation() + " " + codTournament.GetDate());
 		Label lblPrize = new Label("Prize");
+		Label lblTournDesc= new Label("A one-sided game mode, the goal is for an attacking side to either eliminate the,\ndefending team or detonate either one of two bomb sites. This is a bracket style\ntournament with an overall of 4 teams elimination style. ");
+		
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
 		
@@ -1601,40 +1630,44 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnReturn, 14.0);
 		AnchorPane.setLeftAnchor(btnReturn, 14.0);
 		
-		AnchorPane.setTopAnchor(lblTitle, 42.0);
+		AnchorPane.setTopAnchor(lblTitle, 35.0);
 		AnchorPane.setLeftAnchor(lblTitle, 137.0);
 		
-		AnchorPane.setTopAnchor(lblLocation, 79.0);
-		AnchorPane.setLeftAnchor(lblLocation, 210.0);
+		AnchorPane.setTopAnchor(lblLocation, 72.0);
+		AnchorPane.setLeftAnchor(lblLocation, 170.0);
 		
-		AnchorPane.setTopAnchor(lblPrize, 149.0);
+		AnchorPane.setTopAnchor(lblTournDesc, 100.0);
+		AnchorPane.setLeftAnchor(lblTournDesc, 40.0);
+		
+		AnchorPane.setTopAnchor(lblPrize, 189.0);
 		AnchorPane.setLeftAnchor(lblPrize, 137.0);
 		
-		AnchorPane.setTopAnchor(lblBracketSize, 186.0);
+		AnchorPane.setTopAnchor(lblBracketSize, 226.0);
 		AnchorPane.setLeftAnchor(lblBracketSize, 137.0);
 		
-		AnchorPane.setTopAnchor(lblTeamsJoined, 223.0);
+		AnchorPane.setTopAnchor(lblTeamsJoined, 270.0);
 		AnchorPane.setLeftAnchor(lblTeamsJoined, 137.0);
 		
-		AnchorPane.setTopAnchor(lblPrizeAmt, 149.0);
+		AnchorPane.setTopAnchor(lblPrizeAmt, 189.0);
 		AnchorPane.setLeftAnchor(lblPrizeAmt, 342.0);
 		
-		AnchorPane.setTopAnchor(lblBracketAmt, 186.0);
+		AnchorPane.setTopAnchor(lblBracketAmt, 226.0);
 		AnchorPane.setLeftAnchor(lblBracketAmt, 342.0);
 		
-		AnchorPane.setTopAnchor(lblTeamsJoinedVal, 223.0);
+		AnchorPane.setTopAnchor(lblTeamsJoinedVal, 270.0);
 		AnchorPane.setLeftAnchor(lblTeamsJoinedVal, 342.0);
 
-		AnchorPane.setTopAnchor(btnJoinTeam, 267.0);
+		AnchorPane.setTopAnchor(btnJoinTeam, 320.0);
 		AnchorPane.setLeftAnchor(btnJoinTeam, 120.0);
 		
-		AnchorPane.setTopAnchor(btnCreateTeam, 267.0);
+		AnchorPane.setTopAnchor(btnCreateTeam, 320.0);
 		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
 		
-		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
+		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 375.0); // Tom
 		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, lblTournDesc); // Tom
+		
 		stackPane.getChildren().add(ap);
 		codTourneyScene = new Scene(stackPane, 600,400);
 	}
