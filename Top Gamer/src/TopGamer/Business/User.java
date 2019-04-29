@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
 public class User 
 {
 	private String m_firstName;
@@ -151,7 +153,7 @@ public class User
 	 * @return true/false
 	 * @throws SQLException
 	 */
-	public boolean Login(String userName, String password) throws SQLException
+	public boolean Login(String userName, String password) throws SQLServerException
 	{
 		
 		SQLConnection sqlConnection = new SQLConnection();

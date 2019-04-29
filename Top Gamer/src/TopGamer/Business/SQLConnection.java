@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.sqlite.SQLiteException;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
 
@@ -59,7 +60,7 @@ public class SQLConnection {
 	 * @param userName UserName
 	 * @param password Password
 	 */
-	public void AddUser(String firstName, String lastName, String email, String userName, String password, String platform) throws SQLiteException
+	public Boolean AddUser(String firstName, String lastName, String email, String userName, String password, String platform) throws SQLServerException
 	{
 		//adds user info from the registration form
 		String addUserQry = "INSERT INTO tblUsers (FirstName,LastName,Email,UserName,Password,PlatformID) " +
@@ -77,9 +78,14 @@ public class SQLConnection {
 			System.out.println("User added successfully");
 			preparedStatement.close();
 		}
+		catch (SQLServerException e) {
+			return false;
+		}
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
+		return true;
 	}
 	
 	

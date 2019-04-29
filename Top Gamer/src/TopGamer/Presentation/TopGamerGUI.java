@@ -35,12 +35,15 @@ import org.controlsfx.control.textfield.TextFields;
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
 import org.sqlite.SQLiteException;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
 import TopGamer.Business.*;
 
 
@@ -61,7 +64,7 @@ public class TopGamerGUI extends Application
 	Scene fortniteScene, codScene, haloScene;
 	
 	//Score reporting scenes
-	Scene fortniteReportScore;
+	Scene fortniteReportScore, codReportScore, haloReporScore;
 
 	//Tournament scenes
 	Scene codTourneyScene, fortniteTourneyScene, haloTourneyScene;
@@ -287,7 +290,7 @@ public class TopGamerGUI extends Application
 					{
 						Valid = currentUser.Login(txtLoginName.getText(), txtLoginPass.getText());	
 					}
-						catch(SQLException e)
+						catch(SQLServerException e)
 					{
 						e.printStackTrace();
 					}
@@ -384,6 +387,7 @@ public class TopGamerGUI extends Application
 		lblValidPass = new Label("");
 		
 		txtFName = new JFXTextField();
+		txtFName.requestFocus();
 		txtFName.setLabelFloat(true);
 		txtFName.setPromptText("First Name");
 		txtFName.setOnKeyPressed(e -> {
@@ -461,7 +465,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(txtEmail, 181.0);
 		
 		AnchorPane.setLeftAnchor(lblValidUserName, 226.0);
-		AnchorPane.setTopAnchor(lblValidUserName, 221.0);
+		AnchorPane.setTopAnchor(lblValidUserName, 214.0);
 		AnchorPane.setLeftAnchor(txtUserName, 226.0);
 		AnchorPane.setTopAnchor(txtUserName, 238.0);
 		
@@ -492,38 +496,51 @@ public class TopGamerGUI extends Application
 			try {
 				SQLConnection s = new SQLConnection();
 				rbSelectedPlatform = (RadioButton)platformGroup.getSelectedToggle();
-				s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText(),rbSelectedPlatform.getText());
 				
-				//set current user to the registered user
-				currentUser.Login(txtUserName.getText(), txtPass.getText());
-				
-				String logOutTitle = "Registration Successful";
-				String logOutContent = "Welcome!";
-				JFXDialogLayout dialogContent = new JFXDialogLayout();
-				dialogContent.setHeading(new Text(logOutTitle));
-				dialogContent.setBody(new Text(logOutContent));
-				JFXDialog dialog = new JFXDialog();
-				JFXButton button = new JFXButton("Okay");
-				button.setOnAction(ev->{
-					dialog.close(); 
-					OpenMainDashboard();
-					txtFName.setText("");
-					txtLName.setText("");
-					txtEmail.setText("");
-					txtUserName.setText("");
-					txtPass.setText("");
-				});
-				dialog.setContent(dialogContent);
-				dialog.getChildren().add(button);
-				dialog.setDialogContainer(registerStack);
-				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-				dialogContent.setActions(button);
-				dialog.show();
-				
-				
-
-			} catch (SQLException e) {
-				System.out.println("Error saving user to database");
+				if(!s.AddUser(txtFName.getText(), txtLName.getText(), txtEmail.getText(), txtUserName.getText(), txtPass.getText(),rbSelectedPlatform.getText()))
+				{
+					lblValidUserName.setText("Username Already Exists");
+					lblValidUserName.setTextFill(Color.RED);
+					txtUserName.setText(null);
+					txtUserName.requestFocus();
+				}
+				else {
+					//set current user to the registered user
+					currentUser.Login(txtUserName.getText(), txtPass.getText());
+					
+					String registerTitle = "Registration Successful";
+					String registerContent = String.format("Welcome, %s!", currentUser.GetUsername());
+					JFXDialogLayout dialogContent = new JFXDialogLayout();
+					dialogContent.setHeading(new Text(registerTitle));
+					dialogContent.setBody(new Text(registerContent));
+					JFXDialog dialog = new JFXDialog();
+					JFXButton button = new JFXButton("Okay");
+					button.setOnAction(ev->{
+						dialog.close(); 
+						OpenMainDashboard();
+						txtFName.setText("");
+						txtLName.setText("");
+						txtEmail.setText("");
+						txtUserName.setText("");
+						txtPass.setText("");
+						rbPC.setSelected(false);
+						rbXbox.setSelected(false);
+						rbPS4.setSelected(false);
+						lblValidFirstName.setText(null);
+						lblValidLastName.setText(null);
+						lblValidEmail.setText(null);
+						lblValidUserName.setText(null);
+						lblValidPass.setText(null);
+					});
+					dialog.setContent(dialogContent);
+					dialog.getChildren().add(button);
+					dialog.setDialogContainer(registerStack);
+					dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+					dialogContent.setActions(button);
+					dialog.show();
+				}
+			} catch (SQLServerException e) {
+				System.out.println("Duplicate Record");
 			}
 		
 		}
@@ -996,6 +1013,22 @@ public class TopGamerGUI extends Application
 				btnOkay.setOnAction(ev->dialog.close());
 				dialog.show();
 				e.consume();
+				return;
+			}
+			if(fortniteTournament.GetTeamsJoined() < fortniteTournament.GetBrackSize())
+			{
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Not enough teams"));
+				dialogContent.setBody(new Text("Scores cannot be reported until the bracket is full"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
 				return;
 			}
 			for(Team team : fortniteTournament.GetTeams())
@@ -1512,7 +1545,6 @@ public class TopGamerGUI extends Application
 		CreateCODScene();
 		window.setScene(codScene);
 	}
-	
 
 	/**
 	 * Creates scene for COD tournament
@@ -1528,7 +1560,38 @@ public class TopGamerGUI extends Application
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
-
+		JFXButton btnReportScores = new JFXButton("Report Scores");
+		
+		btnReportScores.setOnAction(e->{
+			if(!currentUser.GetPlatform().GetPlatformName().equals(codTournament.GetGame().GetPlatform().GetPlatformName())) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Incompatiable Systems");
+				alert.setContentText("You play on " + currentUser.GetPlatform().GetPlatformName() + ". The tournament is on " + codTournament.GetGame().GetPlatform().GetPlatformName());
+				alert.showAndWait();
+				return;
+			}
+			if(codTournament.GetTeamsJoined() < codTournament.GetBrackSize())
+			{
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Not enough teams"));
+				dialogContent.setBody(new Text("Scores cannot be reported until the bracket is full"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
+				return;
+			}
+			else
+				OpenCODScoreReport();
+			
+		});
+		
 		btnJoinTeam.setOnAction(e->{
 			if(!loggedIn) {
 				Alert alert = new Alert(AlertType.WARNING);
@@ -1676,10 +1739,14 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnCreateTeam, 320.0);
 		AnchorPane.setLeftAnchor(btnCreateTeam, 300.0);
 		
-		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 375.0); // Tom
-		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
+		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 375.0);
+		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); 
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, lblTournDesc); // Tom
+		AnchorPane.setTopAnchor(btnReportScores, 375.0);
+		AnchorPane.setLeftAnchor(btnReportScores, 300.0); 
+		
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, lblTournDesc,btnReportScores); // Tom
 		
 		stackPane.getChildren().add(ap);
 		codTourneyScene = new Scene(stackPane, 600,400);
@@ -1842,6 +1909,76 @@ public class TopGamerGUI extends Application
 		window.setScene(joinTeam);
 	}
 	
+	public void CreateCODScoreReport() {
+		
+		AnchorPane aPane = new AnchorPane();
+		
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setLayoutX(14);
+		btnReturn.setLayoutY(14);
+		btnReturn.setOnAction(e->OpenCodTourney());
+		
+		JFXComboBox<String> cbGame1 = new JFXComboBox<String>();
+		cbGame1.setLayoutX(254);
+		cbGame1.setLayoutY(141);
+		cbGame1.getItems().addAll(codTournament.GetTeams().get(0).GetTeamName(),codTournament.GetTeams().get(1).GetTeamName());
+		
+		JFXComboBox<String> cbGame2 = new JFXComboBox<String>();
+		cbGame2.setLayoutX(254);
+		cbGame2.setLayoutY(202);
+		cbGame2.getItems().addAll(codTournament.GetTeams().get(2).GetTeamName(),codTournament.GetTeams().get(3).GetTeamName());
+		JFXComboBox<String> cbFinal = new JFXComboBox<String>();
+		cbFinal.setLayoutX(254);
+		cbFinal.setLayoutY(266);
+		
+	
+		cbGame1.setOnAction(e->{
+			if(!cbFinal.getItems().contains(cbGame1.getValue()))
+				cbFinal.getItems().add(cbGame1.getValue()); 
+		});
+		cbGame2.setOnAction(e->{ 
+			if(!cbFinal.getItems().contains(cbGame2.getValue()))
+				cbFinal.getItems().add(cbGame2.getValue()); 
+		});
+		Label lblHeader = new Label("Please select the winner for each game");
+		lblHeader.setLayoutX(197);
+		lblHeader.setLayoutY(100);
+		Label lblGame1 =new Label("Game1");
+		lblGame1.setLayoutX(201);
+		lblGame1.setLayoutY(154);
+		Label lblGame2 =new Label("Game2");
+		lblGame2.setLayoutX(201);
+		lblGame2.setLayoutY(219);
+		Label lblFinal =new Label("Final");
+		lblFinal.setLayoutX(204);
+		lblFinal.setLayoutY(283);
+		
+		JFXButton btnSubmit = new JFXButton("Submit");
+		btnSubmit.setLayoutX(274);
+		btnSubmit.setLayoutY(331);
+		
+		btnSubmit.setOnAction(e->{
+			
+			if(!cbFinal.getValue().equals(cbGame1.getValue()) || !cbFinal.getValue().equals(cbGame2.getValue()))
+			{
+				System.out.println(cbFinal.getValue() + "is not in the final.");
+				return;
+			}
+			else
+				codTournament.ReportScore(cbGame1.getValue(), cbGame2.getValue(), cbFinal.getValue());
+		});
+		
+		
+		aPane.getChildren().addAll(lblHeader,lblGame1,lblGame2,lblFinal,cbGame1,cbGame2,cbFinal,btnSubmit,btnReturn);
+		codReportScore = new Scene(aPane,600,400);
+		
+	}
+	
+	public void OpenCODScoreReport()
+	{
+		CreateCODScoreReport();
+		window.setScene(codReportScore);
+	}
 	
 	
 	//**********************************

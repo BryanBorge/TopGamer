@@ -202,7 +202,7 @@ public class Tournament
 		String teamNameQry = "select TeamName from tblTeams teams JOIN tblTournaments t ON teams.TournamentID = t.TournamentID where t.TournamentID = ?";
 		
 		Team loadTeam;
-		
+		m_teams = new ArrayList<Team>();
 		Connection connection = dbConnection.connect();		
 		ResultSet result;
 
@@ -260,10 +260,6 @@ public class Tournament
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
 	
 	/**
@@ -318,6 +314,8 @@ public class Tournament
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	/**
@@ -448,6 +446,12 @@ public class Tournament
 				}
 			}
 		}
+
+	 public void ReportScore(String winnerFirstGame, String winnerSecondGame, String winnerFinal)
+	 {
+		 
+	 }
+
 }
 
  
