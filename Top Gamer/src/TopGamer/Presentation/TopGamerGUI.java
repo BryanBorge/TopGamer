@@ -1564,11 +1564,18 @@ public class TopGamerGUI extends Application
 		
 		btnReportScores.setOnAction(e->{
 			if(!currentUser.GetPlatform().GetPlatformName().equals(codTournament.GetGame().GetPlatform().GetPlatformName())) {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Error");
-				alert.setHeaderText("Incompatiable Systems");
-				alert.setContentText("You play on " + currentUser.GetPlatform().GetPlatformName() + ". The tournament is on " + codTournament.GetGame().GetPlatform().GetPlatformName());
-				alert.showAndWait();
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Incompatiable Systems"));
+				dialogContent.setBody(new Text("You play on " + currentUser.GetPlatform().GetPlatformName() + ". The tournament is on " + codTournament.GetGame().GetPlatform().GetPlatformName()));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
 				return;
 			}
 			if(codTournament.GetTeamsJoined() < codTournament.GetBrackSize())
