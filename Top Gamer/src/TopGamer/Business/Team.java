@@ -206,6 +206,7 @@ public class Team {
 		
 		String teamQry = "select TeamName,ScoreReported, UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamID = ?";
 	
+		this.SetTeamID(teamID);
 		Connection connection = dbConnection.connect();
 		ResultSet result;
 		

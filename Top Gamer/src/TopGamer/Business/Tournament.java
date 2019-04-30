@@ -6,6 +6,7 @@
  */
 
 package TopGamer.Business;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +24,8 @@ public class Tournament
 	private int m_bracketSize;
 	private int m_teamsJoined;
 	private Game m_game;
+	private int m_winnerID;
+	private String m_status;
 	private ArrayList<Team> m_teams;
 	
 	/**
@@ -187,6 +190,27 @@ public class Tournament
 		return m_game;
 	}
 	
+	public void SetStatus(String s)
+	{
+		m_status = s;
+	}
+	
+	public String GetStatus()
+	{
+		return m_status;
+	}
+	
+	public void SetWinnerID(int i)
+	{
+		m_winnerID = i;
+	}
+	
+	public int GetWinnerID()
+	{
+		return m_winnerID;
+	}
+	
+	
 	/**
 	 * Loads in all tournament data
 	 * Calls LoadGameData and LoadPlatformData
@@ -197,7 +221,7 @@ public class Tournament
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = ?), 110) as Date, Location from tblTournaments where TournamentID = ?";
+		String tournamentQry = "select TournamentID,TournamentName, GameID, Prize, BracketSize, CONVERT(VARCHAR(10),(Select Date from tblTournaments where TournamentID = ?), 110) as Date, Location,Winner, Status from tblTournaments where TournamentID = ?";
 		String countQry = "select count(TournamentID) as num from tblTeams where TournamentID = ?";
 		String teamNameQry = "select TeamName from tblTeams teams JOIN tblTournaments t ON teams.TournamentID = t.TournamentID where t.TournamentID = ?";
 		
@@ -222,6 +246,8 @@ public class Tournament
 				this.SetBrackSize(result.getInt("BracketSize"));
 				this.SetLocation(result.getString("Location"));
 				this.SetDate(result.getString("Date"));
+				this.SetWinnerID(result.getInt("Winner"));
+				this.SetStatus(result.getString("Status"));
 			}
 			prepStatement.close();
 			this.m_game.LoadGameData(dbGameID);
@@ -277,7 +303,7 @@ public class Tournament
 		try {
 			if(this.GetGame().GetPlatform().GetID() == 5)
 			{
-				String qry = "select UserName from tblUsers where UserName <> ?";
+				String qry = "select UserName from tblUsers where TeamID is NULL and UserName <> ?";
 				preparedStatement = connection.prepareStatement(qry);
 				preparedStatement.setString(1, currUser);
 			}
@@ -359,10 +385,10 @@ public class Tournament
 		 	SQLConnection sqlConnection = new SQLConnection();
 			Connection connection = sqlConnection.connect();
 			String createTeamQuery = "INSERT into tblTeams (TeamName) VALUES(\'" + TeamName + "\')";
-			String addUser1 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user1 + "\'";
-			String addUser2 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user2 + "\'";
-			String addUser3 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user3 + "\'";
-			String addUser4 = "Update tblUsers set TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user4 + "\'";
+			String addUser1 = "Update tblUsers set ScoreReported = False, TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user1 + "\'";
+			String addUser2 = "Update tblUsers set ScoreReported = False, TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user2 + "\'";
+			String addUser3 = "Update tblUsers set ScoreReported = False, TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user3 + "\'";
+			String addUser4 = "Update tblUsers set ScoreReported = False, TeamID = (select TeamID from tblTeams where TeamName = \'" + TeamName + "\') where UserName = \'" + user4 + "\'";
 			
 			try {
 				Statement statement = connection.createStatement();
@@ -419,18 +445,18 @@ public class Tournament
 			return openTeams;
 		}
 	 
-	 public void ReportScore(double totalPoints, int teamID)
+	 public void ReportScore(double totalPoints, Team team)
 		{
 			SQLConnection dbConnection = new SQLConnection();
 			
 			String scoreQry = "update tblTeams set Score = ?, ScoreReported = 1 where TeamID = ?";
-		
+			
 			Connection connection = dbConnection.connect();
 			
 			try {
 				PreparedStatement prepStatement = connection.prepareStatement(scoreQry);
 				prepStatement.setDouble(1, totalPoints);
-				prepStatement.setInt(2, teamID);
+				prepStatement.setInt(2, team.GetTeamID());
 				int rowsAffected = prepStatement.executeUpdate();
 				prepStatement.close();
 				
@@ -438,20 +464,133 @@ public class Tournament
 				e.printStackTrace();
 			}
 			
-			for(Team team : m_teams)
+			for(Team t : m_teams)
 			{
-				if(team.GetTeamID() == teamID)
+				if(t.GetTeamID() == team.GetTeamID())
 				{
-					team.SetScoreReported(true);
+					t.SetScoreReported(true);
 				}
 			}
+			
+			if(totalPoints == 100)
+				CloseTournament(team);
+			
+			
+			
 		}
 
 	 public void ReportScore(String winnerFirstGame, String winnerSecondGame, String winnerFinal)
 	 {
+		 ArrayList<Team> winners = new ArrayList<>();
+		 Team winningTeam = new Team();
 		 
+		if(m_teams.get(0).GetTeamName().equals(winnerFirstGame))
+		{
+			m_teams.get(0).SetWins(m_teams.get(0).GetWins() + 1);
+			winners.add(m_teams.get(0));
+			m_teams.get(1).SetLosses(m_teams.get(1).GetLosses() + 1);
+		}
+		
+		if(m_teams.get(1).GetTeamName().equals(winnerFirstGame))
+		{
+			m_teams.get(1).SetWins(m_teams.get(1).GetWins() + 1);
+			winners.add(m_teams.get(1));
+			m_teams.get(0).SetLosses(m_teams.get(0).GetLosses() + 1);
+		}
+		
+		if(m_teams.get(2).GetTeamName().equals(winnerSecondGame))
+		{
+			m_teams.get(2).SetWins(m_teams.get(2).GetWins() + 1);
+			winners.add(m_teams.get(2));
+			m_teams.get(3).SetLosses(m_teams.get(3).GetLosses() + 1);
+		}
+		
+		if(m_teams.get(3).GetTeamName().equals(winnerSecondGame))
+		{
+			m_teams.get(3).SetWins(m_teams.get(3).GetWins() + 1);
+			winners.add(m_teams.get(3));
+			m_teams.get(2).SetLosses(m_teams.get(2).GetLosses() + 1);
+		}
+		
+		for(Team team : winners)
+		{
+			if(team.GetTeamName().equals(winnerFinal))
+			{
+				team.SetWins(team.GetWins() + 1);
+				winningTeam = team;
+			}
+			else
+				team.SetLosses(team.GetLosses() + 1);
+		}
+		
+		String updateTeamScore = "Update tblTeams set Wins = ?, Losses = ? where TeamName = ?";
+		String updateTournamentWinner = "Update tblTournaments set Winner = ?, Status = ? where TournamentID = ?";
+		
+		SQLConnection sqlConnection = new SQLConnection();
+		Connection connection = sqlConnection.connect();
+		
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(updateTeamScore);
+			
+			for(Team teams : m_teams)
+			{
+				preparedStatement.setInt(1,teams.GetWins());
+				preparedStatement.setInt(2,teams.GetLosses());
+				preparedStatement.setString(3,teams.GetTeamName());
+				int rowsAff = preparedStatement.executeUpdate();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(updateTournamentWinner);
+			preparedStatement.setInt(1, winningTeam.GetTeamID());
+			preparedStatement.setString(2,"CLOSED");
+			preparedStatement.setInt(3, this.GetID());
+			int rowsAff = preparedStatement.executeUpdate();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	 }
-
+	 
+	 public void CloseTournament(Team winningTeam)
+	 {
+		 String closeQry = "Update tblTournaments set Status = ?, Winner = ? where TournamentID = ?";
+		 String updateTeamQry = "Update tblTeams syet Wins = ? where TeamID = ?";
+		 
+		 
+		 SQLConnection sqlConnection = new SQLConnection();
+			Connection connection = sqlConnection.connect();
+			
+			try {
+				PreparedStatement preparedStatement = connection.prepareStatement(closeQry);
+				
+	
+				preparedStatement.setString(1,"CLOSED");
+				preparedStatement.setInt(2,winningTeam.GetTeamID());
+				preparedStatement.setInt(3,this.GetID());
+				int rowsAff = preparedStatement.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				PreparedStatement preparedStatement = connection.prepareStatement(updateTeamQry);
+		
+				preparedStatement.setInt(1,winningTeam.GetWins());
+				preparedStatement.setInt(2,winningTeam.GetTeamID());
+				int rowsAff = preparedStatement.executeUpdate();
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	 }
 }
 
  

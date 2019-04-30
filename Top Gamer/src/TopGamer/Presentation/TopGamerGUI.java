@@ -128,10 +128,11 @@ public class TopGamerGUI extends Application
 		
 		CreateLoginScene();
 		CreateRegisterScene();
-		CreateMainDashboard();
 		CreateFortniteScene();		
 		CreateCODScene();	
 		CreateHaloScene();
+		CreateMainDashboard();
+		
 
 		window.getIcons().add(new Image("icon.png"));
 		window.setTitle("Top Gamer");
@@ -821,11 +822,40 @@ public class TopGamerGUI extends Application
 		haloLogo.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event ->{mainDashboardScene.setCursor(Cursor.HAND);});
 		haloLogo.addEventHandler(MouseEvent.MOUSE_EXITED, event ->{ mainDashboardScene.setCursor(Cursor.DEFAULT);});
 		
-		JFXButton codTourney = new JFXButton("4v4 CoD Tournament");
-		codTourney.setOnAction(e -> OpenCodTourney());
-		JFXButton fortniteTourney = new JFXButton("4v4 Fortnite Tournament");
-		fortniteTourney.setOnAction(e->OpenFortniteTourney());
-		JFXButton haloTourney = new JFXButton("4v4 Halo Tournament");
+		JFXButton codTourney = new JFXButton("Call of Duty Search and Destroy (" + codTournament.GetStatus() + ")");
+	
+		codTourney.setOnAction(e->{
+			
+			if(codTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: codTournament.GetTeams())
+				{
+					if(t.GetTeamID() == codTournament.GetWinnerID())
+					{
+						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+					}
+				}
+			}
+			else
+				OpenCodTourney();
+		});
+		
+		JFXButton fortniteTourney = new JFXButton("Fortnite Friday (" + fortniteTournament.GetStatus() + ")");
+		fortniteTourney.setOnAction(e->{
+			if(fortniteTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: fortniteTournament.GetTeams())
+				{
+					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
+					{
+						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+					}
+				}
+			}
+			else
+				OpenFortniteTourney();
+		});
+		JFXButton haloTourney = new JFXButton("Halo Team Slayer (" + haloTournament.GetStatus() + ")");
 		haloTourney.setOnAction(e->OpenHaloTourney());
 		
 		//Set image position on anchorScroll
@@ -898,15 +928,28 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label("Fortnite"); 
 		lblTitle.setFont(new Font(24));
-		Label lblDesc = new Label("Leaderboard");
+		Label lblLeaderboard = new Label("Leaderboard");
 		Label lblTournaments = new Label("Tournaments");
-		lblDesc.setStyle("-fx-font-weight: bold");
+		lblLeaderboard.setStyle("-fx-font-weight: bold");
 		lblTournaments.setStyle("-fx-font-weight: bold");
 		
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnTournament1 = new JFXButton("Friday Fortnite");
-		btnTournament1.setOnAction(e->OpenFortniteTourney());
+		JFXButton btnTournament1 = new JFXButton("Friday Fortnite (" + fortniteTournament.GetStatus() + ")");
+		btnTournament1.setOnAction(e->{
+			if(fortniteTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: fortniteTournament.GetTeams())
+				{
+					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
+					{
+						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+					}
+				}
+			}
+			else
+				OpenFortniteTourney();
+		});
 		
 		
 		ImageView fortniteLogo = new ImageView(new Image("Fortnite.jpg"));
@@ -944,6 +987,8 @@ public class TopGamerGUI extends Application
 		{
 			leaderBoardTable.getItems().add(t);
 		}
+		
+		
 				
 		AnchorPane.setTopAnchor(fortniteLogo, 25.0);
 		AnchorPane.setLeftAnchor(fortniteLogo, 50.0);
@@ -954,20 +999,19 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 90.0);
-		AnchorPane.setLeftAnchor(lblDesc, 175.0);
+		AnchorPane.setTopAnchor(lblLeaderboard, 90.0);
+		AnchorPane.setLeftAnchor(lblLeaderboard, 200.0);
 		
 		AnchorPane.setTopAnchor(lblTournaments, 175.0);
-		AnchorPane.setLeftAnchor(lblTournaments, 69.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 50.0);
 		
-		
-		AnchorPane.setTopAnchor(btnTournament1, 220.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 62.0);
+		AnchorPane.setTopAnchor(btnTournament1, 190.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 50.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 115.0);
-		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
+		AnchorPane.setLeftAnchor(leaderBoardTable, 200.0);
 		
-		ap.getChildren().addAll(fortniteLogo,lblTournaments,lblTitle,lblDesc,btnTournament1,btnReturn,leaderBoardTable);
+		ap.getChildren().addAll(fortniteLogo,lblTournaments,lblTitle,lblLeaderboard,btnTournament1,btnReturn,leaderBoardTable);
 	
 		fortniteScene = new Scene(ap,600,400);
 	
@@ -1033,7 +1077,7 @@ public class TopGamerGUI extends Application
 			}
 			for(Team team : fortniteTournament.GetTeams())
 			{
-				if(team.GetTeamID() == currentUser.GetTeam().GetTeamID())
+				if(team.GetTeamName().equals(currentUser.GetTeam().GetTeamName()))
 				{
 					if(team.GetScoreReported() == false)
 						OpenFortniteScoreReport();
@@ -1140,7 +1184,7 @@ public class TopGamerGUI extends Application
 		Label lblTitle = new Label(fortniteTournament.GetTournamentName() + "(" + fortniteTournament.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(fortniteTournament.GetLocation() + " " + fortniteTournament.GetDate());
-		Label lbltourney = new Label ("Each team will be able to play 4 games, first team to 100 points wins");
+		Label lblTourneyDesc = new Label ("Each team will play a max of 4 games. Teams can earn up to 25 points each game.\n The first team to 100 points is the winner");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -1158,8 +1202,8 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblLocation, 79.0);
 		AnchorPane.setLeftAnchor(lblLocation, 210.0);
 		
-		AnchorPane.setTopAnchor(lbltourney, 105.0);
-		AnchorPane.setLeftAnchor(lbltourney, 135.0);
+		AnchorPane.setTopAnchor(lblTourneyDesc, 105.0);
+		AnchorPane.setLeftAnchor(lblTourneyDesc, 135.0);
 		
 		
 		AnchorPane.setTopAnchor(lblPrize, 149.0);
@@ -1192,7 +1236,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnReportScore, 310.0); 
 		AnchorPane.setLeftAnchor(btnReportScore, 300.0);
 		
-		ap.getChildren().addAll(btnReturn,lblTitle,lblLocation,lbltourney,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, btnReportScore); // Tom
+		ap.getChildren().addAll(btnReturn,lblTitle,lblLocation,lblTourneyDesc,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams, btnReportScore); // Tom
 		stackPane.getChildren().add(ap);
 		fortniteTourneyScene = new Scene(stackPane, 600,400);
 	}
@@ -1412,7 +1456,8 @@ public class TopGamerGUI extends Application
 		btnSubmit.setOnAction(e->{
 		
 		double sum = Math.round(sliderGame1.getValue() + sliderGame2.getValue() + sliderGame3.getValue() + sliderGame4.getValue());
-		fortniteTournament.ReportScore(sum, currentUser.GetTeam().GetTeamID());
+		
+		fortniteTournament.ReportScore(sum, currentUser.GetTeam());
 		
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
 		dialogContent.setHeading(new Text("Scores reported"));
@@ -1467,10 +1512,24 @@ public class TopGamerGUI extends Application
 		JFXButton btnReturn = new JFXButton("<-");
 
 		btnReturn.setOnAction(e-> OpenMainDashboard());
-		JFXButton btnTournament1 = new JFXButton("4v4 Cod Tourney");
+		JFXButton btnTournament1 = new JFXButton("4v4 Search and Destroy (" + codTournament.GetStatus() + ")");
 
 		
-		btnTournament1.setOnAction(e->OpenCodTourney());
+		btnTournament1.setOnAction(e->{
+			
+			if(codTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: codTournament.GetTeams())
+				{
+					if(t.GetTeamID() == codTournament.GetWinnerID())
+					{
+						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+					}
+				}
+			}
+			else
+				OpenCodTourney();
+		});
 		
 		ImageView codLogo = new ImageView(new Image("Cod.jpg"));
 		codLogo.setFitWidth(104);
@@ -1519,8 +1578,8 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblLeaderBoard, 85.0);
-		AnchorPane.setLeftAnchor(lblLeaderBoard, 175.0);
+		AnchorPane.setTopAnchor(lblLeaderBoard, 90.0);
+		AnchorPane.setLeftAnchor(lblLeaderBoard, 205.0);
 		
 		AnchorPane.setTopAnchor(lblTournaments, 180.0);
 		AnchorPane.setLeftAnchor(lblTournaments, 50.0);
@@ -1530,7 +1589,7 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(btnTournament1, 50.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 115.0);
-		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
+		AnchorPane.setLeftAnchor(leaderBoardTable, 205.0);
 		
 		
 		ap.getChildren().addAll(codLogo,lblTitle,lblLeaderBoard,btnTournament1,btnReturn,leaderBoardTable, lblTournaments);
@@ -1701,7 +1760,7 @@ public class TopGamerGUI extends Application
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(codTournament.GetLocation() + " " + codTournament.GetDate());
 		Label lblPrize = new Label("Prize");
-		Label lblTournDesc= new Label("A one-sided game mode, the goal is for an attacking side to either eliminate the,\ndefending team or detonate either one of two bomb sites. This is a bracket style\ntournament with an overall of 4 teams elimination style. ");
+		Label lblTournDesc= new Label("A one-sided game mode, the goal is for an attacking side to either eliminate the,\ndefending team or detonate either one of two bomb sites. This is a bracket style\ntournament with 4 teams, single elimination. ");
 		
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -1918,8 +1977,9 @@ public class TopGamerGUI extends Application
 	
 	public void CreateCODScoreReport() {
 		
+		StackPane stackPane = new StackPane();
 		AnchorPane aPane = new AnchorPane();
-		
+
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setLayoutX(14);
 		btnReturn.setLayoutY(14);
@@ -1961,23 +2021,39 @@ public class TopGamerGUI extends Application
 		lblFinal.setLayoutY(283);
 		
 		JFXButton btnSubmit = new JFXButton("Submit");
-		btnSubmit.setLayoutX(274);
+		btnSubmit.setLayoutX(274); 
 		btnSubmit.setLayoutY(331);
 		
 		btnSubmit.setOnAction(e->{
 			
-			if(!cbFinal.getValue().equals(cbGame1.getValue()) || !cbFinal.getValue().equals(cbGame2.getValue()))
+			if(cbFinal.getValue().equals(cbGame1.getValue()) || cbFinal.getValue().equals(cbGame2.getValue()))
+			{
+				codTournament.ReportScore(cbGame1.getValue(), cbGame2.getValue(), cbFinal.getValue());
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Scores Reported"));
+				dialogContent.setBody(new Text("Scores have been reported. Tournament is now closed"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->{dialog.close(); OpenCodScene();});
+				dialog.show();
+			}
+			else
 			{
 				System.out.println(cbFinal.getValue() + "is not in the final.");
 				return;
 			}
-			else
-				codTournament.ReportScore(cbGame1.getValue(), cbGame2.getValue(), cbFinal.getValue());
+				
 		});
 		
 		
 		aPane.getChildren().addAll(lblHeader,lblGame1,lblGame2,lblFinal,cbGame1,cbGame2,cbFinal,btnSubmit,btnReturn);
-		codReportScore = new Scene(aPane,600,400);
+		stackPane.getChildren().add(aPane);
+		codReportScore = new Scene(stackPane,600,400);
 		
 	}
 	
@@ -2003,9 +2079,9 @@ public class TopGamerGUI extends Application
 		
 		Label lblTitle = new Label("Halo 5"); 
 		lblTitle.setFont(new Font(24));
-		Label lblDesc = new Label("Leaderboards");
+		Label lblLeaderboard = new Label("Leaderboards");
 		Label lblTournaments = new Label ("Tournaments");
-		lblDesc.setStyle("-fx-font-weight: bold");
+		lblLeaderboard.setStyle("-fx-font-weight: bold");
 		lblTournaments.setStyle("-fx-font-weight: bold");
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenMainDashboard());
@@ -2065,20 +2141,20 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(lblTitle, 15.0);
 		AnchorPane.setLeftAnchor(lblTitle, 175.0);
 		
-		AnchorPane.setTopAnchor(lblDesc, 55.0);
-		AnchorPane.setLeftAnchor(lblDesc, 175.0);
+		AnchorPane.setTopAnchor(lblLeaderboard, 55.0);
+		AnchorPane.setLeftAnchor(lblLeaderboard, 175.0);
 		
-		AnchorPane.setTopAnchor(btnTournament1, 220.0);
-		AnchorPane.setLeftAnchor(btnTournament1, 59.0);
+		AnchorPane.setTopAnchor(btnTournament1, 200.0);
+		AnchorPane.setLeftAnchor(btnTournament1, 50.0);
 		
 		AnchorPane.setTopAnchor(lblTournaments, 175.0);
-		AnchorPane.setLeftAnchor(lblTournaments, 67.0);
+		AnchorPane.setLeftAnchor(lblTournaments, 50.0);
 		
 		AnchorPane.setTopAnchor(leaderBoardTable, 75.0);
 		AnchorPane.setLeftAnchor(leaderBoardTable, 175.0);
 		
 		
-		ap.getChildren().addAll(haloLogo,lblTitle,lblDesc,btnTournament1,lblTournaments,btnReturn,leaderBoardTable);
+		ap.getChildren().addAll(haloLogo,lblTitle,lblLeaderboard,btnTournament1,lblTournaments,btnReturn,leaderBoardTable);
 	
 		haloScene = new Scene(ap,600,400);
 	}
@@ -2103,7 +2179,8 @@ public class TopGamerGUI extends Application
 		JFXButton btnCreateTeam = new JFXButton("Create team");
 		JFXButton btnJoinTeam = new JFXButton("Join team");
 		JFXButton btnViewRegisteredTeams= new JFXButton("View Registered Teams"); // Tom
-
+		JFXButton btnReportScores = new JFXButton("Report Scores");
+		
 		Leaderboard leaderboard = new Leaderboard();
 		leaderboard.LoadLeaderboardData(haloTournament);
 		
@@ -2144,6 +2221,50 @@ public class TopGamerGUI extends Application
 			}
 			OpenJoinTeamHalo();
 			});
+		
+		
+		
+		btnReportScores.setOnAction(e->{
+			if(!currentUser.GetPlatform().GetPlatformName().equals(haloTournament.GetGame().GetPlatform().GetPlatformName())) {
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Incompatiable Systems"));
+				dialogContent.setBody(new Text("You play on " + currentUser.GetPlatform().GetPlatformName() + ". The tournament is on " + haloTournament.GetGame().GetPlatform().GetPlatformName()));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
+				return;
+			}
+			if(haloTournament.GetTeamsJoined() < haloTournament.GetBrackSize())
+			{
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Not enough teams"));
+				dialogContent.setBody(new Text("Scores cannot be reported until the bracket is full"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->dialog.close());
+				dialog.show();
+				return;
+			}
+			else
+				OpenHaloScoreReport();
+			
+		});
+		
+		
+		
+		
+		
 		btnViewRegisteredTeams.setOnAction(e->OpenViewRegisteredTeams(haloTournament));
 		JFXButton btnReturn = new JFXButton("<-");
 		btnReturn.setOnAction(e-> OpenHaloScene()); // open halo?
@@ -2206,7 +2327,7 @@ public class TopGamerGUI extends Application
 		Label lblTitle = new Label(haloTournament.GetTournamentName() + "(" + haloTournament.GetGame().GetPlatform().GetPlatformName() + ")");
 		lblTitle.setFont(new Font(24));
 		Label lblLocation = new Label(haloTournament.GetLocation() + " " + haloTournament.GetDate());
-		Label lblTourneyDescription = new Label("Players are divided up into teams of 3-5 players Kill as many players as possible. \n this is a bracket style tournament, with 4 team elimination style");
+		Label lblTourneyDescription = new Label("Players are divided up into teams of 4 players. The goal is to kill as many players as possible. \nThis is a bracket style tournament with 4 teams, single elimination");
 		Label lblPrize = new Label("Prize");
 		Label lblBracketSize = new Label("Bracket Size");
 		Label lblTeamsJoined = new Label("Teams Joined");
@@ -2254,7 +2375,11 @@ public class TopGamerGUI extends Application
 		AnchorPane.setTopAnchor(btnViewRegisteredTeams, 310.0); // Tom
 		AnchorPane.setLeftAnchor(btnViewRegisteredTeams, 120.0); // Tom
 		
-		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblTourneyDescription,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams); // Tom
+		AnchorPane.setTopAnchor(btnReportScores, 310.0);
+		AnchorPane.setLeftAnchor(btnReportScores, 300.0); 
+		
+		
+		ap.getChildren().addAll(btnReturn,lblTitle, lblLocation,lblTourneyDescription,lblPrize,lblBracketSize,lblTeamsJoined,lblPrizeAmt,lblBracketAmt,lblTeamsJoinedVal,btnJoinTeam,btnCreateTeam, btnViewRegisteredTeams,btnReportScores); // Tom
 		stackPane.getChildren().add(ap);
 		haloTourneyScene = new Scene(stackPane, 600,400);
 	}
@@ -2415,9 +2540,93 @@ public class TopGamerGUI extends Application
 		window.setScene(joinTeam);
 	}
 		
+	public void CreateHaloScoreReport() {
+		
+		StackPane stackPane = new StackPane();
+		AnchorPane aPane = new AnchorPane();
+
+		JFXButton btnReturn = new JFXButton("<-");
+		btnReturn.setLayoutX(14);
+		btnReturn.setLayoutY(14);
+		btnReturn.setOnAction(e->OpenCodTourney());
+		
+		JFXComboBox<String> cbGame1 = new JFXComboBox<String>();
+		cbGame1.setLayoutX(254);
+		cbGame1.setLayoutY(141);
+		cbGame1.getItems().addAll(haloTournament.GetTeams().get(0).GetTeamName(),haloTournament.GetTeams().get(1).GetTeamName());
+		
+		JFXComboBox<String> cbGame2 = new JFXComboBox<String>();
+		cbGame2.setLayoutX(254);
+		cbGame2.setLayoutY(202);
+		cbGame2.getItems().addAll(haloTournament.GetTeams().get(2).GetTeamName(),haloTournament.GetTeams().get(3).GetTeamName());
+		JFXComboBox<String> cbFinal = new JFXComboBox<String>();
+		cbFinal.setLayoutX(254);
+		cbFinal.setLayoutY(266);
+		
 	
-	
-	
+		cbGame1.setOnAction(e->{
+			if(!cbFinal.getItems().contains(cbGame1.getValue()))
+				cbFinal.getItems().add(cbGame1.getValue()); 
+		});
+		cbGame2.setOnAction(e->{ 
+			if(!cbFinal.getItems().contains(cbGame2.getValue()))
+				cbFinal.getItems().add(cbGame2.getValue()); 
+		});
+		Label lblHeader = new Label("Please select the winner for each game");
+		lblHeader.setLayoutX(197);
+		lblHeader.setLayoutY(100);
+		Label lblGame1 =new Label("Game1");
+		lblGame1.setLayoutX(201);
+		lblGame1.setLayoutY(154);
+		Label lblGame2 =new Label("Game2");
+		lblGame2.setLayoutX(201);
+		lblGame2.setLayoutY(219);
+		Label lblFinal =new Label("Final");
+		lblFinal.setLayoutX(204);
+		lblFinal.setLayoutY(283);
+		
+		JFXButton btnSubmit = new JFXButton("Submit");
+		btnSubmit.setLayoutX(274); 
+		btnSubmit.setLayoutY(331);
+		
+		btnSubmit.setOnAction(e->{
+			
+			if(cbFinal.getValue().equals(cbGame1.getValue()) || cbFinal.getValue().equals(cbGame2.getValue()))
+			{
+				haloTournament.ReportScore(cbGame1.getValue(), cbGame2.getValue(), cbFinal.getValue());
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Scores Reported"));
+				dialogContent.setBody(new Text("Scores have been reported. Tournament is now closed"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->{dialog.close(); OpenCodScene();});
+				dialog.show();
+			}
+			else
+			{
+				System.out.println(cbFinal.getValue() + "is not in the final.");
+				return;
+			}
+				
+		});
+		
+		
+		aPane.getChildren().addAll(lblHeader,lblGame1,lblGame2,lblFinal,cbGame1,cbGame2,cbFinal,btnSubmit,btnReturn);
+		stackPane.getChildren().add(aPane);
+		haloReporScore = new Scene(stackPane,600,400);
+		
+	}
+
+	public void OpenHaloScoreReport()
+	{
+		CreateHaloScoreReport();
+		window.setScene(haloReporScore);
+	}
 	
 	public void CreateViewRegisteredTeams(Tournament t){ 	
 		AnchorPane	aPane = new AnchorPane();
