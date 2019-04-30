@@ -24,6 +24,7 @@ import javafx.stage.PopupWindow.AnchorLocation;
 
 import java.awt.Event;
 import java.awt.event.TextEvent;
+import java.nio.channels.SelectableChannel;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -609,12 +610,11 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateMainDashboard()
 	{
+		
 		btnProfile = new JFXButton("Profile");
 		btnViewProfile = new JFXButton("View profile");
 		btnLogOut= new JFXButton("Log out");
 		
-		
-	
 		btnViewProfile.setOnAction(e->{
 			if(!loggedIn) {
 				String viewProfileTitle = "Not logged in";
@@ -832,7 +832,19 @@ public class TopGamerGUI extends Application
 				{
 					if(t.GetTeamID() == codTournament.GetWinnerID())
 					{
-						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(mainDashStack);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
 					}
 				}
 			}
@@ -848,7 +860,19 @@ public class TopGamerGUI extends Application
 				{
 					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
 					{
-						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(mainDashStack);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
 					}
 				}
 			}
@@ -856,7 +880,32 @@ public class TopGamerGUI extends Application
 				OpenFortniteTourney();
 		});
 		JFXButton haloTourney = new JFXButton("Halo Team Slayer (" + haloTournament.GetStatus() + ")");
-		haloTourney.setOnAction(e->OpenHaloTourney());
+		haloTourney.setOnAction(e->{
+			if(haloTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: haloTournament.GetTeams())
+				{
+					if(t.GetTeamID() == haloTournament.GetWinnerID())
+					{
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(mainDashStack);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
+					}
+				}
+			}
+			else
+				OpenHaloTourney();
+		});
 		
 		//Set image position on anchorScroll
 		AnchorPane.setTopAnchor(fortniteLogo, 50.0);
@@ -922,6 +971,7 @@ public class TopGamerGUI extends Application
 	 */
 	public void CreateFortniteScene()
 	{
+		StackPane stackPane = new StackPane();
 		fortniteTournament = new Tournament();
 		fortniteTournament.LoadTournamentData(6);
 		AnchorPane ap = new AnchorPane();
@@ -943,7 +993,19 @@ public class TopGamerGUI extends Application
 				{
 					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
 					{
-						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(stackPane);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
 					}
 				}
 			}
@@ -1012,8 +1074,8 @@ public class TopGamerGUI extends Application
 		AnchorPane.setLeftAnchor(leaderBoardTable, 200.0);
 		
 		ap.getChildren().addAll(fortniteLogo,lblTournaments,lblTitle,lblLeaderboard,btnTournament1,btnReturn,leaderBoardTable);
-	
-		fortniteScene = new Scene(ap,600,400);
+		stackPane.getChildren().add(ap);
+		fortniteScene = new Scene(stackPane,600,400);
 	
 	}
 	/**
@@ -1501,6 +1563,7 @@ public class TopGamerGUI extends Application
 		codTournament = new Tournament();
 		codTournament.LoadTournamentData(3);
 		
+		StackPane stackPane = new StackPane();
 		AnchorPane ap = new AnchorPane();
 		
 		Label lblTitle = new Label("Call Of Duty: \nAdvanced Warefare"); 
@@ -1523,7 +1586,19 @@ public class TopGamerGUI extends Application
 				{
 					if(t.GetTeamID() == codTournament.GetWinnerID())
 					{
-						System.out.println("Tournament is closed. " + t.GetTeamName() + " is the winner.");
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(stackPane);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
 					}
 				}
 			}
@@ -1593,8 +1668,8 @@ public class TopGamerGUI extends Application
 		
 		
 		ap.getChildren().addAll(codLogo,lblTitle,lblLeaderBoard,btnTournament1,btnReturn,leaderBoardTable, lblTournaments);
-	
-		codScene = new Scene(ap,600,400);
+		stackPane.getChildren().add(ap);
+		codScene = new Scene(stackPane,600,400);
 	}
 	/**
 	 * Set main window to the COD scene
@@ -2075,6 +2150,7 @@ public class TopGamerGUI extends Application
 		haloTournament = new Tournament();
 		haloTournament.LoadTournamentData(11);
 		
+		StackPane stackPane = new StackPane();
 		AnchorPane ap = new AnchorPane();
 		
 		Label lblTitle = new Label("Halo 5"); 
@@ -2087,8 +2163,34 @@ public class TopGamerGUI extends Application
 		btnReturn.setOnAction(e-> OpenMainDashboard());
 		
 
-		JFXButton btnTournament1 = new JFXButton("4v4 Team Slayer");
-		btnTournament1.setOnAction(e->OpenHaloTourney());
+		JFXButton btnTournament1 = new JFXButton("4v4 Team Slayer (" + haloTournament.GetStatus() + ")");
+		btnTournament1.setOnAction(e->{
+			
+			if(haloTournament.GetStatus().equals("CLOSED"))
+			{
+				for(Team t: haloTournament.GetTeams())
+				{
+					if(t.GetTeamID() == haloTournament.GetWinnerID())
+					{
+						JFXDialogLayout dialogContent = new JFXDialogLayout();
+						dialogContent.setHeading(new Text("Tournament Closed"));
+						dialogContent.setBody(new Text(t.GetTeamName() + " is the winner"));
+						JFXDialog dialog = new JFXDialog();
+						JFXButton btnOkay = new JFXButton("Okay");
+						dialog.setContent(dialogContent);
+						dialog.getChildren().add(btnOkay);
+						dialog.setDialogContainer(stackPane);
+						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+						dialogContent.setActions(btnOkay);
+						btnOkay.setOnAction(ev->dialog.close());
+						dialog.show();
+						return;
+					}
+				}
+			}
+			else
+				OpenHaloTourney();
+		});
 
 		
 		ImageView haloLogo = new ImageView(new Image("Halo.jpg"));
@@ -2155,8 +2257,8 @@ public class TopGamerGUI extends Application
 		
 		
 		ap.getChildren().addAll(haloLogo,lblTitle,lblLeaderboard,btnTournament1,lblTournaments,btnReturn,leaderBoardTable);
-	
-		haloScene = new Scene(ap,600,400);
+		stackPane.getChildren().add(ap);
+		haloScene = new Scene(stackPane,600,400);
 	}
 	/**
 	 * Set main window to the main Halo scene
@@ -2604,7 +2706,7 @@ public class TopGamerGUI extends Application
 				dialog.setDialogContainer(stackPane);
 				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
 				dialogContent.setActions(btnOkay);
-				btnOkay.setOnAction(ev->{dialog.close(); OpenCodScene();});
+				btnOkay.setOnAction(ev->{dialog.close(); OpenHaloScene();});
 				dialog.show();
 			}
 			else
