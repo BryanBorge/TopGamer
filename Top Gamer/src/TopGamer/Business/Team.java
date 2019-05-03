@@ -21,7 +21,6 @@ public class Team {
 	private int m_wins;
 	private int m_losses;
 	private int m_score;
-	private int m_teamID;
 	private Boolean m_scoredReported;
 	
 		
@@ -51,17 +50,6 @@ public class Team {
 		m_wins = w;
 		m_losses = l;
 		m_score = s;
-	}
-	
-	
-	public void SetTeamID(int id)
-	{
-		m_teamID = id;
-	}
-	
-	public int GetTeamID()
-	{
-		return m_teamID;
 	}
 	
 	
@@ -128,7 +116,6 @@ public class Team {
 	}
 	
 	
-	
 	/**
 	 * sets Wins member variable
 	 * @param Wins 
@@ -174,7 +161,7 @@ public class Team {
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String teamQry = "select t.TeamID as TID, ScoreReported, UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamName = ?";
+		String teamQry = "select ScoreReported, UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamName = ?";
 	
 		Connection connection = dbConnection.connect();
 		ResultSet result;
@@ -187,7 +174,6 @@ public class Team {
 			result = prepStatement.executeQuery();
 			while(result.next())
 			{
-				m_teamID = result.getInt("TID");
 				m_scoredReported = result.getBoolean("ScoreReported");
 				User user = new User(result.getString("FirstName"),result.getString("LastName"),result.getString("UserName"),result.getString("Email"));
 				m_teamMembers.add(user);
@@ -206,7 +192,6 @@ public class Team {
 		
 		String teamQry = "select TeamName,ScoreReported, UserName, FirstName, LastName, Email from tblUsers u JOIN tblTeams t on u.TeamID = t.TeamID where t.TeamID = ?";
 	
-		this.SetTeamID(teamID);
 		Connection connection = dbConnection.connect();
 		ResultSet result;
 		

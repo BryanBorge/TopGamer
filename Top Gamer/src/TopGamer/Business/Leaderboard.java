@@ -37,14 +37,14 @@ public class Leaderboard {
 		SQLConnection dbConnection = new SQLConnection();
 		
 		String lbQry = "SELECT TeamName, Wins, Losses, Score from tblTeams team "
-				+ "JOIN tblTournaments t on team.TournamentID = t.TournamentID where t.GameID = ?";
+				+ "JOIN tblTournaments t on team.TournamentID = t.TournamentID where t.GameID = (select GameID from tblGames where GameName = ?)";
 		
 		Connection connection = dbConnection.connect();
 		ResultSet result;
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(lbQry);
-			preparedStatement.setInt(1,t.GetGame().GetID());
+			preparedStatement.setString(1,t.GetGame().GetGameName());
 			result = preparedStatement.executeQuery();
 			
 			while(result.next())

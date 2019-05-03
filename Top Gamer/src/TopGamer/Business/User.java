@@ -200,13 +200,12 @@ public class User
 	{
 		SQLConnection dbConnection = new SQLConnection();
 		
-		String userQry = "select FirstName, LastName, Email, PlatformID from tblUsers where UserName = ?";
-		//String teamQry = "select t.TeamID as ID from tblUsers u join tblTeams t on t.TeamID = u.TeamID where UserName = ?";
+		String userQry = "select FirstName, LastName, Email, PlatformName from tblUsers u JOIN tblPlatform p ON p.PlatformID = u.PlatformID where UserName =?";
 		String teamQry = "Select TeamID from tblUsers where UserName = ?";
 		
 		Connection connection = dbConnection.connect();
 		ResultSet result;
-		int dbPlatformID = -1;
+		String dbPlatformName = "";
 		
 		try {
 			PreparedStatement prepStatement = connection.prepareStatement(userQry);
@@ -217,9 +216,9 @@ public class User
 				this.SetFirstName(result.getString("FirstName"));
 				this.SetLastName(result.getString("LastName"));
 				this.SetEmail(result.getString("Email"));
-				dbPlatformID = result.getInt("PlatformID");
+				dbPlatformName = result.getString("PlatformName");
 			}
-			this.m_platform.Load(dbPlatformID);
+			this.m_platform.LoadPlatformData(dbPlatformName);
 			prepStatement.close();
 			
 		} catch (SQLException e) {

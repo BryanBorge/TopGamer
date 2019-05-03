@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import javax.swing.event.ChangeListener;
 import javax.xml.transform.Templates;
 
 import org.controlsfx.control.textfield.TextFields;
@@ -830,7 +831,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: codTournament.GetTeams())
 				{
-					if(t.GetTeamID() == codTournament.GetWinnerID())
+					if(t == codTournament.GetWinner())
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -858,7 +859,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: fortniteTournament.GetTeams())
 				{
-					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
+					if(t == fortniteTournament.GetWinner())
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -885,7 +886,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: haloTournament.GetTeams())
 				{
-					if(t.GetTeamID() == haloTournament.GetWinnerID())
+					if(t.GetTeamName().equals(haloTournament.GetWinner().GetTeamName()))
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -991,7 +992,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: fortniteTournament.GetTeams())
 				{
-					if(t.GetTeamID() == fortniteTournament.GetWinnerID())
+					if(t == fortniteTournament.GetWinner())
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -1584,7 +1585,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: codTournament.GetTeams())
 				{
-					if(t.GetTeamID() == codTournament.GetWinnerID())
+					if(t == codTournament.GetWinner())
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -2164,13 +2165,14 @@ public class TopGamerGUI extends Application
 		
 
 		JFXButton btnTournament1 = new JFXButton("4v4 Team Slayer (" + haloTournament.GetStatus() + ")");
+	
 		btnTournament1.setOnAction(e->{
 			
 			if(haloTournament.GetStatus().equals("CLOSED"))
 			{
 				for(Team t: haloTournament.GetTeams())
 				{
-					if(t.GetTeamID() == haloTournament.GetWinnerID())
+					if(t.GetTeamName().equals(haloTournament.GetWinner().GetTeamName()))
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -2199,28 +2201,33 @@ public class TopGamerGUI extends Application
 		
 		
 		//leader board table view
-		TableView<Team> leaderBoardTable = new TableView<>();
+		TableView<Team> leaderBoardTable = new TableView<Team>();
 		leaderBoardTable.setPrefHeight(200);
 		leaderBoardTable.setPrefWidth(300);
 		leaderBoardTable.setPlaceholder(new Label("No tournaments have been played for this game yet"));
 		
 		//team name column
 		TableColumn<Team, String> teamNameCol = new TableColumn<>("Team Name");
+		teamNameCol.setSortable(false);
 		teamNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		teamNameCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().GetTeamName()));
 		
 		//wins column
 		TableColumn<Team, String> winsCol = new TableColumn<>("Wins");
+		winsCol.setSortable(false);
 		winsCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		winsCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().WinsToString()));
 		
 		//losses column
 		TableColumn<Team, String> lossesCol = new TableColumn<>("Losses");
+		lossesCol.setSortable(false);
 		lossesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		lossesCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().LossesToString()));
 		
+
 		//add columns to the list view
 		leaderBoardTable.getColumns().addAll(teamNameCol,winsCol,lossesCol);
+		leaderBoardTable.getSortOrder().add(winsCol);
 		
 
 		//load leader board to hold data for that tournament
@@ -2736,7 +2743,7 @@ public class TopGamerGUI extends Application
 		aPane.setPrefWidth(600);
 		
 		ArrayList<Team> registered = new ArrayList<Team>();
-		registered =  t.ViewRegisterdTeams(t.GetID());
+		registered =  t.ViewRegisterdTeams(t.GetTournamentName());
 		
 		ListView<Team> teamlist= new ListView <Team>();	
 		teamlist.setPrefHeight(200);
