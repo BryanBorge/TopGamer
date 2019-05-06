@@ -10,7 +10,6 @@ public class Game
 {
 	private String m_gameName;
 	private Platform m_platform;
-	private int m_gameID;
 	
 	/**
 	 * Game default constructor 
@@ -21,7 +20,6 @@ public class Game
 	{
 		m_gameName = "N/A";
 		m_platform = new Platform();
-		m_gameID = -1;
 	}
 	
 	/**
@@ -54,17 +52,7 @@ public class Game
 	{
 		return m_gameName;
 	}
-	
-	public void SetID(int i)
-	{
-		m_gameID = i;
-	}
-	
-	public int GetID() {
-		return m_gameID;
-	}
-	
-	
+
 	/**
 	 * SetGamePlatform
 	 * Sets platform member variable
@@ -80,22 +68,21 @@ public class Game
 		return m_platform;
 	}
 	
-	public void LoadGameData(int id)
+	public void LoadGameData(String gameName)
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		ResultSet result;
-		String gameQry = "select GameID,GameName from tblGames where GameID =?";
+		String gameQry = "select GameID,GameName from tblGames where GameID = (select GameID from tblGames where GameName = ?)";
 	
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(gameQry);
-			preparedStatement.setInt(1, id);
+			preparedStatement.setString(1, gameName);
 			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
 				m_gameName = result.getString("GameName");
-				m_gameID = result.getInt("GameID");
-				m_platform.LoadPlatformData(result.getInt("GameID"));
+				m_platform.LoadPlatform(m_gameName);
 			}	
 			preparedStatement.close();
 		} catch (SQLException e) {

@@ -15,7 +15,7 @@ import javax.sql.PooledConnection;
 public class Platform 
 {
 	private String m_platformName;
-	private int m_platformID;
+	//private int m_platformID;
 	
 	/**
 	 * Platform default constructor
@@ -27,17 +27,7 @@ public class Platform
 		m_platformName = "N/A";
 	}
 	
-	public void SetID(int id)
-	{
-		m_platformID = id;
-	}
-	
-	public int GetID()
-	{
-		return m_platformID;
-	}
-	
-	
+
 	/**
 	 * SetPlatform
 	 * Sets platform member variable
@@ -58,20 +48,19 @@ public class Platform
 		return m_platformName;
 	}
 	
-	public void LoadPlatformData(int gameID)
+	public void LoadPlatform(String gameName)
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		ResultSet result;
-		String platformQry = "Select p.PlatformID,PlatformName from tblPlatform p JOIN tblGames g on p.PlatformID = g.PlatformID where g.GameID = ?";
+		String platformQry = "Select PlatformName from tblPlatform p JOIN tblGames g on p.PlatformID = g.PlatformID where g.GameID = (select GameID from tblGames where GameName = ?)";
 		
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(platformQry);
-			preparedStatement.setInt(1, gameID);
+			preparedStatement.setString(1, gameName);
 			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
-				this.m_platformID = result.getInt("PlatformID");
 				this.m_platformName = result.getString("PlatformName");
 			}
 			preparedStatement.close();
@@ -80,20 +69,19 @@ public class Platform
 		}
 }
 	
-	public void Load(int platformID)
+	public void LoadPlatformData(String platformName)
 	{
 		SQLConnection sqlConnection = new SQLConnection();
 		Connection connection = sqlConnection.connect();
 		ResultSet result;
-		String platformQry = "Select PlatformID,PlatformName from tblPlatform where PlatformID = ?";
+		String platformQry = "Select PlatformName from tblPlatform where PlatformName = ?";
 		
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(platformQry);
-			preparedStatement.setInt(1, platformID);
+			preparedStatement.setString(1, platformName);
 			result = preparedStatement.executeQuery();
 			while(result.next())
 			{
-				this.m_platformID = result.getInt("PlatformID");
 				this.m_platformName = result.getString("PlatformName");
 			}
 			preparedStatement.close();
