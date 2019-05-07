@@ -439,7 +439,7 @@ public class Tournament
 		{
 			SQLConnection dbConnection = new SQLConnection();
 			
-			String scoreQry = "update tblTeams set Score = ?, ScoreReported = 1 where TeamID = (select TeamID from tblTeams where TeamName = ?";
+			String scoreQry = "update tblTeams set Score = ?, ScoreReported = 1 where TeamID = (select TeamID from tblTeams where TeamName = ?)";
 			
 			Connection connection = dbConnection.connect();
 			

@@ -1,6 +1,6 @@
 package TopGamer.Presentation;
 
-
+import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -24,7 +24,9 @@ import javafx.stage.PopupWindow.AnchorLocation;
 
 import java.awt.Event;
 import java.awt.event.TextEvent;
+import java.io.IOError;
 import java.nio.channels.SelectableChannel;
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ import javax.xml.transform.Templates;
 import org.controlsfx.control.textfield.TextFields;
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
 import org.sqlite.SQLiteException;
+import org.sqlite.date.FastDatePrinter;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
@@ -44,6 +48,7 @@ import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import TopGamer.Business.*;
@@ -488,7 +493,7 @@ public class TopGamerGUI extends Application
 		registerScene = new Scene(registerStack,600,400);
 	}
 	/**
-	 * 	Creates an instance of SQLConnection and calls AddUser()
+5	 * 	Creates an instance of SQLConnection and calls AddUser()
 	 *  using data from the register form's text fields
 	 */
 	public void RegisterUser()
@@ -609,8 +614,7 @@ public class TopGamerGUI extends Application
 	/**
 	 * Creates the main dash board scene
 	 */
-	public void CreateMainDashboard()
-	{
+	public void CreateMainDashboard()	{
 		
 		btnProfile = new JFXButton("Profile");
 		btnViewProfile = new JFXButton("View profile");
@@ -831,7 +835,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: codTournament.GetTeams())
 				{
-					if(t == codTournament.GetWinner())
+					if(t.GetTeamName().equals(codTournament.GetWinner().GetTeamName()))
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -859,7 +863,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: fortniteTournament.GetTeams())
 				{
-					if(t == fortniteTournament.GetWinner())
+					if(t.GetTeamName().equals(fortniteTournament.GetWinner().GetTeamName()))
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -992,7 +996,7 @@ public class TopGamerGUI extends Application
 			{
 				for(Team t: fortniteTournament.GetTeams())
 				{
-					if(t == fortniteTournament.GetWinner())
+					if(t.GetTeamName().equals(fortniteTournament.GetWinner().GetTeamName()))
 					{
 						JFXDialogLayout dialogContent = new JFXDialogLayout();
 						dialogContent.setHeading(new Text("Tournament Closed"));
@@ -1034,12 +1038,12 @@ public class TopGamerGUI extends Application
 		TableColumn<Team, String> scoreCol = new TableColumn<>("Score");
 		scoreCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		scoreCol.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().ScoreToString()));
-				
 		
 		//add columns to the list view
 		leaderBoardTable.getColumns().addAll(teamNameCol,scoreCol);
 				
-
+		
+		
 		//load leader board to hold data for that tournament
 		Leaderboard fortniteLeaderboard = new Leaderboard();
 		
@@ -1107,35 +1111,28 @@ public class TopGamerGUI extends Application
 		
 		btnReportScore.setOnAction(e->{
 			if(!loggedIn) {
-				JFXDialogLayout dialogContent = new JFXDialogLayout();
-				dialogContent.setHeading(new Text("Cannot access this"));
-				dialogContent.setBody(new Text("Must login to report scores"));
-				JFXDialog dialog = new JFXDialog();
-				JFXButton btnOkay = new JFXButton("Okay");
-				dialog.setContent(dialogContent);
-				dialog.getChildren().add(btnOkay);
-				dialog.setDialogContainer(stackPane);
-				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-				dialogContent.setActions(btnOkay);
-				btnOkay.setOnAction(ev->dialog.close());
-				dialog.show();
-				e.consume();
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Cannot access this");
+				alert.setContentText("Must be logged in to report scores");
+				alert.showAndWait();
+				return;
+			}
+			if(currentUser.GetTeam().GetTeamName().equals("N/A")) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Cannot access this");
+				alert.setContentText("Must be on a team for this tournament to report scores");
+				alert.showAndWait();
 				return;
 			}
 			if(fortniteTournament.GetTeamsJoined() < fortniteTournament.GetBrackSize())
 			{
-				JFXDialogLayout dialogContent = new JFXDialogLayout();
-				dialogContent.setHeading(new Text("Not enough teams"));
-				dialogContent.setBody(new Text("Scores cannot be reported until the bracket is full"));
-				JFXDialog dialog = new JFXDialog();
-				JFXButton btnOkay = new JFXButton("Okay");
-				dialog.setContent(dialogContent);
-				dialog.getChildren().add(btnOkay);
-				dialog.setDialogContainer(stackPane);
-				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-				dialogContent.setActions(btnOkay);
-				btnOkay.setOnAction(ev->dialog.close());
-				dialog.show();
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Error");
+				alert.setHeaderText("Not enough teams");
+				alert.setContentText("Scores cannot be reported until the bracket is full");
+				alert.showAndWait();
 				return;
 			}
 			for(Team team : fortniteTournament.GetTeams())
@@ -1144,19 +1141,12 @@ public class TopGamerGUI extends Application
 				{
 					if(team.GetScoreReported() == false)
 						OpenFortniteScoreReport();
-					else{
-						JFXDialogLayout dialogContent = new JFXDialogLayout();
-						dialogContent.setHeading(new Text("Cannot report scores"));
-						dialogContent.setBody(new Text("Scores have already been reported"));
-						JFXDialog dialog = new JFXDialog();
-						JFXButton btnOkay = new JFXButton("Okay");
-						dialog.setContent(dialogContent);
-						dialog.getChildren().add(btnOkay);
-						dialog.setDialogContainer(stackPane);
-						dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-						dialogContent.setActions(btnOkay);
-						btnOkay.setOnAction(ev->dialog.close());
-						dialog.show();
+					else {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Error");
+						alert.setHeaderText("Cannot report scores");
+						alert.setContentText("Scored have already been reported");
+						alert.showAndWait();
 						return;
 					}
 				}
@@ -1176,18 +1166,11 @@ public class TopGamerGUI extends Application
 			for(Team team : fortniteTournament.GetTeams())
 			{
 				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
-					JFXDialogLayout dialogContent = new JFXDialogLayout();
-					dialogContent.setHeading(new Text("Cannot join team"));
-					dialogContent.setBody(new Text("You are already on a team"));
-					JFXDialog dialog = new JFXDialog();
-					JFXButton btnOkay = new JFXButton("Okay");
-					dialog.setContent(dialogContent);
-					dialog.getChildren().add(btnOkay);
-					dialog.setDialogContainer(stackPane);
-					dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-					dialogContent.setActions(btnOkay);
-					btnOkay.setOnAction(ev->dialog.close());
-					dialog.show();
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Error");
+					alert.setHeaderText("Cannot join a team");
+					alert.setContentText("You are already on " + currentUser.GetTeam().GetTeamName());
+					alert.showAndWait();
 					return;
 				}
 			}
@@ -1214,18 +1197,11 @@ public class TopGamerGUI extends Application
 			for(Team team : fortniteTournament.GetTeams())
 			{
 				if(currentUser.GetUsername().equals(team.GetSpecificTeamMember(currentUser).GetUsername())) {
-					JFXDialogLayout dialogContent = new JFXDialogLayout();
-					dialogContent.setHeading(new Text("Cannot create team"));
-					dialogContent.setBody(new Text("You are already on a team"));
-					JFXDialog dialog = new JFXDialog();
-					JFXButton btnOkay = new JFXButton("Okay");
-					dialog.setContent(dialogContent);
-					dialog.getChildren().add(btnOkay);
-					dialog.setDialogContainer(stackPane);
-					dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-					dialogContent.setActions(btnOkay);
-					btnOkay.setOnAction(ev->dialog.close());
-					dialog.show();
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Error");
+					alert.setHeaderText("Cannot create a team");
+					alert.setContentText("You are already on " + currentUser.GetTeam().GetTeamName());
+					alert.showAndWait();
 					return;
 				}
 			}
@@ -1518,28 +1494,49 @@ public class TopGamerGUI extends Application
 		btnSubmit.setLayoutY(270);
 		btnSubmit.setOnAction(e->{
 		
-		double sum = Math.round(sliderGame1.getValue() + sliderGame2.getValue() + sliderGame3.getValue() + sliderGame4.getValue());
-		
-		fortniteTournament.ReportScore(sum, currentUser.GetTeam());
-		
-		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		dialogContent.setHeading(new Text("Scores reported"));
-		dialogContent.setBody(new Text("Scores have been saved successfully"));
-		JFXDialog dialog = new JFXDialog();
-		JFXButton btnOkay = new JFXButton("Okay");
-		dialog.setContent(dialogContent);
-		dialog.getChildren().add(btnOkay);
-		dialog.setDialogContainer(stackPane);
-		dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
-		dialogContent.setActions(btnOkay);
-		btnOkay.setOnAction(ev->OpenFortniteTourney());
-		dialog.show();
-		
-		sliderGame1.setValue(0);
-		sliderGame2.setValue(0);
-		sliderGame3.setValue(0);
-		sliderGame4.setValue(0);
-
+			double sum = Math.round(sliderGame1.getValue() + sliderGame2.getValue() + sliderGame3.getValue() + sliderGame4.getValue());
+			
+			fortniteTournament.ReportScore(sum, currentUser.GetTeam());
+			
+			if(sum == 100)
+			{
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Congratulations, you won!"));
+				dialogContent.setBody(new Text("You are the first team to reach 100 points"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->OpenFortniteScene());
+				dialog.show();
+				
+				sliderGame1.setValue(0);
+				sliderGame2.setValue(0);
+				sliderGame3.setValue(0);
+				sliderGame4.setValue(0);
+			}
+			else {
+				JFXDialogLayout dialogContent = new JFXDialogLayout();
+				dialogContent.setHeading(new Text("Scores reported"));
+				dialogContent.setBody(new Text("Scores have been saved successfully"));
+				JFXDialog dialog = new JFXDialog();
+				JFXButton btnOkay = new JFXButton("Okay");
+				dialog.setContent(dialogContent);
+				dialog.getChildren().add(btnOkay);
+				dialog.setDialogContainer(stackPane);
+				dialog.setTransitionType(JFXDialog.DialogTransition.CENTER);
+				dialogContent.setActions(btnOkay);
+				btnOkay.setOnAction(ev->OpenFortniteTourney());
+				dialog.show();
+				
+				sliderGame1.setValue(0);
+				sliderGame2.setValue(0);
+				sliderGame3.setValue(0);
+				sliderGame4.setValue(0);
+			}
 		});
 		
 		aPane.getChildren().addAll(lblTitle,lblGame1,lblGame2,lblGame3,lblGame4,btnReturn,sliderGame1,sliderGame2,sliderGame3,sliderGame4,btnSubmit);
@@ -2769,7 +2766,7 @@ public class TopGamerGUI extends Application
 		btnReturn.setLayoutX(14.0);
 		btnReturn.setLayoutY(14.0);
 		
-		aPane.getChildren().addAll(btnReturn, teamlist);
+		aPane.getChildren().addAll(btnReturn,teamlist);
 		viewRegisteredTeams = new Scene(aPane);
 	}
 	public void OpenViewRegisteredTeams(Tournament t)	
