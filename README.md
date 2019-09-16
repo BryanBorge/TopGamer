@@ -1,4 +1,4 @@
-#Senior Project - BCS430 - Spring 2019
+# Senior Project - BCS430 - Spring 2019
 
 Course Objective: Develop an information system that includes analysis, design planning and organization of a real life or simulated situation.
 
