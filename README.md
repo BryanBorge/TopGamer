@@ -7,4 +7,4 @@ With our combined knownledge and similar academic history, our group chose to de
 
 # UPDATE - 3/3/2020
 
-I found out a few months back that for some reason our Azure database no longer exists. The account is valid and I can still sign on, however the database is missing. That pretty much breaks the whole program if anyone were to download it and try to run it there would be hundreds of errors.
+I found out a few months back that for some reason our Azure database no longer exists. The account is valid and I can still sign on, however, the database is missing. That pretty much breaks the whole program. If anyone were to download it and try to run it there would be hundreds of errors.
